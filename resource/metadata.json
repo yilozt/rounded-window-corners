@@ -3,6 +3,7 @@
   "description": "Make rounded corners for most application",
   "uuid": "roundedmywindow@yilozt.github.com",
   "shell-version": [
-    "41"
+    "41",
+    "42"
   ]
 }

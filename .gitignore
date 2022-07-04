@@ -1,0 +1,5 @@
+yarn.lock
+docs-lock.json
+_build
+node_modules
+@gi

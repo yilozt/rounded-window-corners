@@ -1,0 +1,29 @@
+{
+  "name": "rounded-corners-effect",
+  "version": "0.0.1",
+  "description": "test",
+  "author": "LuoYi <langisme@qq.com>",
+  "license": "GPL2",
+  "main": "src/extension.ts",
+  "devDependencies": {
+    "@gi.ts/cli": "^1.5.7",
+    "@gi.ts/lib": "^1.5.9",
+    "@gi.ts/parser": "^1.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.30.4",
+    "@typescript-eslint/parser": "^5.30.4",
+    "eslint": "^8.19.0",
+    "typescript": "^4.7.4",
+    "tsc-watch": "^5.0.3"
+  },
+  "scripts": {
+    "lock:types": "XDG_DATA_DIRS=$XDG_DATA_DIRS:/usr/share/gnome-shell:/usr/lib/mutter-10 gi-ts config --lock",
+    "clean:types": "rm -rf ./@types",
+    "build:types": "yarn clean:types && yarn lock:types && gi-ts generate && ./scripts/skipcheck.sh",
+    "eslint": "eslint ./src --fix",
+    "build:ts": "tsc",
+    "trans:gjs": "./scripts/trans.js && cp -r resource/* _build",
+    "build": "yarn build:ts && yarn eslint && yarn trans:gjs",
+    "onSuccess": "yarn eslint && yarn trans:gjs",
+    "watch": "tsc-watch --noClear --onSuccess \"yarn onSuccess\""
+  }
+}

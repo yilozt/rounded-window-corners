@@ -1,0 +1,23 @@
+{
+  "options": {
+    "inferGenerics": true,
+    "promisify": true,
+    "propertyCase": "both",
+    "versionedOutput": false,
+    "versionedImports": false,
+    "withDocs": true,
+    "out": "./@gi"
+  },
+  "libraries": {
+    "Cogl":     [ "10" ],
+    "Clutter":  [ "10" ],
+    "Meta":     [ "10" ],
+    "Shell":    [ "0.1" ],
+    "GLib":     [ "2.0" ],
+    "Gio":      [ "2.0" ],
+    "GObject":  [ "2.0" ],
+    "Gtk":      [ "3.0", "4.0" ],
+    "St":       [ "1.0" ],
+    "Graphene": [ "1.0"]
+  }
+}
