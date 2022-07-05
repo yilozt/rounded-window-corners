@@ -1,17 +1,19 @@
 {
-    "compileOnSave": true,
-    "compilerOptions": {
-        "target": "es2015",
-        "strict": true,
-        "pretty": true,
-        "removeComments": false,
-        "baseUrl": "./src",
-        "paths": {
-            "@gi/*": ["../@gi/*"],
-            "@ui/*": ["../@ui/*"],
-            "@me/*": ["./*.ts", "./*"]
-        },
-        "outDir": "./_build"
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2020",
+    "sourceMap": true,
+    "strict": true,
+    "pretty": true,
+    "removeComments": false,
+    "baseUrl": "./src",
+    "paths": {
+      "@imports/*": ["../@imports/*"],
+      "gi://*":     ["../@gi/*"],
+      "@global":    ["./global.d.ts"],
     },
-    "include": ["./src/*.ts"],
+    "outDir": "./_build/"
+  },
+  "include": ["./src/**/*.ts"  ],
 }

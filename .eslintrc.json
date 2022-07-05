@@ -41,8 +41,13 @@
     ],
     "space-before-function-paren": "error",
     "func-call-spacing": ["error", "always"],
-    "no-var": ["off"],
-    "max-len": ["error", 85]
+    "no-var": ["error"],
+    "max-len": ["error", {
+      "code": 80,
+      "comments": 95,
+      "ignoreTemplateLiterals": true,
+      "ignoreUrls": true
+    }]
   },
-  "ignorePatterns": ["_build/**", "scripts/**", "*.d.ts"]
+  "ignorePatterns": ["_build/**", "scripts/**", "*.d.ts", "extension.ts", "**/*.js"]
 }

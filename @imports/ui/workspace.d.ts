@@ -1,4 +1,4 @@
-import { Window } from '@gi/meta'
+import { Window } from 'gi://Meta'
 import { WindowPreview } from 'windowPreview'
 
 export class Workspace {

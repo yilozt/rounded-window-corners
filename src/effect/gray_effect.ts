@@ -1,7 +1,7 @@
-import { registerClass } from '@gi/gobject'
-import { GLSLEffect, SnippetHook } from '@gi/shell'
+import { registerClass } from 'gi://GObject'
+import { GLSLEffect, SnippetHook } from 'gi://Shell'
 
-export var GrayEffect = registerClass ({
+export default registerClass ({
   Properties: {}
 },
 class GrayEffect extends GLSLEffect {
@@ -17,5 +17,4 @@ class GrayEffect extends GLSLEffect {
 
     this.add_glsl_snippet (SnippetHook.FRAGMENT, '', fragmentCode, false)
   }
-}
-)
+})

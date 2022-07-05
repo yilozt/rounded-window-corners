@@ -8,5 +8,7 @@
 cd $(dirname $0)/../@gi
 
 for file in $(ls .); do
-  sed -i '1i// @ts-nocheck' $file
+  sed -i '1i// @ts-nocheck' "$file"
 done
+
+../scripts/giRename.js

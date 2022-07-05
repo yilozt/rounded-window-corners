@@ -3,7 +3,6 @@
     "inferGenerics": true,
     "promisify": true,
     "propertyCase": "both",
-    "versionedOutput": false,
     "versionedImports": false,
     "withDocs": true,
     "out": "./@gi"
