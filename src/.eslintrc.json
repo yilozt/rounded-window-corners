@@ -1,6 +1,5 @@
 {
   "env": {
-    "browser": true,
     "es2021": true
   },
   "extends": [
@@ -39,15 +38,17 @@
       "error",
       "never"
     ],
-    "space-before-function-paren": "error",
-    "func-call-spacing": ["error", "always"],
+    "no-trailing-spaces": "error",
+    "block-spacing": ["error", "always"],
+    "space-before-function-paren": ["error", "never"],
+    "func-call-spacing": ["error", "never"],
     "no-var": ["error"],
     "max-len": ["error", {
-      "code": 80,
-      "comments": 95,
+      "code": 95,
       "ignoreTemplateLiterals": true,
+      "ignoreStrings": true,
       "ignoreUrls": true
     }]
   },
-  "ignorePatterns": ["_build/**", "scripts/**", "*.d.ts", "extension.ts", "**/*.js"]
+  "ignorePatterns": ["extension.ts", "global.d.ts"]
 }

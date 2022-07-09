@@ -1,4 +1,15 @@
 {
+  "// options": [
+    " This file is used by gi-ts, to genarate .d.ts for gir binding, so that we can use   ",
+    " auto-compeleted features when we write gnome shell extension.                       ",
+    "                                                                                     ",
+    " Borrowd from:                                                                       ",
+    "https://github.com/oae/gnome-shell-extensions-sync/blob/master/docs.json             ",
+    "                                                                                     ",
+    " Options can be check by this command:                                               ",
+    "   yarn gi-ts generate --help                                                        "
+  ],
+
   "options": {
     "inferGenerics": true,
     "promisify": true,
@@ -7,6 +18,12 @@
     "withDocs": true,
     "out": "./@gi"
   },
+
+  "// libraries": [
+    "We will use those libraries in our extensions.                                       ",
+    " You can use `yarn build` then check `docs-lock.json` to see all libraries.          "
+  ],
+
   "libraries": {
     "Cogl":     [ "10" ],
     "Clutter":  [ "10" ],

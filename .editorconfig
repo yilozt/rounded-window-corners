@@ -3,7 +3,7 @@ root = true
 [*]
 charset = utf-8
 
-[*.{ts,js,json,sh}]
+[*.{ts,js,json,sh, glsl}]
 indent_style = space
 indent_size = 2
 trim_trailing_whitespace = true

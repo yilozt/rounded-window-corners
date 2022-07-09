@@ -3,17 +3,18 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "es2020",
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
-    "pretty": true,
+    "pretty": false,
     "removeComments": false,
+    "skipLibCheck": true,
     "baseUrl": "./src",
     "paths": {
       "@imports/*": ["../@imports/*"],
       "gi://*":     ["../@gi/*"],
-      "@global":    ["./global.d.ts"],
+      "@global":    ["./global.d.ts"]
     },
     "outDir": "./_build/"
   },
-  "include": ["./src/**/*.ts"  ],
+  "include": ["src/**/*.ts"  ]
 }

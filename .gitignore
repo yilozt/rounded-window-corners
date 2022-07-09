@@ -1,5 +1,7 @@
 yarn.lock
-docs-lock.json
+*lock*
 _build
 node_modules
 @gi
+.vagrant
+Vagrantfile

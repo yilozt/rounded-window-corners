@@ -9,25 +9,22 @@
     "@gi.ts/cli": "^1.5.7",
     "@gi.ts/lib": "^1.5.9",
     "@gi.ts/parser": "^1.5.3",
+    "@types/gulp": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",
     "eslint": "^8.19.0",
-    "source-map-support": "^0.5.21",
-    "tsc-watch": "^5.0.3",
+    "gulp": "4",
+    "gulp-cli": "^2.3.0",
+    "gulp-eslint-new": "^1.5.1",
+    "gulp-preserve-typescript-whitespace": "^1.0.3",
+    "gulp-rename": "^2.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "lock:types": "XDG_DATA_DIRS=$XDG_DATA_DIRS:/usr/share/gnome-shell:/usr/lib/mutter-10 gi-ts config --lock",
-    "clean:types": "rm -rf ./@gi",
-    "clean:build": "rm -rf _build",
-    "clean": "yarn clean:types && yarn clean:build",
-    "build:types": "yarn clean && yarn lock:types && gi-ts generate && ./scripts/skipcheck.sh",
-    "eslint": "eslint ./resource/debug/src --fix",
-    "build:ts": "tsc",
-    "trans:gjs": "./scripts/replaceImports.js && cp -r resource/* _build && cp -r src _build/debug/",
-    "build": "yarn build:types && yarn build:ts && yarn eslint && yarn trans:gjs && yarn copy",
-    "onSuccess": "yarn eslint && yarn trans:gjs && yarn copy",
-    "watch": "tsc-watch --noClear --onSuccess \"yarn onSuccess\"",
-    "copy": "rm -rf ~/.local/share/gnome-shell/extensions/roundedmywindow@yilozt.github.com/* && cp -r _build/* ~/.local/share/gnome-shell/extensions/roundedmywindow@yilozt.github.com/"
+    "build": "gulp build",
+    "install:ext": "gulp install",
+    "watch": "gulp watch",
+    "vm": "gulp vm"
   }
 }
