@@ -1,59 +1,84 @@
-const { restoreWhitespace,
-  saveWhitespace,
-  PreserveTypescriptWhitespaceOptions
-} = require('gulp-preserve-typescript-whitespace')
-const { dest, src, pipe, series, } = require('gulp')
+// This gulp script will do those step to build our gnome-shell extensions: 
+//   1. Compile typescript
+//   2. Format output js files
+//   2. Copy all things in Resources into build dir
+//   4. Convert import statements into style that Gjs need
+//   5. Compile settings schemas in build dir
+//   6. [Optional] Install extensions:
+//      Copy all things in build dir into ~/.local/share/gnome-shell/extensions
+
+const { dest, src, series, } = require('gulp')
 const ts = require('gulp-typescript')
-const { obj } = require('through2')
-const Vinyl = require('vinyl')
-const { rmSync } = require('fs')
-const { homedir } = require('os')
 const colors = require('ansi-colors')
+const { format_output } = require('./eslint')
 
 const tsProject = ts.createProject('tsconfig.json')
 const BUILD_DIR = require('../tsconfig.json').compilerOptions.outDir
 const SRC_DIR = require('../tsconfig.json').compilerOptions.baseUrl
 
-/**
- * @type {PreserveTypescriptWhitespaceOptions}
- */
-const preserveConfig = {
-  preserveNewLines: true,
-  preserveMultipleSpaces: true,
-  preserveSpacesBeforeColons: true,
-  preserveSameLineElse: true,
-  showDebugOutput: true,
+// Compile Typescript source code, because typescript compile will remove all empty
+// lines in compiled javascript files, and make the output files looks uncomfortable.
+// so We have to use 'gulp-preserve-typescript-whitespace' to add some empty lines in
+// compiled javascript files.
+//
+// [1] https://github.com/microsoft/TypeScript/issues/843
+// [2] https://www.npmjs.com/package/gulp-preserve-typescript-whitespace
+const { restoreWhitespace, saveWhitespace } = require('gulp-preserve-typescript-whitespace')
+const compile_ts = () => tsProject.src()                                            // Setup source
+  .pipe(saveWhitespace())                                                           // Save white-space
+  .pipe(tsProject()).js                                                             // Compile ts into js
+  .pipe(restoreWhitespace())                                                        // Restore white space
+  .pipe(src([`${SRC_DIR}/**/*`, `!${SRC_DIR}/**/*.ts`, `!${SRC_DIR}/**/*.d.ts`]))   // Add *.ui and shaders under src/ into source
+  .pipe(dest(BUILD_DIR))                                                            // Set output
+
+// Compile GSettings schemas in build directory by glib-compile-schemas
+// It will stop build process when schemas compile failed.
+const compile_schema = (cb) => {
+  require('child_process').exec(`cd ${BUILD_DIR} && glib-compile-schemas schemas/`)
+    .stderr.on('data', (data) => {
+      const out = data.toString()
+      if (out.length!= 0) {
+        cb(new Error(data))
+      }
+    }).on('close', () => cb(null))
 }
 
-const copy_resource = () => src('./resource/**').
+// Copy everything in resources directory into build directory
+const copy_resources = () => src('./resources/**').
   pipe(dest(BUILD_DIR))
 
+// Install extensions, copy all things in build directory into
+// ~/.local/share/gnome-shell/extensions
 const install_extension = () => {
-  const uuid = require('../resource/metadata.json').uuid
-  const extension_dir = homedir + '/.local/share/gnome-shell/extensions/' + uuid
-  rmSync(extension_dir, { recursive: true, force: true })
+  const uuid = require('../resources/metadata.json').uuid
+  const extension_dir = require('os').homedir + '/.local/share/gnome-shell/extensions/' + uuid
+  require('fs').rmSync(extension_dir, { recursive: true, force: true })
   return src(`${BUILD_DIR}/**`)
     .pipe(dest(extension_dir))
 }
 
-/**
- *
- * @returns {NodeJS.ReadWriteStream}
- */
-const compile_ts = () => tsProject.src()
-  .pipe(saveWhitespace(preserveConfig))
-  .pipe(tsProject()).js
-  .pipe(restoreWhitespace())
-  .pipe(replace_imports())
-  .pipe(src([`${SRC_DIR}/**/*`, `!${SRC_DIR}/**/*.ts`, `!${SRC_DIR}/**/*.d.ts`]))
+// Replace import statements in output files, to let extensions works with gjs
+// Convert `import XXX from YYY` into `const XXX = imports.YYY`
+// This idea is base on the Pop!_Os does:
+//
+// https://github.com/pop-os/shell/blob/master_jammy/scripts/transpile.sh
+// 
+// We can got more flexibility in `replace()` of Javascript.
+const replace_imports = () => src(`${BUILD_DIR}/**/*.js`)
+  .pipe(replace())      // All things happened here.
   .pipe(dest(BUILD_DIR))
 
-exports.build_ts = series(compile_ts, copy_resource)
+
+// -------------------------------------------------------- [Export gulp tasks]
+
+exports.build_ts = series(compile_ts, format_output, replace_imports, copy_resources, compile_schema)
 exports.copy_extension = install_extension
 
-//  ========================================================== private methods
 
-const replace_imports = () => obj(/** @param file {Vinyl} */ function (file, encoding, callback) {
+// ---------------------------------------------------------- [Private methods]
+
+const Vinyl = require('vinyl')
+const replace = () => require('through2').obj(/** @param file {Vinyl} */ function (file, encoding, callback) {
   const ERR_IMPORTS = []
 
   /**
@@ -76,9 +101,9 @@ const replace_imports = () => obj(/** @param file {Vinyl} */ function (file, enc
    */
   const replace_func = (match, p1, p2) => {
     // We will skip `src/global.d.ts`, because content of this
-    // file exits in our gnome shell enviroments
+    // file exits in our gnome shell environments
     if (p2.includes('global')) {
-      return `// ${match}`
+      return ``
     }
 
     const imports_gi = p2.includes('@gi/') || p2.includes('gi://')
@@ -88,22 +113,24 @@ const replace_imports = () => obj(/** @param file {Vinyl} */ function (file, enc
 
     if (imports_gi || imports_shell) {
       // We will convert `import * as Abc from 'Xyz'`
-      // to `const Abc = imports.XXXX`, so ' * as ' is unnessary
-      p1 = p1.replace('* as ', '')
+      // to `const Abc = imports.XXXX`, so ' * as ' is unnecessary
+      if (p1.includes('* as')) {
+        p1 = p1.replace('* as ', '') + '     '
+      }
 
       if (imports_gi) {
         // When we import something from gi
         // generate const XXX = imports.gi.XXX
-        p2 = 'imports.gi.' + p2.replace(/.*@gi\//, '').replace('gi://', '')
+        p2 = 'imports.gi.' + p2.replace(/.*@gi\//, '').replace('gi://', '').replace(/-.*/, '')
       } else if (imports_shell) {
         // When we import something from gnome shell
         // generate const XXX = imports.XXX.XXX
         p2 = 'imports' + p2.replace(/.*@imports/, '').replace(/\//g, '.')
       }
-      res = `const ${p1} = ${p2}`
+      res = `const ${p1}  = ${p2}`
     } else {
       // When we import local modules from our extensions, it must be
-      // relative path
+      // relative path, see:
       // https://gitlab.gnome.org/GNOME/gjs/-/blob/master/doc/ESModules.md#terminology
       if (!(p2.match(/^\.\.\//) || p2.match(/^\.\//))) {
         ERR_IMPORTS.push(match)
@@ -116,26 +143,28 @@ const replace_imports = () => obj(/** @param file {Vinyl} */ function (file, enc
       }
       res = `import ${p1} from '${p2}'`
     }
+
     return res
   }
 
   let replaced = file.contents.toString()
 
-  // extension.js is entry point of gnome shell extensions, we will process
-  // it specially
-  const isExtensionJs = file.relative.includes('extension.js')
+  // extension.js / prefs.js is entry point of gnome shell extensions,
+  // we will process them specially
+  const isEntryJs = file.relative.includes('extension.js')
+    || file.relative.includes('prefs.js')
 
-  // Remove 'export ' in extension.js, because it is not ES modules in our
+  // Remove 'export ' in extension.js / prefs.js, because it is not ES modules in our
   // extensions.
-  if (isExtensionJs) {
+  if (isEntryJs) {
     replaced = replaced.replace(/^export /gm, '')
   }
 
-  // We will haldles all import statements with this simple regex
-  // express
-  replaced = replaced.replace(/^\s*import\s+(.*)\s+from\s+['"](.*)['"]/gm, replace_func)
+  // We will handles all import statements with this simple regex express
+  replaced = replaced.replace(/import\s+?(.*?) from\s+?['"](.*?)['"]/gm, replace_func)
   file.contents = Buffer.from(replaced, encoding)
 
+  // Output error message when we can't understand a import statement.
   if (ERR_IMPORTS.length > 0) {
     console.error(
       colors.red('error '),
@@ -150,13 +179,8 @@ const replace_imports = () => obj(/** @param file {Vinyl} */ function (file, enc
     )
     console.error('')
   } else {
-    // console.log(
-    //   colors.bold(colors.green('  √  ')),
-    //   'All import converted for  ',
-    //   colors.bold(file.relative),
-    // )
+    // console.log(colors.bold(colors.green('  √  ')), colors.bold(file.relative))
   }
 
   callback(null, file)
 })
-

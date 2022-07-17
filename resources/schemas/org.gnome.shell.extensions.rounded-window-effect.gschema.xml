@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema
+    id="org.gnome.shell.extensions.rounded-window-effect"
+    path="/org/gnome/shell/extensions/rounded-window-effect/"
+  >
+    
+    <key name="black-list" type="as">
+      <default>["qq.exe", "tim.exe"]</default>
+      <summary>window here will not be rounded</summary>
+      <description>
+        The contents of the list represent the instance part of the window's
+        `WM_CLASS`, as same as the output of `xprop WM_CLASS|cut -d \" -f 2`
+      </description>
+    </key>
+
+    <key name="skip-libadwaita-app" type="b">
+      <summary>Skip applications writen by Libadwaita</summary>
+      <default>true</default>
+    </key>
+
+    <key name="skip-libhandy-app" type="b">
+      <summary>Skip applications writen by LibHandy</summary>
+      <default>true</default>
+    </key>
+    
+    <key name="global-rounded-corner-settings" type="a{sv}">
+      <default>
+        <!--
+          GLib.Variant is express as <type_name, value> in gsettings, but '<' and '>'
+          is used to close tag in xml, so we have to use '&lt;' and '&rt;' when we
+          want to set default value to Variant type.
+        -->
+        {
+          'padding': &lt;{
+            'left': &lt;uint32 1&gt;,
+            'right': &lt;uint32 1&gt;,
+            'top': &lt;uint32 1&gt;,
+            'bottom': &lt;uint32 1&gt;
+          }&gt;,
+          'keep_rounded_corners': &lt;true&gt;,
+          'border_radius': &lt;uint32 12&gt;
+        }
+      </default>
+    </key>
+
+    <key name="focus-shadow" type="a{si}">
+      <default>
+        {
+          'horizontal_offset': 0,
+          'vertical_offset': 41,
+          'blur_offset': 38,
+          'spread_radius': -15,
+          'opacity': 53
+        }
+      </default>
+    </key>
+
+    <key name="unfocus-shadow" type="a{si}">
+      <default>
+        {
+          'horizontal_offset': 0,
+          'vertical_offset': 10,
+          'blur_offset': 9,
+          'spread_radius': -5,
+          'opacity': 62
+        }
+      </default>
+    </key>
+
+    <key name="debug-mode" type="b">
+      <default>false</default>
+    </key>
+
+  </schema>
+</schemalist>

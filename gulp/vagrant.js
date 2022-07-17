@@ -1,33 +1,36 @@
-const { series } = require("gulp");
-const { spawn } = require("child_process")
-const colors = require("ansi-colors")
-const fs = require('fs')
+// This gulp scripts use to init and start virtual machine which
+// use to development gnome-shell extensions.
+// It will use the scripts under ./conf to install gnome-shell
+// desktop, setup gdm, install virtual box  addition and show
+// the log of gnome-shell by vagrant.
+
+const { series, parallel } = require("gulp");
 
 const choice_init_script = () => {
+  // Choice scripts to init vm 
   const lang = process.env['LANG'].split('.')[0]
-  if (fs.existsSync(`conf/${lang}.init_vm.sh`)) {
+  if (require('fs').existsSync(`conf/${lang}.init_vm.sh`)) {
     return `/scripts/${lang}.init_vm.sh`
   } else {
     return '/scripts/init_vm.sh'
   }
 }
 
-// We will make output all message from child process here
-/**
- *
- * @param {string} cmd
- * @param {string[]} opts
- * @param {import("child_process").SpawnOptions} config
- * @returns
- */
+// Handle output of log that generate by `vagrant ssh` in this
+// function
 const run_cmd = (cmd, opts, config) => {
-  const child = spawn(cmd, opts, {
+  const child = require("child_process").spawn(cmd, opts, {
     'shell': true,
     ...config
   })
 
   if (!config || !config['stdio']) {
-    // handle ssh output for gnome shell simplely
+    const tip = (opts[2].includes('gjs'))
+      ? 'preferences : '
+      : '  extension : '
+
+    // Add color for output of `vagrant ssh`
+    const colors = require("ansi-colors")
     const handle_output = (data) => {
       let contents = data.toString();
       if (contents.endsWith('\n')) {
@@ -38,12 +41,14 @@ const run_cmd = (cmd, opts, config) => {
         if (line.match(/err|Err|Failed|failed/)) {
           res = colors.bold(colors.yellow(line)) // failed message
         } else if (line.match(/^=+>|^\[.*?\]/)) {
-          res = colors.bold(line)  // log message
+          res = colors.bold(line)                // log message
         } else if (line.match(/(.*?:\/\/.*?\:)|(Stack trace)/)) {
-          res = colors.red(line)   // stack error
+          res = colors.red(line)                 // stack error
+        } else if (line.match(/LOG: /)) {
+          res = colors.green(line)               // JS LOG
         }
 
-        res = colors.dim(` |  `) + res
+        res = colors.dim(tip) + res
         console.log(res)
       })
     }
@@ -54,12 +59,22 @@ const run_cmd = (cmd, opts, config) => {
   return child
 }
 
+// -------------------------------------------------------- [Export gulp tasks]
+
+// Start and setup vm by Vagrantfile 
+const up = () => run_cmd('vagrant', ['up'], { 'stdio': 'inherit'})
+
+// Install gnome desktop and init vm
 const init_vm = () => run_cmd(
   'vagrant',
   ['ssh', '-c', `'sudo ${choice_init_script()}'` ],
   { 'stdio': 'inherit', shell: '/usr/bin/bash'}
 )
-const up = () => run_cmd('vagrant', ['up'], { 'stdio': 'inherit'})
-const ssh = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o cat /usr/bin/gnome-shell"'])
 
-exports.vagrant = series(up, init_vm, ssh)
+// Display debug log for our Extension
+const watch_shell = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o cat /usr/bin/gnome-shell"'])
+
+// Display debug log for our preferences pages
+const watch_gjs   = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o cat /usr/bin/gjs"'])
+
+exports.vagrant = series(up, init_vm, parallel(watch_shell, watch_gjs))

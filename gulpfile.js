@@ -1,15 +1,28 @@
 const { parallel, series, watch: w } = require('gulp')
 const { build_ts, copy_extension }  = require('./gulp/build')
-const { eslint, fix_out_intent} = require('./gulp/eslint')
+const { eslint } = require('./gulp/eslint')
 const { gi } = require('./gulp/gi')
 const { vagrant } = require('./gulp/vagrant')
 
 const watch   = () => w(
-  ['./src/**/*', './docs.json', 'resource/**/*'],
-  this.install
+  ['./src/**/*', './docs.json', 'resources/**/*'],
+  this.build
 )
 
-exports.build   = series(gi, parallel(eslint, build_ts), fix_out_intent)
+// Generate @gi Folder
+exports.gi      = gi
+
+// Build Extension
+exports.build   = series(gi, parallel(eslint, build_ts))
+
+// Build & Install extension
 exports.install = series(this.build, copy_extension)
-exports.watch   = series(this.install, watch)
-exports.vm      = series(this.install, parallel(vagrant, watch))
+
+// Development Options
+
+// Watch changes in src/
+exports.watch   = series(this.build, watch)
+
+// Watch changes & run extensions in virtual machine
+// Need vagrant installed.
+exports.vm      = series(this.build, parallel(vagrant, watch))

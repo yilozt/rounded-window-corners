@@ -1,11 +1,15 @@
-const { dest } = require('gulp')
+// This gulp scripts use `eslint` to check out code and format
+// Output js files in _build directory.
+
 const gulp = require('gulp')
 const gulpESLintNew = require('gulp-eslint-new')
 
-const src_pathes = require('../tsconfig.json').include
+// Read configuration from .tsconfig.json
+const src_path = require('../tsconfig.json').include
 const build_dir = require('../tsconfig.json').compilerOptions.outDir
 
-const eslint = () => gulp.src(src_pathes)
+// Use eslint to check while compile typescript
+const eslint = () => gulp.src(src_path)
   .pipe(gulpESLintNew({
     fix: true,
     overrideConfig: require('../src/.eslintrc.json')
@@ -13,14 +17,16 @@ const eslint = () => gulp.src(src_pathes)
   .pipe(gulpESLintNew.fix())
   .pipe(gulpESLintNew.format())
 
-const fix_out_intent = () => gulp.src(`${build_dir}/**/*.js`)
+// Use eslint to format the compiled javascript files
+const format_output = () => gulp.src(`${build_dir}/**/*.js`)
   .pipe(gulpESLintNew({
     fix: true,
-    overrideConfig: require('../resource/.eslintrc.json')
+    overrideConfig: require('../resources/.eslintrc.json')
   }))
   .pipe(gulpESLintNew.fix())
   .pipe(gulpESLintNew.format())
-  .pipe(dest(build_dir))
+
+// -------------------------------------------------------- [Export gulp tasks]
 
 exports.eslint = eslint
-exports.fix_out_intent = fix_out_intent
+exports.format_output = format_output

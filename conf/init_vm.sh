@@ -1,11 +1,13 @@
+#!/bin/bash
+
 # Those scripts used to init vm
 
 # enable debug info so that we can know what happened.
 set -ex
 
-if [ -d /etc/done ] && exit 0
+[[ -e /etc/done ]] && exit 0
 
-dnf install -y gnome-shell gnome-tweaks gnome-extensions-app @development-tools xrdp gnome-terminal vim nautilus
+dnf install -y gnome-shell gnome-tweaks gnome-extensions-app virtualbox-guest-additions @development-tools xrdp gnome-terminal vim nautilus
 systemctl set-default graphical.target
 echo "[daemon]" > /etc/gdm/custom.conf
 echo "AutomaticLoginEnable = true" >> /etc/gdm/custom.conf
@@ -23,4 +25,5 @@ echo "auth sufficient pam_succeed_if.so user ingroup nopasswdlogin" > /tmp/a
 cat /etc/pam.d/gdm-password >> /tmp/a
 cat /tmp/a > /etc/pam.d/gdm-password
 systemctl start gdm
+
 echo '' > /etc/done

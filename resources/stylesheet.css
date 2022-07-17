@@ -1,11 +1,3 @@
-/* Add your custom extension styling here */
-decoration {
-  box-shadow: none;
-}
-decoration:backdrop {
-  box-shadow: none;
-}
-
 .shadow {
   background-color: rgba(212, 95, 95, 0);
   border: rgba(255, 0, 0, 0) 80px solid;
