@@ -1,0 +1,41 @@
+{
+  "[1]": [
+    "We have to use create a simple configuration json to generate docs.json   ",
+    "Because gi.ts have not offer a way to fix conflict, so we have to generate",
+    ".d.ts in twice.                                                           "
+  ],
+
+  "[2]": [
+    "Options to configuration gi.ts:",
+    "https://gitlab.gnome.org/ewlsh/gi.ts/-/tree/master/packages/cli"
+  ],
+  "options": {
+    "inferGenerics": true,
+    "promisify": true,
+    "propertyCase": "both",
+    "versionedOutput": false,
+    "versionedImports": false,
+    "withDocs": true,
+    "out": "./@gi"
+  },
+
+  "[3]": [
+    "Those configuration will be used in ./gulp/gi.js, to generate *.d.ts for this",
+    "gnome-shell extensions."
+  ],
+  "libraries_prefs": {
+    "Adw": [ "1" ],
+    "Gtk": [ "4.0" ]
+  },
+  "libraries_ext": {
+    "Cogl":     [ "10" ],
+    "Clutter":  [ "10" ],
+    "Meta":     [ "10" ],
+    "Shell":    [ "0.1" ],
+    "GLib":     [ "2.0" ],
+    "Gio":      [ "2.0" ],
+    "GObject":  [ "2.0" ],
+    "St":       [ "1.0" ],
+    "Graphene": [ "1.0"]
+  }
+}

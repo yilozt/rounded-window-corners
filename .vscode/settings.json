@@ -1,0 +1,21 @@
+{
+    "cSpell.words": [
+        "Adwaita",
+        "GLSL",
+        "Graphene",
+        "libadwaita",
+        "libhandy",
+        "Prefs",
+        "valign",
+        "vfunc"
+    ],
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "match": ".ts",
+                "isAsync": true,
+                "cmd": "yarn build"
+            }
+        ]
+    },
+}

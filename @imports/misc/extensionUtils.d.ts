@@ -6,7 +6,7 @@ import * as Gio from '../../@gi/Gio'
  * @returns {?object} - The current extension, or null if not called from
  * an extension.
  */
-declare function getCurrentExtension(): object | null;
+declare function getCurrentExtension(): { uuid: string } | null;
 /**
  * initTranslations:
  * @param {string=} domain - the gettext domain to use

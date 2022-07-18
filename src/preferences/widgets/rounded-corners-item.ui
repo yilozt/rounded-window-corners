@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <requires lib="libadwaita" version="1.0" />
+  <template class="RoundedCornersItem" parent="GtkListBox">
+    <property name="selection-mode">none</property>
+    <child>
+      <object class="AdwActionRow">
+        <property name="title" translatable="yes">Keep Rounded Corners When Maximized</property>
+        <property name="subtitle" translatable="yes">Always keep rounded corners when window is maximized or tiled.</property>
+        <property name="activatable-widget">rounded_in_maximized_switch</property>
+        <child>
+          <object class="GtkSwitch" id="rounded_in_maximized_switch">
+            <property name="valign">GTK_ALIGN_CENTER</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwActionRow">
+        <property name="title" translatable="yes">Border Radius</property>
+        <child>
+          <object class="GtkScale" id="border_radius_scale">
+            <property name="valign">GTK_ALIGN_CENTER</property>
+            <property name="hexpand">TRUE</property>
+            <property name="draw-value">TRUE</property>
+            <property name="round-digits">0</property>
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="adjustment">border_radius_ajustment</property>
+            <property name="value-pos">GTK_POS_RIGHT</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="AdwExpanderRow">
+        <property name="title" translatable="yes">Paddings</property>
+        <property name="subtitle" translatable="yes">Clip paddings of window</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Left</property>
+            <child>
+              <object class="GtkScale" id="padding_left_scale">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="hexpand">TRUE</property>
+                <property name="draw-value">TRUE</property>
+                <property name="round-digits">0</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="adjustment">padding_left_ajustment</property>
+                <property name="value-pos">GTK_POS_RIGHT</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Right</property>
+            <child>
+              <object class="GtkScale" id="padding_right_scale">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="hexpand">TRUE</property>
+                <property name="draw-value">TRUE</property>
+                <property name="round-digits">0</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="adjustment">padding_right_ajustment</property>
+                <property name="value-pos">GTK_POS_RIGHT</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Top</property>
+            <child>
+              <object class="GtkScale" id="padding_top_scale">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="hexpand">TRUE</property>
+                <property name="draw-value">TRUE</property>
+                <property name="round-digits">0</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="adjustment">padding_top_ajustment</property>
+                <property name="value-pos">GTK_POS_RIGHT</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Bottom</property>
+            <child>
+              <object class="GtkScale" id="padding_bottom_scale">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="hexpand">TRUE</property>
+                <property name="draw-value">TRUE</property>
+                <property name="round-digits">0</property>
+                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                <property name="adjustment">padding_bottom_ajustment</property>
+                <property name="value-pos">GTK_POS_RIGHT</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkAdjustment" id="border_radius_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="padding_left_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="padding_right_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="padding_top_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="padding_bottom_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+</interface>

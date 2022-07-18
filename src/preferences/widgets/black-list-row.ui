@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <requires lib="libadwaita" version="1.0" />
+  <template class="BlacklistRow" parent="AdwExpanderRow">
+    <child type="action">
+      <object class="GtkButton" id="remove_button">
+        <property name="valign">center</property>
+        <property name="icon-name">window-close-symbolic</property>
+        <style>
+          <class name="flat" />
+          <class name="circular" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesRow" id="wm_name_row">
+        <property name="activatable">false</property>
+        <property name="selectable">false</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <child>
+              <object class="GtkButton">
+                <property name="margin-end">12</property>
+                <property name="icon-name">find-location-symbolic</property>
+                <style>
+                  <class name="flat" />
+                  <class name="circular" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="hexpand">true</property>
+                <property name="buffer">
+                  <object class="GtkEntryBuffer" id="entry_buffer"></object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

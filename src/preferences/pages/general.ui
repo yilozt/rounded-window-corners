@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0" />
+  <requires lib="libadwaita" version="1.0" />
+  <template class="General" parent="AdwPreferencesPage">
+    <property name="title" translatable="yes">General</property>
+    <property name="icon-name">emblem-system-symbolic</property>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Applications</property>
+        <property name="description" translatable="yes">The application written by Libhandy / LibAdwaita have native rounded corners, so we can skip them.</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Skip Libadwaita Applications</property>
+            <property name="activatable-widget">skip_libadwaita_app_switch</property>
+            <child>
+              <object class="GtkSwitch" id="skip_libadwaita_app_switch">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Skip LibHandy Applications</property>
+            <property name="activatable-widget">skip_libhandy_app_switch</property>
+            <child>
+              <object class="GtkSwitch" id="skip_libhandy_app_switch">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Window Shadow</property>
+            <property name="activatable">True</property>
+            <signal name="activated" handler="_show_edit_shadow_window_cb" />
+            <child>
+              <object class="GtkImage">
+                <property name="icon_name">go-next-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="global_settings_preferences_group">
+        <property name="title" translatable="yes">Global Settings</property>
+        <property name="description" translatable="yes">This settings will effects all windows</property>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title" translatable="yes">Debug</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title">Enable Log</property>
+            <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; to see the log</property>
+            <property name="activatable-widget">enable_log_switch</property>
+            <child>
+              <object class="GtkSwitch" id="enable_log_switch">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -44,6 +44,11 @@
       </default>
     </key>
 
+    <key name="custom-rounded-corner-settings" type="a{sv}">
+      <default>{}</default>
+    </key>
+
+
     <key name="focus-shadow" type="a{si}">
       <default>
         {

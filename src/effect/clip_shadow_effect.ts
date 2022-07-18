@@ -1,12 +1,21 @@
-import * as GObject from 'gi://GObject'
-import * as Shell   from 'gi://Shell'
+// imports.gi
+import * as GObject                from '@gi/GObject'
+import { SnippetHook, GLSLEffect } from '@gi/Shell'
 
-import utils        from '../utils'
+// local modules
+import utils                       from '../utils'
 
-const { dels, code } = utils.loadShader(import.meta.url, './shader/clip_shadow.frag')
+// ------------------------------------------------------------------- [imports]
 
-export default GObject.registerClass({}, class ClipShadowEffect extends Shell.GLSLEffect {
-  vfunc_build_pipeline(): void {
-    this.add_glsl_snippet(Shell.SnippetHook.FRAGMENT, dels, code, false)
-  }
-})
+const { declarations, code } = utils.loadShader (
+    import.meta.url,
+    './shader/clip_shadow.frag'
+)
+
+class ClipShadowEffect extends GLSLEffect {
+    vfunc_build_pipeline (): void {
+        this.add_glsl_snippet (SnippetHook.FRAGMENT, declarations, code, false)
+    }
+}
+
+export default GObject.registerClass ({}, ClipShadowEffect)

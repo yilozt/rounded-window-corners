@@ -11,7 +11,7 @@
     "baseUrl": "./src",
     "paths": {
       "@imports/*": ["../@imports/*"],
-      "gi://*":     ["../@gi/*"],
+      "@gi/*":      ["../@gi/*"],
       "@global":    ["./global.d.ts"]
     },
     "outDir": "./_build/"

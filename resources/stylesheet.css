@@ -1,12 +1,5 @@
 .shadow {
-  background-color: rgba(212, 95, 95, 0);
-  border: rgba(255, 0, 0, 0) 80px solid;
-  box-shadow: 2 2px 3px 5px rgba(83, 83, 83, 0.205);
-  transition-duration: 500ms;
+  transition-duration: 150ms;
   transition-property: box-shadow;
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  border-radius: 16px;
-}
-.shadow:hover {
-  box-shadow: 0 2px 3px -1px rgba(0, 0, 0, 0.2);
+  transition-timing-function: linear;
 }

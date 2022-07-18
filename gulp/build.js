@@ -9,8 +9,9 @@
 
 const { dest, src, series, } = require('gulp')
 const ts = require('gulp-typescript')
+const prettier = require('gulp-prettier')
 const colors = require('ansi-colors')
-const { format_output } = require('./eslint')
+const { align_imports } = require('./format')
 
 const tsProject = ts.createProject('tsconfig.json')
 const BUILD_DIR = require('../tsconfig.json').compilerOptions.outDir
@@ -24,12 +25,19 @@ const SRC_DIR = require('../tsconfig.json').compilerOptions.baseUrl
 // [1] https://github.com/microsoft/TypeScript/issues/843
 // [2] https://www.npmjs.com/package/gulp-preserve-typescript-whitespace
 const { restoreWhitespace, saveWhitespace } = require('gulp-preserve-typescript-whitespace')
-const compile_ts = () => tsProject.src()                                            // Setup source
-  .pipe(saveWhitespace())                                                           // Save white-space
-  .pipe(tsProject()).js                                                             // Compile ts into js
-  .pipe(restoreWhitespace())                                                        // Restore white space
-  .pipe(src([`${SRC_DIR}/**/*`, `!${SRC_DIR}/**/*.ts`, `!${SRC_DIR}/**/*.d.ts`]))   // Add *.ui and shaders under src/ into source
-  .pipe(dest(BUILD_DIR))                                                            // Set output
+const compile_ts = () => tsProject.src()  // Setup source
+  .pipe(saveWhitespace())                 // Save white-space
+  .pipe(tsProject()).js                   // Compile ts into js
+  .pipe(restoreWhitespace())              // Restore white space
+  .pipe(prettier())                       // Format the output
+  .pipe(align_imports())                  // Align import statements
+  .pipe(replace())                        // Convert import statements to GJs-compatibility
+  .pipe(src([
+    `${SRC_DIR}/**/*`,
+    `!${SRC_DIR}/**/*.ts`,
+    `!${SRC_DIR}/**/*.d.ts`
+  ]))                                     // Add *.ui and shaders under src/ into source
+  .pipe(dest(BUILD_DIR))                  // Set output
 
 // Compile GSettings schemas in build directory by glib-compile-schemas
 // It will stop build process when schemas compile failed.
@@ -57,6 +65,15 @@ const install_extension = () => {
     .pipe(dest(extension_dir))
 }
 
+// -------------------------------------------------------- [Export gulp tasks]
+
+exports.build_ts = series(compile_ts, copy_resources, compile_schema)
+exports.copy_extension = install_extension
+
+// ---------------------------------------------------------- [Private methods]
+
+const Vinyl = require('vinyl')
+
 // Replace import statements in output files, to let extensions works with gjs
 // Convert `import XXX from YYY` into `const XXX = imports.YYY`
 // This idea is base on the Pop!_Os does:
@@ -64,20 +81,6 @@ const install_extension = () => {
 // https://github.com/pop-os/shell/blob/master_jammy/scripts/transpile.sh
 // 
 // We can got more flexibility in `replace()` of Javascript.
-const replace_imports = () => src(`${BUILD_DIR}/**/*.js`)
-  .pipe(replace())      // All things happened here.
-  .pipe(dest(BUILD_DIR))
-
-
-// -------------------------------------------------------- [Export gulp tasks]
-
-exports.build_ts = series(compile_ts, format_output, replace_imports, copy_resources, compile_schema)
-exports.copy_extension = install_extension
-
-
-// ---------------------------------------------------------- [Private methods]
-
-const Vinyl = require('vinyl')
 const replace = () => require('through2').obj(/** @param file {Vinyl} */ function (file, encoding, callback) {
   const ERR_IMPORTS = []
 
@@ -134,8 +137,10 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
       // https://gitlab.gnome.org/GNOME/gjs/-/blob/master/doc/ESModules.md#terminology
       if (!(p2.match(/^\.\.\//) || p2.match(/^\.\//))) {
         ERR_IMPORTS.push(match)
-        return `// error: Modules from extension should be import with relative`
-            +  ` path => import ${p1} from ${p2}`
+        return '\n// ------------------------------------------------------------------\n'
+            +    '// error: Modules from extension should be import with relative path.\n'
+            +    `// error: ${match}\n`
+            +    '// ------------------------------------------------------------------\n\n'
       }
 
       if (!p2.match(/js$/)) {
@@ -161,7 +166,7 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
   }
 
   // We will handles all import statements with this simple regex express
-  replaced = replaced.replace(/import\s+?(.*?) from\s+?['"](.*?)['"]/gm, replace_func)
+  replaced = replaced.replace(/import (.*?) from\s+?['"](.*?)['"]/gm, replace_func)
   file.contents = Buffer.from(replaced, encoding)
 
   // Output error message when we can't understand a import statement.

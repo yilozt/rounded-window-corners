@@ -7,6 +7,27 @@
     "sourceType": "module"
   },
   "rules": {
-    "semi": ["error", "never"]
-  }
+    "indent": [
+      "error",
+      4
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ],
+    "strict": "error",
+    "no-trailing-spaces": "error",
+    "block-spacing": ["error", "always"],
+    "space-before-function-paren": ["error", "always"],
+    "func-call-spacing": ["error", "always"]
+  },
+  "ignorePatterns": ["global.d.ts"]
 }

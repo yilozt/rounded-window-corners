@@ -13,7 +13,7 @@ def get_uuid (path)
   return uuid
 end
 
-UUID = get_uuid "./resource/metadata.json"
+UUID = get_uuid "./resources/metadata.json"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for

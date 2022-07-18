@@ -5,3 +5,7 @@ node_modules
 @gi
 .vagrant
 Vagrantfile
+.ts-for-girrc.js
+docs.json
+*.log
+.tmp

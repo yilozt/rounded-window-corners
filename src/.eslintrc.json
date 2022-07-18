@@ -19,12 +19,12 @@
       "error",
       {
         "allowDestructuring": false,
-        "allowedNames": ["extensionThis"]
+        "allowedNames": ["self"]
       }
     ],
     "indent": [
       "error",
-      2
+      4
     ],
     "linebreak-style": [
       "error",
@@ -38,15 +38,15 @@
       "error",
       "never"
     ],
+    "strict": "error",
     "no-trailing-spaces": "error",
     "block-spacing": ["error", "always"],
-    "space-before-function-paren": ["error", "never"],
-    "func-call-spacing": ["error", "never"],
+    "space-before-function-paren": ["error", "always"],
+    "func-call-spacing": ["error", "always"],
     "no-var": ["error"],
     "max-len": ["error", {
-      "code": 95,
-      "ignoreUrls": true
+      "code": 80
     }]
   },
-  "ignorePatterns": ["extension.ts", "global.d.ts"]
+  "ignorePatterns": ["global.d.ts"]
 }
