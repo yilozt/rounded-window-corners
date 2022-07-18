@@ -10,8 +10,10 @@
 const { dest, src, series, } = require('gulp')
 const ts = require('gulp-typescript')
 const prettier = require('gulp-prettier')
+const gulpESLintNew = require('gulp-eslint-new')
 const colors = require('ansi-colors')
 const { align_imports } = require('./format')
+const { gi } = require('./gi')
 
 const tsProject = ts.createProject('tsconfig.json')
 const BUILD_DIR = require('../tsconfig.json').compilerOptions.outDir
@@ -25,12 +27,30 @@ const SRC_DIR = require('../tsconfig.json').compilerOptions.baseUrl
 // [1] https://github.com/microsoft/TypeScript/issues/843
 // [2] https://www.npmjs.com/package/gulp-preserve-typescript-whitespace
 const { restoreWhitespace, saveWhitespace } = require('gulp-preserve-typescript-whitespace')
+
+const eslint_src = () => gulpESLintNew({
+  fix: true,
+  overrideConfig: require('../src/.eslintrc.json')
+})
+const eslint_out = () => gulpESLintNew({
+  fix: true,
+  overrideConfig: { ...require('../resources/.eslintrc.json') }
+})
+
 const compile_ts = () => tsProject.src()  // Setup source
+  .pipe(prettier())                       // Format the source
+  .pipe(align_imports())                  // Align import statements in source
+  .pipe(eslint_src())                     // eslint
+  .pipe(gulpESLintNew.fix())              // Auto Fix
+  .pipe(gulpESLintNew.format())
   .pipe(saveWhitespace())                 // Save white-space
   .pipe(tsProject()).js                   // Compile ts into js
   .pipe(restoreWhitespace())              // Restore white space
   .pipe(prettier())                       // Format the output
   .pipe(align_imports())                  // Align import statements
+  .pipe(eslint_out())                     // eslint for output
+  .pipe(gulpESLintNew.fix())              // Auto fix
+  .pipe(gulpESLintNew.format())
   .pipe(replace())                        // Convert import statements to GJs-compatibility
   .pipe(src([
     `${SRC_DIR}/**/*`,
@@ -52,7 +72,7 @@ const compile_schema = (cb) => {
 }
 
 // Copy everything in resources directory into build directory
-const copy_resources = () => src('./resources/**').
+const copy_resources = () => src('./resources/**/*').
   pipe(dest(BUILD_DIR))
 
 // Install extensions, copy all things in build directory into
@@ -67,7 +87,7 @@ const install_extension = () => {
 
 // -------------------------------------------------------- [Export gulp tasks]
 
-exports.build_ts = series(compile_ts, copy_resources, compile_schema)
+exports.build = series(gi, compile_ts, copy_resources, compile_schema)
 exports.copy_extension = install_extension
 
 // ---------------------------------------------------------- [Private methods]

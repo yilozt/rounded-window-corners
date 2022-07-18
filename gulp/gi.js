@@ -5,6 +5,9 @@ const { existsSync, statSync, writeFileSync, readFileSync, rmSync, rm, mkdirSync
 const { exec, execSync } = require('child_process')
 const { parallel, series, src, dest } = require('gulp')
 
+const Vinyl = require('vinyl')
+const { obj } = require('through2')
+
 const conf = require('../.gi.ts.rc.json')
 const LOCK_FILE = 'docs.lock',
   CONFIG_FILE = '.gi.ts.rc.json',
@@ -21,52 +24,55 @@ const should_update = () => {
   return true
 }
 
-// Generate docs.json from gi.ts.rc.json
-// gi-ts will use .ts-for-girrc.js as configuration file.
-const generate_gi_prefs = () => {
-  mkdirSync('.tmp/prefs', {recursive: true})
-  writeFileSync('.tmp/prefs/docs.json', JSON.stringify({
-    'libraries': conf.libraries_prefs,
-    ...conf
-  }))
-  return exec("cd .tmp/prefs && gi-ts generate")
-}
+const extra_connect_func = () => obj( /** @param file {Vinyl} */(file, enc, cb) => {
+  let res = ''
 
-const generate_gi_ext = () => {
-  const extra_lib = [
-    execSync('find /usr/lib -maxdepth 1 -type d -name \'mutter-*\'').toString().split('\n')[0],
-    '/usr/share/gnome-shell'
-  ].join(':')
-  mkdirSync('.tmp/ext', {recursive: true})
-  writeFileSync('.tmp/ext/docs.json', JSON.stringify({
-    'libraries': conf.libraries_ext,
-    ...conf
-  }))
-  return exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`)
-}
+  let connect_funcs = []
+  let collecting = false;
 
-const generate_gi = () => {
-  if (should_update(LOCK_FILE, CONFIG_FILE)) {
-    conf.options.out = `../../${conf.options.out}`
-    rmSync(GI_DIR, { recursive: true, force: true })
-    return series(
-      parallel(generate_gi_ext, generate_gi_prefs),
-      rename_gi,
-      (cb) => {
-        writeFileSync(LOCK_FILE, statSync(CONFIG_FILE).mtimeMs.toString())
-        rmSync('.tmp', { recursive: true, force: true })
-        cb(null)
+  const lines = file.contents.toString().split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].match(/^export.*? class/)) {
+      collecting = true
+    }
+
+    if (collecting) {
+      const match = lines[i].match(/^    connect\((.*)\): number;/)
+      if (match) {
+        connect_funcs.push(match[1])
       }
-    )
-  }
-  const do_nothing = (cb) => cb(null)
-  return series(do_nothing)
-}
+    }
 
-const Vinyl = require('vinyl')
-const rename_gi = () => {
+    if (lines[i].startsWith('}') && collecting) {
+      connect_funcs = connect_funcs.filter(v => !v.includes("id: string"))
+      if (connect_funcs.length > 0) {
+        const t = `${connect_funcs.map(v => '[' + v + ']').reverse().join(' | ')}`
+        res += `    /** */ connect(...args: ${t}): number;\n`
+      }
+
+      res += '}'
+
+      connect_funcs = []
+      collecting = false
+    } else {
+      res += (lines[i] + '\n')
+    }
+  }
+
+  file.contents = Buffer.from(res, enc)
+  cb(null, file)
+})
+
+const rename_gi = (cb) => {
+  if (!should_update()) {
+    cb(null)
+    return
+  }
+
+  // generate name map
+  const maps = {}
+
   /** @param file {Vinyl} */
-  const { obj } = require('through2')
   const replace_imports = (file, encoding, callback) => {
     rm(file.path, () => { })
     const contents = file.contents.toString().replace(
@@ -77,17 +83,68 @@ const rename_gi = () => {
     callback(null, file)
   }
 
-  // generate name map
-  const maps = {}
+
   Object.keys(Object.assign({}, conf.libraries_ext, conf.libraries_prefs))
     .forEach(item => maps[item.toLowerCase()] = item)
 
   return src(`${GI_DIR}/**/*.d.ts`)
+    .pipe(extra_connect_func())
     .pipe(obj(replace_imports))
     .pipe(require('gulp-rename')(path => path.basename = maps[path.basename], { multiExt: true }))
     .pipe(dest(GI_DIR))
 }
 
+// Generate docs.json from gi.ts.rc.json
+// gi-ts will use .ts-for-girrc.js as configuration file.
+const generate_gi_prefs = (cb) => {
+  if (!should_update()) {
+    cb(null)
+    return
+  }
+
+  mkdirSync('.tmp/prefs', { recursive: true })
+  writeFileSync('.tmp/prefs/docs.json', JSON.stringify({
+    'libraries': conf.libraries_prefs,
+    ...conf
+  }))
+  return exec("cd .tmp/prefs && gi-ts generate")
+}
+
+const generate_gi_ext = (cb) => {
+  if (!should_update()) {
+    cb(null)
+    return
+  }
+
+  const extra_lib = [
+    execSync('find /usr/lib -maxdepth 1 -type d -name \'mutter-*\'').toString().split('\n')[0],
+    '/usr/share/gnome-shell'
+  ].join(':')
+  mkdirSync('.tmp/ext', { recursive: true })
+  writeFileSync('.tmp/ext/docs.json', JSON.stringify({
+    'libraries': conf.libraries_ext,
+    ...conf
+  }))
+  return exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`)
+}
+
+const generate_gi = series(
+  async () => {
+    if (should_update()) {
+      conf.options.out = `../../${conf.options.out}`
+      rmSync(GI_DIR, { recursive: true, force: true })
+    }
+  },
+  parallel(generate_gi_ext, generate_gi_prefs),
+  rename_gi,
+  async () => {
+    if (should_update()) {
+      writeFileSync(LOCK_FILE, statSync(CONFIG_FILE).mtimeMs.toString())
+      rmSync('.tmp', { recursive: true, force: true })
+    }
+  }
+)
+
 // -------------------------------------------------------- [Export gulp tasks]
 
-exports.gi = series(generate_gi())
+exports.gi = generate_gi

@@ -3,4 +3,5 @@ import { WindowPreview } from 'windowPreview'
 
 export class Workspace {
     _addWindowClone(metaWindow: Window): WindowPreview;
+    _removeWindowClone(metaWin: Window): WindowPreview?;
 }
