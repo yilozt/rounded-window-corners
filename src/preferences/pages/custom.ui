@@ -6,7 +6,34 @@
     <property name="title" translatable="yes">Custom</property>
     <property name="icon-name">document-edit-symbolic</property>
     <child>
-      <object class="AdwPreferencesGroup" id="custom_group"></object>
+      <object class="AdwPreferencesGroup" id="custom_group">
+        <property name="description">Add application to this list to setup custom rounded corners settings.</property>
+        <child type="header-suffix">
+          <object class="GtkButton" id="add_row_btn">
+            <property name="valign">end</property>
+            <child>
+              <object class="GtkBox">
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="margin-end">6</property>
+                    <property name="icon-name">list-add-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Add Window</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <style>
+              <class name="circular" />
+            </style>
+          </object>
+        </child>
+      </object>
     </child>
   </template>
 </interface>

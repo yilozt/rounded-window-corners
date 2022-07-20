@@ -6,15 +6,17 @@ import { Bin }                     from '@gi/St'
 import { BindingFlags }            from '@gi/GObject'
 
 // local modules
-import utils                       from './utils'
-import constants                   from './constants'
+import { loadShader }              from './utils/io'
+import * as UI                     from './utils/ui'
+import { _log }                    from './utils/log'
+import constants                   from './utils/constants'
 import ClipShadowEffect            from './effect/clip_shadow_effect'
-import * as types                  from './types'
-import settings                    from './settings'
+import * as types                  from './utils/types'
+import settings                    from './utils/settings'
 import { Connections }             from './connections'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }             from './settings'
+import { SchemasKeys }             from './utils/settings'
 import { Window, WindowActor }     from '@gi/Meta'
 import { WM }                      from '@gi/Shell'
 import { global }                  from '@global'
@@ -22,7 +24,7 @@ import * as Gio                    from '@gi/Gio'
 
 // --------------------------------------------------------------- [end imports]
 
-const { declarations, code } = utils.loadShader (
+const { declarations, code } = loadShader (
     import.meta.url,
     './effect/shader/rounded_corners.frag'
 )
@@ -38,6 +40,7 @@ export class RoundedCornersManager {
     private uniforms: types.Uniforms = new types.Uniforms ()
 
     private global_rounded_corners = settings ().global_rounded_corner_settings
+    private custom_rounded_corners = settings ().custom_rounded_corner_settings
 
     constructor () {
         // Init GLSLEffect and load shader
@@ -144,21 +147,32 @@ export class RoundedCornersManager {
         }
 
         // Todo: Test in high resolution
-        const scale_factor = utils.scaleFactor ()
+        const scale_factor = UI.scaleFactor ()
 
         const border_width = 0 * scale_factor
-        const skip = false
         const brightness = 0
 
-        // TODO: Add support to custom settings for windows
-        const radius = this.global_rounded_corners.border_radius * scale_factor
-        const paddings = this.global_rounded_corners.padding
+        const meta_win = actor.meta_window
+
+        const settings = this._get_rounded_corners_cfg (meta_win)
+        let radius = settings.border_radius * scale_factor
+        const { keep_rounded_corners, padding } = settings
+
+        let skip = false
+        if (
+            !keep_rounded_corners &&
+            (meta_win.maximized_horizontally || meta_win.maximized_vertically)
+        ) {
+            skip = true
+        }
+
+        radius *= scale_factor
 
         const bounds = [
-            outer_bounds.x1 + paddings.left * scale_factor,
-            outer_bounds.y1 + paddings.top * scale_factor,
-            outer_bounds.x2 - paddings.right * scale_factor,
-            outer_bounds.y2 - paddings.bottom * scale_factor,
+            outer_bounds.x1 + padding.left * scale_factor,
+            outer_bounds.y1 + padding.top * scale_factor,
+            outer_bounds.x2 - padding.right * scale_factor,
+            outer_bounds.y2 - padding.bottom * scale_factor,
         ]
 
         const inner_bounds = [
@@ -190,7 +204,7 @@ export class RoundedCornersManager {
 
     private _compute_bounds (actor: WindowActor): types.Bounds {
         const win = actor.meta_window
-        const [x, y, width, height] = utils.computeWindowContentsOffset (win)
+        const [x, y, width, height] = UI.computeWindowContentsOffset (win)
         return {
             x1: x + 1,
             y1: y + 1,
@@ -205,7 +219,8 @@ export class RoundedCornersManager {
      */
     private _create_shadow (actor: WindowActor) {
         const shadow = new Bin ({
-            style: `padding: ${constants.SHADOW_PADDING}px; background: yellow`,
+            style: `padding: ${constants.SHADOW_PADDING}px
+                             /*background: yellow*/;`,
             child: new Bin ({
                 x_expand: true,
                 y_expand: true,
@@ -248,8 +263,8 @@ export class RoundedCornersManager {
 
     private _compute_shadow_actor_offset (actor: WindowActor): number[] {
         const [offset_x, offset_y, offset_width, offset_height] =
-            utils.computeWindowContentsOffset (actor.meta_window)
-        const shadow_padding = constants.SHADOW_PADDING * utils.scaleFactor ()
+            UI.computeWindowContentsOffset (actor.meta_window)
+        const shadow_padding = constants.SHADOW_PADDING * UI.scaleFactor ()
         return [
             offset_x - shadow_padding,
             offset_y - shadow_padding,
@@ -352,6 +367,18 @@ export class RoundedCornersManager {
      * @param win WindowActor to test
      */
     private _should_enable_effect (win: Window): boolean {
+        // Skip when application in black list.
+
+        const wm_class_instance = win.get_wm_class_instance ()
+        if (wm_class_instance == null) {
+            _log (`Warning: wm_class_instance of ${win}: ${win.title} is null`)
+            return false
+        }
+
+        if (settings ().black_list.includes (wm_class_instance)) {
+            return false
+        }
+
         // Check type of window, only need to add rounded corners to normal
         // window and dialog.
 
@@ -365,13 +392,10 @@ export class RoundedCornersManager {
         }
 
         // Skip libhandy / libadwaita applications according the settings.
-
-        const { AppType, getAppType } = utils
+        const { getAppType, AppType } = UI
 
         const app_type = getAppType (win)
-        utils._log (
-            'Check Type of window:' + `${win.title} => ${AppType[app_type]}`
-        )
+        _log ('Check Type of window:' + `${win.title} => ${AppType[app_type]}`)
 
         if (settings ().skip_libadwaita_app) {
             if (getAppType (win) === AppType.LibAdwaita) {
@@ -382,16 +406,6 @@ export class RoundedCornersManager {
             if (getAppType (win) === AppType.LibHandy) {
                 return false
             }
-        }
-
-        // Skip when application in black list.
-
-        const wm_class_instance = win.get_wm_class_instance ()
-        if (wm_class_instance == null) {
-            throw Error (`wm_class_instance of ${win}: ${win.title} is null`)
-        }
-        if (settings ().black_list.includes (wm_class_instance)) {
-            return false
         }
 
         return true
@@ -424,13 +438,44 @@ export class RoundedCornersManager {
                 ? settings ().focus_shadow
                 : settings ().unfocus_shadow
             if (shadow) {
+                const { border_radius, padding } =
+                    this._get_rounded_corners_cfg (actor.meta_window)
+
                 this._update_shadow_actor_style (
                     shadow,
-                    this.global_rounded_corners.border_radius,
-                    shadow_cfg
+                    border_radius,
+                    shadow_cfg,
+                    padding
                 )
             }
         })
+    }
+
+    private _get_rounded_corners_cfg (win: Window): types.RoundedCornersCfg {
+        const k = win.get_wm_class_instance ()
+        if (
+            k == null ||
+            !this.custom_rounded_corners[k] ||
+            !this.custom_rounded_corners[k].enabled
+        ) {
+            return this.global_rounded_corners
+        }
+        return this.custom_rounded_corners[k]
+    }
+
+    /**
+     * This method will be called when global rounded corners settings changed.
+     */
+    private _update_rounded_corners_settings () {
+        this.global_rounded_corners = settings ().global_rounded_corner_settings
+        this.custom_rounded_corners = settings ().custom_rounded_corner_settings
+
+        const effect_name = constants.ROUNDED_CORNERS_EFFECT
+        global
+            .get_window_actors ()
+            .filter ((actor) => actor.get_effect (effect_name) != null)
+            .forEach ((actor) => this.on_size_changed (actor))
+        this._update_all_shadow_actor_style ()
     }
 
     // ------------------------------------------------------- [signal handlers]
@@ -443,6 +488,7 @@ export class RoundedCornersManager {
         switch (key) {
         case 'skip-libadwaita-app':
         case 'skip-libhandy-app':
+        case 'black-list':
             this._update_all_window_effect_state ()
             break
         case 'focus-shadow':
@@ -450,19 +496,11 @@ export class RoundedCornersManager {
             this._update_all_shadow_actor_style ()
             break
         case 'global-rounded-corner-settings':
-            this._update_global_rounded_corners_settings ()
+        case 'custom-rounded-corner-settings':
+            this._update_rounded_corners_settings ()
             break
         default:
         }
-    }
-    private _update_global_rounded_corners_settings () {
-        this.global_rounded_corners = settings ().global_rounded_corner_settings
-        const effect_name = constants.ROUNDED_CORNERS_EFFECT
-        global
-            .get_window_actors ()
-            .filter ((actor) => actor.get_effect (effect_name) != null)
-            .forEach ((actor) => this.on_size_changed (actor))
-        this._update_all_shadow_actor_style ()
     }
 
     /**
@@ -503,16 +541,17 @@ export class RoundedCornersManager {
             return
         }
 
-        // TODO: change border_radius
         const shadow_settings = win.appears_focused
             ? settings ().focus_shadow
             : settings ().unfocus_shadow
 
+        const { border_radius, padding } = this._get_rounded_corners_cfg (win)
+
         this._update_shadow_actor_style (
             shadow,
-            this.global_rounded_corners.border_radius,
+            border_radius,
             shadow_settings,
-            this.global_rounded_corners.padding
+            padding
         )
     }
 }

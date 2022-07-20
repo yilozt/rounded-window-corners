@@ -1,5 +1,5 @@
 // local modules
-import { _log }     from './utils'
+import { _log }     from './utils/log'
 
 // Types
 import * as GObject from '@gi/GObject'

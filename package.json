@@ -1,15 +1,14 @@
 {
-  "name": "rounded-corners-effect",
+  "name": "gnome-shell-extension-rounded-corners-effect",
   "version": "0.0.1",
   "description": "test",
   "author": "LuoYi <langisme@qq.com>",
-  "license": "GPL2",
+  "license": "GPLv2",
   "main": "src/extension.ts",
   "devDependencies": {
     "@gi.ts/cli": "^1.5.7",
     "@gi.ts/lib": "^1.5.9",
     "@gi.ts/parser": "^1.5.3",
-    "@monstrs/prettier-plugin-import-align": "^0.2.42",
     "@types/gulp": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",

@@ -1,15 +1,15 @@
 // imports.gi
-import * as GObject                    from '@gi/GObject'
-import * as Adw                        from '@gi/Adw'
-import * as Gtk                        from '@gi/Gtk'
-import * as Gio                        from '@gi/Gio'
+import * as GObject       from '@gi/GObject'
+import * as Adw           from '@gi/Adw'
+import * as Gtk           from '@gi/Gtk'
+import * as Gio           from '@gi/Gio'
 
 // local modules
-import settings                        from '../../settings'
-import RoundedCornersItem              from '../widgets/rounded-corners-item'
-import EditShadowWindow                from '../widgets/edit-shadow-window'
-import { list_children, template_url } from '../../utils'
-import { _log }                        from '../../utils'
+import settings           from '../../utils/settings'
+import RoundedCornersItem from '../widgets/rounded-corners-item'
+import EditShadowWindow   from '../widgets/edit-shadow-window'
+import { list_children }  from '../../utils/ui'
+import { template_url }   from '../../utils/io'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -34,6 +34,7 @@ export const General = GObject.registerClass (
         private _skip_libadwaita_app_switch        !: Gtk.Switch
 
         private edit_shadow_window = new EditShadowWindow ()
+        private config_items = new RoundedCornersItem ()
 
         constructor () {
             super ()
@@ -59,28 +60,17 @@ export const General = GObject.registerClass (
         }
 
         private build_ui () {
-            const global_items = new RoundedCornersItem ()
-            list_children (global_items).forEach ((i) => {
-                global_items.remove (i)
+            list_children (this.config_items).forEach ((i) => {
+                this.config_items.remove (i)
                 this._global_settings_preferences_group.add (i)
             })
 
             // Bind Variants
-            global_items.cfg = settings ().global_rounded_corner_settings
+            this.config_items.cfg = settings ().global_rounded_corner_settings
 
-            global_items.watch ((cfg) => {
-                _log (JSON.stringify (cfg))
+            this.config_items.watch ((cfg) => {
                 settings ().global_rounded_corner_settings = cfg
             })
-        }
-
-        // --------------------------------------------------- [virtual methods]
-
-        /** Destroy shadow edit window  */
-        vfunc_dispose (): void {
-            this.edit_shadow_window.close ()
-            this.edit_shadow_window.destroy ()
-            super.vfunc_dispose ()
         }
 
         // ---------------------------------------------------- [signal handler]

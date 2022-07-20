@@ -5,7 +5,7 @@ import * as GLib                   from '@gi/GLib'
 import { getSettings }             from '@imports/misc/extensionUtils'
 
 // local modules
-import { _log as log }             from './utils'
+import { _log as log }             from './log'
 
 // used to mark types, will be remove in output files.
 import * as Gio                    from '@gi/Gio'
@@ -34,6 +34,7 @@ export type SchemasKeys =
     | 'focus-shadow'
     | 'unfocus-shadow'
     | 'debug-mode'
+    | 'picked-window'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -49,6 +50,7 @@ class Settings {
     focus_shadow                   !: BoxShadow
     unfocus_shadow                 !: BoxShadow
     debug_mode                     !: boolean
+    picked_window                  !: string
 
     /** GSettings, which used to store and load settings */
     g_settings: Gio.Settings = getSettings (

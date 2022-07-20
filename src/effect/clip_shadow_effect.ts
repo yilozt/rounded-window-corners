@@ -3,11 +3,11 @@ import * as GObject                from '@gi/GObject'
 import { SnippetHook, GLSLEffect } from '@gi/Shell'
 
 // local modules
-import utils                       from '../utils'
+import { loadShader }              from '../utils/io'
 
 // ------------------------------------------------------------------- [imports]
 
-const { declarations, code } = utils.loadShader (
+const { declarations, code } = loadShader (
     import.meta.url,
     './shader/clip_shadow.frag'
 )

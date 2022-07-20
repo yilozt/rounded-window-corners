@@ -24,9 +24,21 @@
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="pick_window_btn">
                 <property name="margin-end">12</property>
                 <property name="icon-name">find-location-symbolic</property>
+                <property name="tooltip-text">Pick Window to add into list</property>
+                <style>
+                  <class name="flat" />
+                  <class name="circular" />
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="change_title_btn">
+                <property name="margin-end">12</property>
+                <property name="icon-name">emblem-ok-symbolic</property>
+                <property name="tooltip-text">Apply this title</property>
                 <style>
                   <class name="flat" />
                   <class name="circular" />

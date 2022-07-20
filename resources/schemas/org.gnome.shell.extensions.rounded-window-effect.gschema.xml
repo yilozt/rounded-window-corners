@@ -77,5 +77,9 @@
       <default>false</default>
     </key>
 
+    <key name="picked-window" type="s">
+      <default>'window-not-found'</default>
+    </key>
+
   </schema>
 </schemalist>

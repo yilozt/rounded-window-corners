@@ -22,4 +22,5 @@ export default {
     CLIP_SHADOW_EFFECT: 'Clip Shadow Effect',
     /** Padding of shadow actors */
     SHADOW_PADDING: 80,
+    TIPS_EMPTY: 'Expand this row to edit this settings.'
 }

@@ -12,13 +12,14 @@ import { WindowManager }         from '@imports/ui/windowManager'
 import { openPrefs }             from '@imports/misc/extensionUtils'
 
 // local modules
-import constants                 from './constants'
+import constants                 from './utils/constants'
 import { RoundedCornersManager } from './rounded-corners-manager'
-import utils                     from './utils'
+import { _log as log }           from './utils/log'
+import { scaleFactor }           from './utils/ui'
+import * as WindowPicker         from './utils/pick-window'
+import { connections }           from './connections'
 
 // --------------------------------------------------------------- [end imports]
-
-const log = utils._log
 export class Extension {
     private _orig_add_window_clone !: (_: Window) => WindowPreview
     private _switch_ws_patch       !: () => void
@@ -35,7 +36,9 @@ export class Extension {
         this._orig_add_window_clone = Workspace.prototype._addWindowClone
         this._switch_ws_patch = WorkspaceGroup.prototype._createWindows
         this._size_changed_patch = WindowManager.prototype._sizeChangeWindowDone
+
         this._rounded_corners_manager.enable ()
+        WindowPicker.init ()
 
         const self = this
 
@@ -77,7 +80,7 @@ export class Extension {
             window_container.connect ('notify::width', () => {
                 const paddings =
                     (window_container.width / window.get_frame_rect ().width) *
-                    (constants.SHADOW_PADDING * utils.scaleFactor ())
+                    (constants.SHADOW_PADDING * scaleFactor ())
 
                 shadow_clone.get_constraints ().forEach ((_c, i) => {
                     const c = _c as BindConstraint
@@ -103,7 +106,7 @@ export class Extension {
                 }
 
                 const shadow_clone = new Clone ({ source: shadow })
-                const paddings = constants.SHADOW_PADDING * utils.scaleFactor ()
+                const paddings = constants.SHADOW_PADDING * scaleFactor ()
 
                 log (`shadow of window ${win} => `, shadow)
 
@@ -141,9 +144,13 @@ export class Extension {
     }
 
     disable () {
+        // Restore patched methods
         Workspace.prototype._addWindowClone = this._orig_add_window_clone
         WorkspaceGroup.prototype._createWindows = this._switch_ws_patch
         WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
+
         this._rounded_corners_manager.disable ()
+
+        connections ().disconnect_all ()
     }
 }

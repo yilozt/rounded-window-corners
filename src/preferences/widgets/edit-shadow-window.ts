@@ -4,12 +4,12 @@ import * as Gtk           from '@gi/Gtk'
 import { registerClass }  from '@gi/GObject'
 
 // local modules
-import { box_shadow_css } from '../../types'
-import { template_url }   from '../../utils'
-import settings           from '../../settings'
+import { box_shadow_css } from '../../utils/types'
+import { template_url }   from '../../utils/io'
+import settings           from '../../utils/settings'
 
 // just used to mark type of value, will be remove in output javascript
-import { BoxShadow }      from '../../types'
+import { BoxShadow }      from '../../utils/types'
 
 // ----------------------------------------------------------------- end imports
 
@@ -109,19 +109,17 @@ export default registerClass (
         }
 
         private update_style () {
-            const gen_style = (
-                normal_style: BoxShadow,
-                hover_style: BoxShadow
-            ) =>
+            const gen_style = (normal: BoxShadow, hover: BoxShadow) =>
                 new TextEncoder ().encode (`
-            label {
-                background-color: white;
-                transition: box-shadow 200ms;
-                ${box_shadow_css (normal_style)};
-            }
-            label:hover {
-                ${box_shadow_css (hover_style)};
-            }`)
+                    label {
+                        background-color: white;
+                        transition: box-shadow 200ms;
+                        ${box_shadow_css (normal)};
+                    }
+                    label:hover {
+                        ${box_shadow_css (hover)};
+                    }`)
+
             this.unfocus_provider.load_from_data (
                 gen_style (this.unfocus_shadow, this.focus_shadow)
             )

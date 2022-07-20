@@ -30,6 +30,5 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
         .catch ((e) => {
             log ('[prefs] Failed to load ui')
             logError (e)
-            group.description = e.message + '\n' + e.stack
         })
 }

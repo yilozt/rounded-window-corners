@@ -9,7 +9,7 @@
       <object class="AdwPreferencesGroup" id="black_list_group">
         <property name="description">Not all application can works well with rounded corners effects, you can add them to this list to disable effects.</property>
         <child type="header-suffix">
-          <object class="GtkButton">
+          <object class="GtkButton" id="add_row_btn">
             <property name="valign">end</property>
             <child>
               <object class="GtkBox">
