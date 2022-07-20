@@ -1,18 +1,14 @@
-const { series, src } = require("gulp");
+const { series } = require("gulp");
 const { spawn } = require("child_process")
 const colors = require("ansi-colors")
 const fs = require('fs')
 
-const vagrant_file = async () => {
-  if (fs.existsSync('Vagrantfile')) {
-    return
-  }
-
+const choice_init_script = () => {
   const lang = process.env['LANG'].split('.')[0]
-  if (fs.existsSync(`conf/${lang}.Vagrantfile`)) {
-    fs.copyFileSync(`conf/${lang}.Vagrantfile`, `Vagrantfile`)
+  if (fs.existsSync(`conf/${lang}.init_vm.sh`)) {
+    return `/scripts/${lang}.init_vm.sh`
   } else {
-    fs.copyFileSync(`conf/Vagrantfile`, `Vagrantfile`)
+    return '/scripts/init_vm.sh'
   }
 }
 
@@ -58,7 +54,12 @@ const run_cmd = (cmd, opts, config) => {
   return child
 }
 
+const init_vm = () => run_cmd(
+  'vagrant',
+  ['ssh', '-c', `'sudo ${choice_init_script()}'` ],
+  { 'stdio': 'inherit', shell: '/usr/bin/bash'}
+)
 const up = () => run_cmd('vagrant', ['up'], { 'stdio': 'inherit'})
 const ssh = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o cat /usr/bin/gnome-shell"'])
 
-exports.vagrant = series(vagrant_file, up, ssh)
+exports.vagrant = series(up, init_vm, ssh)

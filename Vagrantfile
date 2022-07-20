@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "fedora/36-cloud-base"
-  config.vm.box_url = "https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/36/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-36-1.5.x86_64.vagrant-virtualbox.box"
+  config.vm.box_version = "36-20220504.1"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -60,6 +60,7 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   config.vm.synced_folder "./_build", "/home/vagrant/.local/share/gnome-shell/extensions/#{UUID}"
+  config.vm.synced_folder "./conf", "/scripts"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -87,83 +88,7 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    export releasever=36
-    export basearch=x86_64
-
-    { cat <<EOF
-[fedora]
-name=Fedora $releasever - $basearch
-failovermethod=priority
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Everything/$basearch/os/
-metadata_expire=28d
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-    } > /etc/yum.repos.d/fedora.repo
-
-    { cat <<EOF
-[updates]
-name=Fedora $releasever - $basearch - Updates
-failovermethod=priority
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Everything/$basearch/
-enabled=1
-gpgcheck=1
-metadata_expire=6h
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-    } > /etc/yum.repos.d/fedora-updates.repo
-
-    { cat <<EOF
-[fedora-modular]
-name=Fedora Modular $releasever - $basearch
-failovermethod=priority
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/releases/$releasever/Modular/$basearch/os/
-enabled=1
-metadata_expire=7d
-gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-    } > /etc/yum.repos.d/fedora-modular.repo
-
-    { cat <<EOF
-  [updates-modular]
-name=Fedora Modular $releasever - $basearch - Updates
-failovermethod=priority
-baseurl=https://mirrors.tuna.tsinghua.edu.cn/fedora/updates/$releasever/Modular/$basearch/
-enabled=1
-gpgcheck=1
-metadata_expire=6h
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
-skip_if_unavailable=False
-EOF
-    } > /etc/yum.repos.d/fedora-updates-modular.repo
-
-    # enable debug info so that we can know what happened.
-    set -ex
-
-    dnf makecache
-    dnf install -y gnome-shell gnome-tweaks gnome-extensions-app @development-tools xrdp gnome-terminal vim nautilus
-    systemctl set-default graphical.target
-    
-    echo "[daemon]" > /etc/gdm/custom.conf
-    echo "AutomaticLoginEnable = true" >> /etc/gdm/custom.conf
-    echo "AutomaticLogin = vagrant" >> /etc/gdm/custom.conf
-    systemctl enable gdm
-    systemctl enable xrdp
-  
-    # Bypass the password prompt
-    groupadd nopasswdlogin
-    usermod -aG nopasswdlogin vagrant
-
-    rm -rf /etc/pam.d/gdm-password
-    dnf reinstall -y gdm
-    echo "auth sufficient pam_succeed_if.so user ingroup nopasswdlogin" > /tmp/a
-    cat /etc/pam.d/gdm-password >> /tmp/a
-    cat /tmp/a > /etc/pam.d/gdm-password
-
-    systemctl start gdm
+    rm -rf /etc/done
+    chmod +x /scripts/*.sh
   SHELL
 end

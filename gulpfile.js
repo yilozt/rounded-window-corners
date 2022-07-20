@@ -6,11 +6,10 @@ const { vagrant } = require('./gulp/vagrant')
 
 const watch   = () => w(
   ['./src/**/*', './docs.json', 'resource/**/*'],
-  { ignoreInitial: false },
   this.install
 )
 
 exports.build   = series(gi, parallel(eslint, build_ts), fix_out_intent)
 exports.install = series(this.build, copy_extension)
-exports.watch   = watch
-exports.vm      = parallel(vagrant, this.watch)
+exports.watch   = series(this.install, watch)
+exports.vm      = series(this.install, parallel(vagrant, watch))
