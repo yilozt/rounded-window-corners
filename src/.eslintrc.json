@@ -45,8 +45,6 @@
     "no-var": ["error"],
     "max-len": ["error", {
       "code": 95,
-      "ignoreTemplateLiterals": true,
-      "ignoreStrings": true,
       "ignoreUrls": true
     }]
   },

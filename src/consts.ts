@@ -9,10 +9,10 @@ export const LOADED_MSG = `
 
 [RoundedCordersEffect] Loaded.`
 
-
 export default {
   LOADED_MSG,
   SHADOW_ACTOR_NAME: 'Rounded Window Shadow Actor',
-  WINDOW_ROUNED_CORERS_EFFECT: 'Rounded Corners Effect (Window Actor)',
-  SHADOW_ROUNED_CORERS_EFFECT: 'Rounded Corners Effect (Shadow Actor | for clip)',
+  ROUNDED_CORNERS_EFFECT: 'Rounded Corners Effect',
+  CLIP_SHADOW_EFFECT: 'Clip Shadow Effect',
+  SHADOW_PADDING: 80,
 }

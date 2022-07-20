@@ -3,6 +3,7 @@ import * as Gio  from 'gi://Gio'
 import * as Meta from 'gi://Meta'
 
 import ByteArray from '@imports/byteArray'
+import { global } from '@global'
 
 const load = (path: string): string => {
   const buffer = GLib.file_get_contents(path)[1]
@@ -26,7 +27,7 @@ export const loadFile = (mod_url: string,  relative_path: string): string => {
 
 type Shader = {
   dels: string
-  main: string
+  code: string
 }
 
 export const loadShader = (mod_url: string, relative_path: string): Shader => {
@@ -35,10 +36,10 @@ export const loadShader = (mod_url: string, relative_path: string): Shader => {
 
   dels = dels.trim()
   main = main.trim().replace(/^[{}]/gm, '').trim()
-  return { dels, main }
+  return { dels, code: main }
 }
 
-export const computeOffset = (meta_window: Meta.Window) => {
+export const computeWindowContentsOffset = (meta_window: Meta.Window) => {
   const bufferRect = meta_window.get_buffer_rect()
   const frameRect  = meta_window.get_frame_rect()
   return [
@@ -67,6 +68,9 @@ export const getAppType = (meta_window: Meta.Window): AppType => {
   }
 }
 
+export const scaleFactor = (): number  =>
+  global.display.get_monitor_scale(global.display.get_current_monitor())
+
 export default {
-  loadFile, loadShader, computeOffset, getAppType, AppType
+  loadFile, loadShader, computeWindowContentsOffset, getAppType, AppType, scaleFactor
 }
