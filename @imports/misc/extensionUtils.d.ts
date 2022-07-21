@@ -66,7 +66,7 @@ declare function getSettings(schema?: string | undefined): Gio.Settings;
  *
  * Open the preference dialog of the current extension
  */
-declare function openPrefs(): void;
+declare function openPrefs(): Promise<void>;
 declare function isOutOfDate(extension: any): boolean;
 declare function serializeExtension(extension: any): {};
 declare function deserializeExtension(variant: any): {

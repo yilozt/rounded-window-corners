@@ -1,3 +1,6 @@
+// gnome modules
+import { openPrefs }                from '@imports/misc/extensionUtils'
+
 // local modules
 import { load }                     from './io'
 import { _logError }                from './log'
@@ -68,3 +71,42 @@ export const show_toast = (me: Widget, toast: Toast) => {
 
 export const scaleFactor = () =>
     global.display.get_monitor_scale (global.display.get_current_monitor ())
+
+type BackgroundMenu = {
+    _getMenuItems: () => { label?: { text: string } }[]
+    addAction: (label: string, action: () => void) => void
+}
+type BackgroundExtra = {
+    _backgroundMenu: BackgroundMenu
+}
+
+/**
+ * Add Item into background menu, now we can open preferences page by right
+ * click in background
+ * @param menu - BackgroundMenu to add
+ */
+export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
+    const to_add = 'Open Rounded Corners Effect Preferences Page...'
+
+    for (const item of menu._getMenuItems ()) {
+        if (item.label?.text === to_add) {
+            return
+        }
+    }
+
+    menu.addAction (to_add, () => {
+        try {
+            openPrefs ()
+        } catch (err) {
+            /**/
+        }
+    })
+}
+
+/** Find all Background menu, then add extra item to it */
+export const SetupBackgroundMenu = () => {
+    for (const _bg of global.window_group.first_child.get_children ()) {
+        const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
+        AddBackgroundMenuItem (menu)
+    }
+}

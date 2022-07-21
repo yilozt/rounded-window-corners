@@ -9,12 +9,14 @@ import { Workspace }             from '@imports/ui/workspace'
 import { WindowPreview }         from '@imports/ui/windowPreview'
 import { WorkspaceGroup }        from '@imports/ui/workspaceAnimation'
 import { WindowManager }         from '@imports/ui/windowManager'
-import { openPrefs }             from '@imports/misc/extensionUtils'
+import BackgroundMenu            from '@imports/ui/backgroundMenu'
 
 // local modules
 import constants                 from './utils/constants'
 import { RoundedCornersManager } from './rounded-corners-manager'
 import { _log as log }           from './utils/log'
+import { AddBackgroundMenuItem } from './utils/ui'
+import { SetupBackgroundMenu }   from './utils/ui'
 import { scaleFactor }           from './utils/ui'
 import * as WindowPicker         from './utils/pick-window'
 import { connections }           from './connections'
@@ -24,6 +26,8 @@ export class Extension {
     private _orig_add_window_clone !: (_: Window) => WindowPreview
     private _switch_ws_patch       !: () => void
     private _size_changed_patch    !: (wm: WM, actor: WindowActor) => void
+    private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
+
     private _rounded_corners_manager = new RoundedCornersManager ()
 
     constructor () {
@@ -31,11 +35,10 @@ export class Extension {
     }
 
     enable () {
-        openPrefs ()
-
         this._orig_add_window_clone = Workspace.prototype._addWindowClone
         this._switch_ws_patch = WorkspaceGroup.prototype._createWindows
         this._size_changed_patch = WindowManager.prototype._sizeChangeWindowDone
+        this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._rounded_corners_manager.enable ()
         WindowPicker.init ()
@@ -142,6 +145,12 @@ export class Extension {
             self._rounded_corners_manager.on_size_changed (actor)
             self._rounded_corners_manager._on_focus_changed (actor.meta_window)
         }
+
+        SetupBackgroundMenu ()
+        BackgroundMenu.addBackgroundMenu = (actor, layout) => {
+            this._add_background_menu (actor, layout)
+            AddBackgroundMenuItem (actor._backgroundMenu)
+        }
     }
 
     disable () {
@@ -149,6 +158,7 @@ export class Extension {
         Workspace.prototype._addWindowClone = this._orig_add_window_clone
         WorkspaceGroup.prototype._createWindows = this._switch_ws_patch
         WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
+        BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
         this._rounded_corners_manager.disable ()
 
