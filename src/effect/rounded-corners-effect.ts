@@ -1,4 +1,6 @@
 // imports.gi
+import { PaintNode, PaintContext } from '@gi/Clutter'
+import { PipelineFilter }          from '@gi/Cogl'
 import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
 
@@ -56,6 +58,16 @@ export default registerClass (
             const type = SnippetHook.FRAGMENT
             this.add_glsl_snippet (type, declarations, code, false)
             this._init_uniforms ()
+        }
+
+        vfunc_pre_paint (node: PaintNode, ctx: PaintContext): boolean {
+            const res = super.vfunc_pre_paint (node, ctx)
+            this.get_pipeline ()?.set_layer_filters (
+                0,
+                PipelineFilter.LINEAR_MIPMAP_LINEAR,
+                PipelineFilter.NEAREST
+            )
+            return res
         }
 
         /**

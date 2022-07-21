@@ -201,7 +201,7 @@ export class RoundedCornersManager {
     ) {
         const child = actor.first_child as Bin
         child.style = `background: white;
-                       border-radius: ${border_radius}px;
+                       border-radius: ${border_radius * UI.scaleFactor ()}px;
                        ${types.box_shadow_css (shadow)};
                        margin: ${top}px ${right}px ${bottom}px ${left}px;`
         child.queue_redraw ()
@@ -462,7 +462,7 @@ export class RoundedCornersManager {
             win.maximized_horizontally ||
             win.maximized_vertically ||
             win.fullscreen
-        effect.skip =  !keep_rounded_corners && maximized
+        effect.skip = !keep_rounded_corners && maximized
         return effect.skip
     }
 
@@ -536,7 +536,7 @@ export class RoundedCornersManager {
      * corners window
      * @params win - Meta.Window
      */
-    private _on_focus_changed (win: Window) {
+    _on_focus_changed (win: Window) {
         const shadow = this.shadows.get (win)
         if (!shadow) {
             return
