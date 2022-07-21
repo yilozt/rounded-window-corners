@@ -361,7 +361,11 @@ export class RoundedCornersManager {
         ) {
             return this.global_rounded_corners
         }
-        return this.custom_rounded_corners[k]
+
+        const custom_cfg = this.custom_rounded_corners[k]
+        // Need to skip border radius item from custom settings
+        custom_cfg.border_radius = this.global_rounded_corners.border_radius
+        return custom_cfg
     }
 
     /**

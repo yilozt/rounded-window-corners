@@ -128,16 +128,18 @@ export const Custom = GObject.registerClass (
             enabled_row.add_suffix (enabled_switch)
             expanded_row.add_row (enabled_row)
 
-            list_children (rounded_corners_item).forEach ((child) => {
-                rounded_corners_item.remove (child)
-                expanded_row.add_row (child)
-                enabled_switch.bind_property (
-                    'active',
-                    child,
-                    'sensitive',
-                    GObject.BindingFlags.SYNC_CREATE
-                )
-            })
+            list_children (rounded_corners_item)
+                .filter ((child) => child.name != constants.DON_T_CONFIG)
+                .forEach ((child) => {
+                    rounded_corners_item.remove (child)
+                    expanded_row.add_row (child)
+                    enabled_switch.bind_property (
+                        'active',
+                        child,
+                        'sensitive',
+                        GObject.BindingFlags.SYNC_CREATE
+                    )
+                })
 
             return expanded_row
         }

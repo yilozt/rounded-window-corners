@@ -22,5 +22,8 @@ export default {
     CLIP_SHADOW_EFFECT: 'Clip Shadow Effect',
     /** Padding of shadow actors */
     SHADOW_PADDING: 80,
-    TIPS_EMPTY: 'Expand this row to edit this settings.'
+    /** Tips when add new items in preferences Page */
+    TIPS_EMPTY: 'Expand this row to edit this settings.',
+    /** Used to mark widget in preferences/page/custom.ts */
+    DON_T_CONFIG: 'Don\'t Configuration in Custom Page',
 }

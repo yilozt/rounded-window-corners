@@ -19,6 +19,7 @@
 
     <child>
       <object class="AdwActionRow">
+        <property name="name">Don't Configuration in Custom Page</property>
         <property name="title" translatable="yes">Border Radius</property>
         <child>
           <object class="GtkScale" id="border_radius_scale">
