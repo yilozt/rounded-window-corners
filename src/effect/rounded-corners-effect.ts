@@ -1,5 +1,4 @@
 // imports.gi
-import { PaintNode, PaintContext } from '@gi/Clutter'
 import { PipelineFilter }          from '@gi/Cogl'
 import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
@@ -9,8 +8,12 @@ import { loadShader }              from '../utils/io'
 import * as types                  from '../utils/types'
 import * as UI                     from '../utils/ui'
 
+// types
+import { PaintNode, PaintContext } from '@gi/Clutter'
+
 // -------------------------------------------------------------- [end imports]
 
+// Load fragment shader of rounded corners effect.
 const { declarations, code } = loadShader (
     import.meta.url,
     './shader/rounded_corners.frag'
@@ -67,6 +70,25 @@ export default registerClass (
                 PipelineFilter.LINEAR_MIPMAP_LINEAR,
                 PipelineFilter.NEAREST
             )
+
+            // Reset to default blend mode, so that we can handle opacity
+            // of window.
+            //
+            // GLSLEffect has change this settings, when change opacity of
+            // clutter actor which apply GLSLEffect, it will make it looks like
+            // more dimmed:
+            //
+            // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/src/
+            // shell-glsl-effect.c#L122
+            //
+            // Now changed it to default settings:
+            //
+            // https://developer-old.gnome.org/cogl-2.0-experimental/1.22/
+            // cogl-2.0-experimental-Pipeline.html#cogl-pipeline-set-blend
+
+            this.get_pipeline ()?.set_blend (
+                'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
+            )
             return res
         }
 
@@ -81,7 +103,6 @@ export default registerClass (
         ) {
             const actor = this.actor
 
-            // Todo: Test in high resolution
             const scale_factor = UI.scaleFactor ()
 
             const border_width = 0 * scale_factor

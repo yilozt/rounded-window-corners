@@ -141,12 +141,13 @@ export class RoundedCornersManager {
         for (const prop of [
             'pivot-point',
             'visible',
-            'opacity',
             'translation-x',
             'translation-y',
         ]) {
             actor.bind_property (prop, shadow, prop, flag)
         }
+
+        actor.first_child.bind_property ('opacity', shadow, 'opacity', flag)
 
         // Insert shadow actor below window actor, now shadow actor
         // will show below window actor

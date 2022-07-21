@@ -71,7 +71,7 @@ void main() {
       cogl_color_out *= smoothstep(0.0, 0.6, inner_alpha);
       cogl_color_out = mix(cogl_color_out, vec4(vec3(border_brightness), 1.0), border_alpha);
     } else {
-      cogl_color_out.a = cogl_color_out.a * outer_alpha;
+      cogl_color_out *=  outer_alpha;
     }
   }
 }

@@ -139,7 +139,7 @@ export class Extension {
         ) {
             self._size_changed_patch.apply (this, [shell_wm, actor])
             // Update shadow actor
-            self._rounded_corners_manager.on_size_changed  (actor)
+            self._rounded_corners_manager.on_size_changed (actor)
             self._rounded_corners_manager._on_focus_changed (actor.meta_window)
         }
     }
