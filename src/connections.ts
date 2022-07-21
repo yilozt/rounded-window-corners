@@ -70,6 +70,11 @@ export class Connections {
         _log (`Signal ${signal} of ${source} registered`)
     }
 
+    disconnect<T extends GObject.Object>(
+        source: T,
+        signal: Parameters<T['connect']>[0]
+    ): void
+    disconnect(source: GObject.Object, signal: string): void
     /** Disconnect signal for source */
     disconnect<T extends GObject.Object> (
         source: T,

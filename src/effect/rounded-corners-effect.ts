@@ -7,9 +7,6 @@ import { loadShader }              from '../utils/io'
 import * as types                  from '../utils/types'
 import * as UI                     from '../utils/ui'
 
-// types that just used to mark type of value
-import { WindowActor }             from '@gi/Meta'
-
 // -------------------------------------------------------------- [end imports]
 
 const { declarations, code } = loadShader (
@@ -68,20 +65,9 @@ export default registerClass (
          */
         update_uniforms (
             settings: types.RoundedCornersCfg,
-            bounds_cfg?: types.Bounds
+            outer_bounds: types.Bounds
         ) {
-            const actor = this.actor as WindowActor
-
-            const outer_bounds: types.Bounds = {
-                x1: 0,
-                y1: 0,
-                x2: actor.width,
-                y2: actor.height,
-                ...bounds_cfg,
-            }
-            if (!outer_bounds) {
-                throw Error ('Missing config to update uniforms')
-            }
+            const actor = this.actor
 
             // Todo: Test in high resolution
             const scale_factor = UI.scaleFactor ()
