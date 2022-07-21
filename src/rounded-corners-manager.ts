@@ -1,54 +1,43 @@
 // imports.gi
-import * as Clutter                from '@gi/Clutter'
-import { WindowType }              from '@gi/Meta'
-import { GLSLEffect, SnippetHook } from '@gi/Shell'
-import { Bin }                     from '@gi/St'
-import { BindingFlags }            from '@gi/GObject'
+import * as Clutter            from '@gi/Clutter'
+import { WindowType }          from '@gi/Meta'
+import { Bin }                 from '@gi/St'
+import { BindingFlags }        from '@gi/GObject'
 
 // local modules
-import { loadShader }              from './utils/io'
-import * as UI                     from './utils/ui'
-import { _log }                    from './utils/log'
-import constants                   from './utils/constants'
-import ClipShadowEffect            from './effect/clip_shadow_effect'
-import * as types                  from './utils/types'
-import settings                    from './utils/settings'
-import { Connections }             from './connections'
+import * as UI                 from './utils/ui'
+import { _log }                from './utils/log'
+import constants               from './utils/constants'
+import ClipShadowEffect        from './effect/clip_shadow_effect'
+import * as types              from './utils/types'
+import settings                from './utils/settings'
+import { Connections }         from './connections'
+import RoundedCornersEffect    from './effect/rounded-corners-effect'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }             from './utils/settings'
-import { Window, WindowActor }     from '@gi/Meta'
-import { WM }                      from '@gi/Shell'
-import { global }                  from '@global'
-import * as Gio                    from '@gi/Gio'
+import { SchemasKeys }         from './utils/settings'
+import { Window, WindowActor } from '@gi/Meta'
+import { WM }                  from '@gi/Shell'
+import { global }              from '@global'
+import * as Gio                from '@gi/Gio'
 
 // --------------------------------------------------------------- [end imports]
 
-const { declarations, code } = loadShader (
-    import.meta.url,
-    './effect/shader/rounded_corners.frag'
-)
+const e = new RoundedCornersEffect ()
+type RoundedCornersEffectType = typeof e
 
 export class RoundedCornersManager {
     /** Store connect handles of GObject, to disconnect when we needn't */
     private connections = new Connections ()
 
-    // shadow actors
+    /** Shadow actors of window */
     private shadows: Map<Window, Bin> = new Map ()
 
-    // Uniform locations of shaders
-    private uniforms: types.Uniforms = new types.Uniforms ()
-
+    /** Rounded corners settings */
     private global_rounded_corners = settings ().global_rounded_corner_settings
     private custom_rounded_corners = settings ().custom_rounded_corner_settings
 
     constructor () {
-        // Init GLSLEffect and load shader
-        const effect = new GLSLEffect ()
-        const type = SnippetHook.FRAGMENT
-        effect.add_glsl_snippet (type, declarations, code, false)
-        this._init_uniforms (effect)
-
         // watch settings
         this.connections.connect (
             settings ().g_settings,
@@ -109,99 +98,7 @@ export class RoundedCornersManager {
 
     // ------------------------------------------------------- [private methods]
 
-    private _init_uniforms (effect: GLSLEffect) {
-        this.uniforms = {
-            bounds: 0,
-            clip_radius: 0,
-            inner_bounds: 0,
-            inner_clip_radius: 0,
-            pixel_step: 0,
-            skip: 0,
-            border_width: 0,
-            border_brightness: 0,
-        }
-        Object.keys (this.uniforms).forEach ((k) => {
-            if (!this.uniforms) return
-            const _k = k as keyof types.Uniforms
-            this.uniforms[_k] = effect.get_uniform_location (k)
-        })
-    }
-
-    private _update_uniforms (actor: WindowActor, cfg?: types.Bounds) {
-        const effect = actor.get_effect (
-            constants.ROUNDED_CORNERS_EFFECT
-        ) as GLSLEffect | null
-        if (!effect || !this.uniforms) {
-            return
-        }
-
-        const outer_bounds: types.Bounds = {
-            x1: 0,
-            y1: 0,
-            x2: actor.width,
-            y2: actor.height,
-            ...cfg,
-        }
-        if (!outer_bounds) {
-            throw Error ('Missing config to update uniforms')
-        }
-
-        // Todo: Test in high resolution
-        const scale_factor = UI.scaleFactor ()
-
-        const border_width = 0 * scale_factor
-        const brightness = 0
-
-        const meta_win = actor.meta_window
-
-        const settings = this._get_rounded_corners_cfg (meta_win)
-        let radius = settings.border_radius * scale_factor
-        const { keep_rounded_corners, padding } = settings
-
-        let skip = false
-        if (
-            !keep_rounded_corners &&
-            (meta_win.maximized_horizontally || meta_win.maximized_vertically)
-        ) {
-            skip = true
-        }
-
-        radius *= scale_factor
-
-        const bounds = [
-            outer_bounds.x1 + padding.left * scale_factor,
-            outer_bounds.y1 + padding.top * scale_factor,
-            outer_bounds.x2 - padding.right * scale_factor,
-            outer_bounds.y2 - padding.bottom * scale_factor,
-        ]
-
-        const inner_bounds = [
-            bounds[0] + border_width,
-            bounds[1] + border_width,
-            bounds[2] - border_width,
-            bounds[3] - border_width,
-        ]
-
-        let inner_radius = radius - border_width
-        if (inner_radius < 0.001) {
-            inner_radius = 0.0
-        }
-
-        const pixel_step = [1 / actor.get_width (), 1 / actor.get_height ()]
-        const _skip = skip ? 1 : 0
-
-        const location = this.uniforms
-        effect.set_uniform_float (location.bounds, 4, bounds)
-        effect.set_uniform_float (location.inner_bounds, 4, inner_bounds)
-        effect.set_uniform_float (location.pixel_step, 2, pixel_step)
-        effect.set_uniform_float (location.border_width, 1, [border_width])
-        effect.set_uniform_float (location.clip_radius, 1, [radius])
-        effect.set_uniform_float (location.border_brightness, 1, [brightness])
-        effect.set_uniform_float (location.inner_clip_radius, 1, [inner_radius])
-        effect.set_uniform_float (location.skip, 1, [_skip])
-        effect.queue_repaint ()
-    }
-
+    /** Compute outer bound of rounded corners for window actor */
     private _compute_bounds (actor: WindowActor): types.Bounds {
         const win = actor.meta_window
         const [x, y, width, height] = UI.computeWindowContentsOffset (win)
@@ -215,7 +112,7 @@ export class RoundedCornersManager {
 
     /**
      * Create Shadow for rounded corners window
-     * @param actor window actor which has been setup rounded corners effect
+     * @param actor -  window actor which has been setup rounded corners effect
      */
     private _create_shadow (actor: WindowActor) {
         const shadow = new Bin ({
@@ -319,11 +216,15 @@ export class RoundedCornersManager {
 
         // Add rounded corners to window actor
         {
-            const effect = new GLSLEffect ()
+            const effect = new RoundedCornersEffect ()
             const name = constants.ROUNDED_CORNERS_EFFECT
             actor.add_effect_with_name (name, effect)
 
-            this._update_uniforms (actor, this._compute_bounds (actor))
+            const cfg = this._get_rounded_corners_cfg (actor.meta_window)
+            const skip_cfg = cfg.keep_rounded_corners
+            const win = actor.meta_window
+            this._setup_effect_skip_property (skip_cfg, win, effect)
+            effect.update_uniforms (cfg, this._compute_bounds (actor))
         }
 
         // Create shadow actor for window
@@ -478,6 +379,21 @@ export class RoundedCornersManager {
         this._update_all_shadow_actor_style ()
     }
 
+    /** Skip effect window is maximized */
+    private _setup_effect_skip_property (
+        keep_rounded_corners: boolean,
+        win: Window,
+        effect: RoundedCornersEffectType
+    ): boolean {
+        const skip =
+            !keep_rounded_corners &&
+            (win.maximized_horizontally ||
+                win.maximized_vertically ||
+                win.fullscreen)
+        effect.skip = skip
+        return skip
+    }
+
     // ------------------------------------------------------- [signal handlers]
 
     /**
@@ -513,7 +429,25 @@ export class RoundedCornersManager {
         const win = actor.meta_window
 
         // When size changed. update uniforms for window
-        this._update_uniforms (actor, this._compute_bounds (actor))
+        const effect = actor.get_effect (
+            constants.ROUNDED_CORNERS_EFFECT
+        ) as RoundedCornersEffectType | null
+
+        if (effect) {
+            const cfg = this._get_rounded_corners_cfg (win)
+            if (
+                !this._setup_effect_skip_property (
+                    cfg.keep_rounded_corners,
+                    win,
+                    effect
+                )
+            ) {
+                effect.update_uniforms (
+                    this._get_rounded_corners_cfg (win),
+                    this._compute_bounds (actor)
+                )
+            }
+        }
 
         // Update BindConstraint for shadow
         const shadow = this.shadows.get (win)
