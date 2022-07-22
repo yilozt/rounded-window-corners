@@ -36,6 +36,7 @@
     "Gio":      [ "2.0" ],
     "GObject":  [ "2.0" ],
     "St":       [ "1.0" ],
-    "Graphene": [ "1.0"]
+    "Graphene": [ "1.0"],
+    "GIRepository": ["2.0"]
   }
 }

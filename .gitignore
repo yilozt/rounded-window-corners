@@ -1,6 +1,7 @@
 yarn.lock
 *lock*
-_build
+builddir
+[_]build
 node_modules
 @gi
 .vagrant
@@ -9,3 +10,4 @@ Vagrantfile
 docs.json
 *.log
 .tmp
+.vscode
