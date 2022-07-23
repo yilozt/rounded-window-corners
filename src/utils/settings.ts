@@ -35,6 +35,9 @@ export type SchemasKeys =
     | 'unfocus-shadow'
     | 'debug-mode'
     | 'picked-window'
+    | 'blur-list'
+    | 'blur-sigma'
+    | 'blur-window-opacity'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -51,6 +54,9 @@ class Settings {
     unfocus_shadow                 !: BoxShadow
     debug_mode                     !: boolean
     picked_window                  !: string
+    blur_list                      !: string[]
+    blur_sigma                     !: number
+    blur_window_opacity            !: number
 
     /** GSettings, which used to store and load settings */
     g_settings: Gio.Settings = getSettings (

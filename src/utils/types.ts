@@ -18,11 +18,11 @@ export class Bounds {
     y2 = 0
 }
 
-export interface Padding {
-    left: number
-    right: number
-    top: number
-    bottom: number
+export class Padding {
+    left = 0
+    right = 0
+    top = 0
+    bottom = 0
 }
 
 /** Store into settings, rounded corners configuration  */

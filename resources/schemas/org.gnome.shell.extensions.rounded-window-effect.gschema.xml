@@ -81,5 +81,18 @@
       <default>'window-not-found'</default>
     </key>
 
+    <key name="blur-list" type="as">
+      <default>[]</default>
+    </key>
+
+    <key name="blur-sigma" type="i">
+      <range min="0" max="200"/>
+      <default>20</default>
+    </key>
+
+    <key name="blur-window-opacity" type="i">
+      <range min="0" max="255"/>
+      <default>200</default>
+    </key>
   </schema>
 </schemalist>

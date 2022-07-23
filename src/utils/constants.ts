@@ -20,6 +20,8 @@ export default {
     ROUNDED_CORNERS_EFFECT: 'Rounded Corners Effect',
     /** Name of clip shadow effects  */
     CLIP_SHADOW_EFFECT: 'Clip Shadow Effect',
+    /** Name of blur effect for window */
+    BLUR_EFFECT: 'Patched Blur Effect',
     /** Padding of shadow actors */
     SHADOW_PADDING: 80,
     /** Tips when add new items in preferences Page */
