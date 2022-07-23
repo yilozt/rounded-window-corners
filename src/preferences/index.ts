@@ -1,7 +1,7 @@
-import { General }   from './pages/general.js'
-import { Blacklist } from './pages/blacklist.js'
-import { Custom }    from './pages/custom.js'
-// import { BlurEffect } from './pages/blureffect.js'
+import { General }    from './pages/general.js'
+import { Blacklist }  from './pages/blacklist.js'
+import { Custom }     from './pages/custom.js'
+import { BlurEffect } from './pages/blureffect.js'
 
 // ----------------------------------------------------------------- end imports
 
@@ -13,5 +13,5 @@ export const pages = () => [
     new General (),
     new Blacklist (),
     new Custom (),
-    // new BlurEffect(),
+    new BlurEffect (),
 ]

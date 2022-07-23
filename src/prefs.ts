@@ -1,3 +1,5 @@
+import * as Gtk                                                 from '@gi/Gtk'
+import * as Gdk                                                 from '@gi/Gdk'
 import { PreferencesGroup, PreferencesPage, PreferencesWindow } from '@gi/Adw'
 import { log, logError }                                        from '@global'
 
@@ -31,4 +33,12 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
             log ('[prefs] Failed to load ui')
             logError (e)
         })
+
+    const css = new Gtk.CssProvider ()
+    css.load_from_data ('.code { padding: 10px 16px;}')
+
+    const display = Gdk.Display.get_default ()
+    if (display) {
+        Gtk.StyleContext.add_provider_for_display (display, css, 1024)
+    }
 }

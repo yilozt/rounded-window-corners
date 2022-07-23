@@ -1,7 +1,7 @@
 // @ts-ignore
 
 import { Global, BlurMode } from '@gi/Shell'
-import { Effect } from '@gi/Clutter'
+import { Effect }           from '@gi/Clutter'
 
 declare const global: Global,
     log: any,
