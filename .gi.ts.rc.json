@@ -25,7 +25,8 @@
   ],
   "libraries_prefs": {
     "Adw": [ "1" ],
-    "Gtk": [ "4.0" ]
+    "Gtk": [ "4.0" ],
+    "Gdk": [ "4.0" ]
   },
   "libraries_ext": {
     "Cogl":     [ "10" ],

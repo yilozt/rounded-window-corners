@@ -7,7 +7,7 @@
 //   6. [Optional] Install extensions:
 //      Copy all things in build dir into ~/.local/share/gnome-shell/extensions
 
-const { dest, src, series, } = require('gulp')
+const { dest, src, series, parallel, } = require('gulp')
 const ts = require('gulp-typescript')
 const prettier = require('gulp-prettier')
 const gulpESLintNew = require('gulp-eslint-new')
@@ -38,11 +38,6 @@ const eslint_out = () => gulpESLintNew({
 })
 
 const compile_ts = () => tsProject.src()  // Setup source
-  .pipe(prettier())                       // Format the source
-  .pipe(align_imports())                  // Align import statements in source
-  .pipe(eslint_src())                     // eslint
-  .pipe(gulpESLintNew.fix())              // Auto Fix
-  .pipe(gulpESLintNew.format())
   .pipe(saveWhitespace())                 // Save white-space
   .pipe(tsProject()).js                   // Compile ts into js
   .pipe(restoreWhitespace())              // Restore white space
@@ -58,6 +53,14 @@ const compile_ts = () => tsProject.src()  // Setup source
     `!${SRC_DIR}/**/*.d.ts`
   ]))                                     // Add *.ui and shaders under src/ into source
   .pipe(dest(BUILD_DIR))                  // Set output
+
+const format = () =>  tsProject.src()
+  .pipe(prettier())                       // Format the source
+  .pipe(align_imports())                  // Align import statements in source
+  .pipe(eslint_src())                     // eslint
+  .pipe(gulpESLintNew.fix())              // Auto Fix
+  .pipe(gulpESLintNew.format())
+  .pipe(dest('./src'))
 
 // Compile GSettings schemas in build directory by glib-compile-schemas
 // It will stop build process when schemas compile failed.
@@ -87,7 +90,7 @@ const install_extension = () => {
 
 // -------------------------------------------------------- [Export gulp tasks]
 
-exports.build = series(gi, compile_ts, copy_resources, compile_schema)
+exports.build = series(gi, format, compile_ts, copy_resources, compile_schema)
 exports.copy_extension = install_extension
 
 // ---------------------------------------------------------- [Private methods]

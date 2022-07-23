@@ -68,7 +68,6 @@ const rename_gi = (cb) => {
     cb(null)
     return
   }
-
   // generate name map
   const maps = {}
 
@@ -77,7 +76,13 @@ const rename_gi = (cb) => {
     rm(file.path, () => { })
     const contents = file.contents.toString().replace(
       /^import \* as (.*?) from "(.*?)"/gm,
-      (_, p1, p2) => `import * as ${p1} from "${maps[p2]}"`
+      (p0, p1, p2) => {
+        if (maps[p2]) {
+          return `import * as ${p1} from "${maps[p2]}"`
+        } else {
+          return p0
+        }
+      }
     )
     file.contents = Buffer.from(contents, encoding)
     callback(null, file)
@@ -90,7 +95,11 @@ const rename_gi = (cb) => {
   return src(`${GI_DIR}/**/*.d.ts`)
     .pipe(extra_connect_func())
     .pipe(obj(replace_imports))
-    .pipe(require('gulp-rename')(path => path.basename = maps[path.basename], { multiExt: true }))
+    .pipe(require('gulp-rename')(path => {
+      if (maps[path.basename]) {
+        path.basename = maps[path.basename]
+      }
+    }, { multiExt: true }))
     .pipe(dest(GI_DIR))
 }
 
@@ -107,7 +116,10 @@ const generate_gi_prefs = (cb) => {
     'libraries': conf.libraries_prefs,
     ...conf
   }))
-  return exec("cd .tmp/prefs && gi-ts generate")
+  return exec("cd .tmp/prefs && gi-ts generate", (err, stdout, stderr) => {
+    stdout && console.log(stdout)
+    stderr && console.log(stderr)
+  })
 }
 
 const generate_gi_ext = (cb) => {
@@ -125,7 +137,10 @@ const generate_gi_ext = (cb) => {
     'libraries': conf.libraries_ext,
     ...conf
   }))
-  return exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`)
+  return exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
+    stdout && console.log(stdout)
+    stderr && console.log(stderr)
+  })
 }
 
 const generate_gi = series(
