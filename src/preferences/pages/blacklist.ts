@@ -1,19 +1,19 @@
 // imports.gi
-import * as GObject            from '@gi/GObject'
-import * as Adw                from '@gi/Adw'
+import * as GObject      from '@gi/GObject'
+import * as Adw          from '@gi/Adw'
 
 // Local Modules
-import { _log }                from '../../utils/log'
-import { template_url }        from '../../utils/io'
-import { show_toast }          from '../../utils/ui'
-import settings                from '../../utils/settings'
-import constants               from '../../utils/constants'
-import { connections }         from '../../connections'
-import BlackListRow            from '../widgets/black-list-row'
+import { _log }          from '../../utils/log'
+import { template_url }  from '../../utils/io'
+import { show_toast }    from '../../utils/prefs'
+import settings          from '../../utils/settings'
+import constants         from '../../utils/constants'
+import { connections }   from '../../connections'
+import BlackListRow      from '../widgets/app-row'
 
 // types
-import { BlacklistRowHandler } from '../widgets/black-list-row'
-import * as Gtk                from '@gi/Gtk'
+import { AppRowHandler } from '../widgets/app-row'
+import * as Gtk          from '@gi/Gtk'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -69,7 +69,7 @@ export const Blacklist = GObject.registerClass (
                 return
             }
 
-            const handlers: BlacklistRowHandler = {
+            const handlers: AppRowHandler = {
                 on_delete: (row) => this.on_delete_row (row),
                 on_title_changed: (old_title, new_title) =>
                     this.on_title_changed (old_title, new_title),

@@ -176,8 +176,8 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
 
   // extension.js / prefs.js is entry point of gnome shell extensions,
   // we will process them specially
-  const isEntryJs = file.relative.includes('extension.js')
-    || file.relative.includes('prefs.js')
+  const isEntryJs = file.relative == 'extension.js'
+    || file.relative == 'prefs.js'
 
   // Remove 'export ' in extension.js / prefs.js, because it is not ES modules in our
   // extensions.

@@ -8,7 +8,7 @@ import * as Gio           from '@gi/Gio'
 import settings           from '../../utils/settings'
 import RoundedCornersItem from '../widgets/rounded-corners-item'
 import EditShadowWindow   from '../widgets/edit-shadow-window'
-import { list_children }  from '../../utils/ui'
+import { list_children }  from '../../utils/prefs'
 import { template_url }   from '../../utils/io'
 
 // --------------------------------------------------------------- [end imports]

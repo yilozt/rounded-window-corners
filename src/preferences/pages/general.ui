@@ -60,6 +60,22 @@
             <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; to see the log</property>
             <property name="activatable-widget">enable_log_switch</property>
             <child>
+              <object class="GtkSwitch" id="enable_blur_switch">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
+        <property name="title">Experimental</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title">Blur Effect</property>
+            <property name="subtitle">Enable blur effect to rounded corners windows</property>
+            <child>
               <object class="GtkSwitch" id="enable_log_switch">
                 <property name="valign">center</property>
               </object>

@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0" />
   <requires lib="libadwaita" version="1.0" />
-  <template class="BlacklistRow" parent="AdwExpanderRow">
+  <template class="AppRow" parent="AdwExpanderRow">
     <child type="action">
       <object class="GtkButton" id="remove_button">
         <property name="valign">center</property>

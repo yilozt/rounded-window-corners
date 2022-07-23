@@ -118,6 +118,7 @@ export class RoundedCornersManager {
      */
     private _create_shadow (actor: WindowActor) {
         const shadow = new Bin ({
+            name: 'Shadow Actor',
             style: `padding: ${constants.SHADOW_PADDING}px
                              /*background: yellow*/;`,
             child: new Bin ({
@@ -143,6 +144,8 @@ export class RoundedCornersManager {
             'visible',
             'translation-x',
             'translation-y',
+            'scale-x',
+            'scale-y',
         ]) {
             actor.bind_property (prop, shadow, prop, flag)
         }
@@ -213,7 +216,7 @@ export class RoundedCornersManager {
      * @param actor - window to add effect
      */
     private _add_effect (actor: WindowActor & { shadow_mode?: ShadowMode }) {
-        if (!this._should_enable_effect (actor.meta_window)) {
+        if (!RoundedCornersManager.should_enable_effect (actor.meta_window)) {
             return
         }
 
@@ -268,22 +271,13 @@ export class RoundedCornersManager {
             })
         }
 
-        if (win.get_client_type () == WindowClientType.X11) {
-            // Add rounded corners to surface actor for X11 client
-            if (actor.first_child) {
+        UI.WhenSurfaceActorIsReady (this.connections, actor, () => {
+            if (win.get_client_type () == WindowClientType.X11) {
                 ready (actor.first_child)
             } else {
-                // Surface Actor may not ready in some time
-                this.connections.connect (actor, 'notify::first-child', () => {
-                    this.connections.disconnect (actor, 'notify::first-child')
-                    // now it's ready
-                    ready (actor.first_child)
-                })
+                ready (actor)
             }
-        } else {
-            // Add rounded corners to WindowActor for Wayland client
-            ready (actor)
-        }
+        })
     }
 
     /**`
@@ -323,7 +317,7 @@ export class RoundedCornersManager {
      * Check whether a window should be enable rounded corners effect
      * @param win WindowActor to test
      */
-    private _should_enable_effect (win: Window): boolean {
+    static should_enable_effect (win: Window): boolean {
         // Skip when application in black list.
 
         const wm_class_instance = win.get_wm_class_instance ()
@@ -387,7 +381,9 @@ export class RoundedCornersManager {
     /** Traversal all windows, add or remove rounded corners for them */
     private _update_all_window_effect_state () {
         global.get_window_actors ().forEach ((actor) => {
-            const should_enable = this._should_enable_effect (actor.meta_window)
+            const should_enable = RoundedCornersManager.should_enable_effect (
+                actor.meta_window
+            )
             const has_effect = this._get_rounded_corners (actor) != null
 
             if (should_enable && !has_effect) {
@@ -424,19 +420,11 @@ export class RoundedCornersManager {
     }
 
     private _get_rounded_corners_cfg (win: Window): types.RoundedCornersCfg {
-        const k = win.get_wm_class_instance ()
-        if (
-            k == null ||
-            !this.custom_rounded_corners[k] ||
-            !this.custom_rounded_corners[k].enabled
-        ) {
-            return this.global_rounded_corners
-        }
-
-        const custom_cfg = this.custom_rounded_corners[k]
-        // Need to skip border radius item from custom settings
-        custom_cfg.border_radius = this.global_rounded_corners.border_radius
-        return custom_cfg
+        return UI.ChoiceRoundedCornersCfg (
+            this.global_rounded_corners,
+            this.custom_rounded_corners,
+            win
+        )
     }
 
     /**

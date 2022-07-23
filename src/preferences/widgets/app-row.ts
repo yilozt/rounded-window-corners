@@ -5,7 +5,7 @@ import * as Gtk                  from '@gi/Gtk'
 
 // local Modules
 import { template_url }          from '../../utils/io'
-import { show_toast }            from '../../utils/ui'
+import { show_toast }            from '../../utils/prefs'
 import { connections }           from '../../connections'
 import constants                 from '../../utils/constants'
 import settings, { SchemasKeys } from '../../utils/settings'
@@ -15,8 +15,8 @@ import * as Gio                  from '@gi/Gio'
 
 export default GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './black-list-row.ui'),
-        GTypeName: 'BlacklistRow',
+        Template: template_url (import.meta.url, './app-row.ui'),
+        GTypeName: 'AppRow',
         InternalChildren: [
             'entry_buffer',
             'wm_name_row',
@@ -34,11 +34,11 @@ export default GObject.registerClass (
         private bind_property_handler?: GObject.Binding
 
         /** Store event handlers for this widget */
-        private cb?: BlacklistRowHandler
+        private cb?: AppRowHandler
 
         constructor (
             config?: Adw.ExpanderRow.ConstructorProperties,
-            cb?: BlacklistRowHandler
+            cb?: AppRowHandler
         ) {
             super (config)
             this.cb = cb
@@ -141,7 +141,7 @@ export default GObject.registerClass (
     }
 )
 
-export type BlacklistRowHandler = {
+export type AppRowHandler = {
     on_delete?: (row: Adw.ExpanderRow) => void
     on_open?: (row: Adw.ExpanderRow) => void
     on_close?: () => void

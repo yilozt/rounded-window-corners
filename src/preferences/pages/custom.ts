@@ -3,17 +3,17 @@ import * as GObject                  from '@gi/GObject'
 import * as Adw                      from '@gi/Adw'
 
 // local modules
-import { list_children, show_toast } from '../../utils/ui'
+import { list_children, show_toast } from '../../utils/prefs'
 import { template_url }              from '../../utils/io'
 import constants                     from '../../utils/constants'
 import { connections }               from '../../connections'
 import settings                      from '../../utils/settings'
-import BlacklistRow                  from '../widgets/black-list-row'
+import AppRow                        from '../widgets/app-row'
 import RoundedCornersItem            from '../widgets/rounded-corners-item'
 
 // types
 import { Align, Switch, Button }     from '@gi/Gtk'
-import { BlacklistRowHandler }       from '../widgets/black-list-row'
+import { AppRowHandler }             from '../widgets/app-row'
 import { RoundedCornersCfg }         from 'utils/types'
 
 // --------------------------------------------------------------- [end imports]
@@ -109,9 +109,9 @@ export const Custom = GObject.registerClass (
                     rounded_corners_item.unwatch ()
                     connections ().disconnect_all (enabled_switch)
                 },
-            } as BlacklistRowHandler
+            } as AppRowHandler
 
-            const expanded_row = new BlacklistRow ({ title }, handler)
+            const expanded_row = new AppRow ({ title }, handler)
 
             if (title == '') {
                 expanded_row.subtitle = constants.TIPS_EMPTY

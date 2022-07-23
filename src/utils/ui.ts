@@ -1,15 +1,17 @@
+// imports.gi
+import * as Meta       from '@gi/Meta'
+
 // gnome modules
-import { openPrefs }                from '@imports/misc/extensionUtils'
+import { openPrefs }   from '@imports/misc/extensionUtils'
 
 // local modules
-import { load }                     from './io'
-import { _logError }                from './log'
+import { load }        from './io'
+import { _logError }   from './log'
 
 // types
-import { Widget }                   from '@gi/Gtk'
-import { Toast, PreferencesWindow } from '@gi/Adw'
-import { global }                   from '@global'
-import * as Meta                    from '@gi/Meta'
+import { global }      from '@global'
+import * as types      from './types'
+import { Connections } from '../connections'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -52,23 +54,6 @@ export const getAppType = (meta_window: Meta.Window) => {
     }
 }
 
-export const list_children = (widget: Widget) => {
-    const children = []
-    for (
-        let child = widget.get_first_child ();
-        child != null;
-        child = child.get_next_sibling ()
-    ) {
-        children.push (child)
-    }
-    return children
-}
-
-export const show_toast = (me: Widget, toast: Toast) => {
-    const win: PreferencesWindow = me.root as PreferencesWindow
-    win.add_toast (toast)
-}
-
 export const scaleFactor = () =>
     global.display.get_monitor_scale (global.display.get_current_monitor ())
 
@@ -86,7 +71,7 @@ type BackgroundExtra = {
  * @param menu - BackgroundMenu to add
  */
 export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
-    const to_add = 'Open Rounded Corners Effect Preferences Page...'
+    const to_add = 'Rounded Corners Settings'
 
     for (const item of menu._getMenuItems ()) {
         if (item.label?.text === to_add) {
@@ -109,4 +94,48 @@ export const SetupBackgroundMenu = () => {
         const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
         AddBackgroundMenuItem (menu)
     }
+}
+
+/** When surface actor of Meta.WindowActor is ready, call the ready callback  */
+export const WhenSurfaceActorIsReady = (
+    connections: Connections,
+    actor: Meta.WindowActor,
+    ready: () => void
+) => {
+    const win = actor.meta_window
+    if (win.get_client_type () === Meta.WindowClientType.X11) {
+        // Add rounded corners to surface actor for X11 client
+        if (actor.first_child) {
+            ready ()
+        } else {
+            // Surface Actor may not ready in some time
+            connections.connect (actor, 'notify::first-child', () => {
+                connections.disconnect (actor, 'notify::first-child')
+                // now it's ready
+                ready ()
+            })
+        }
+    } else {
+        // Add rounded corners to WindowActor for Wayland client
+        ready ()
+    }
+}
+
+/** Choice Rounded Corners Settings for window  */
+export const ChoiceRoundedCornersCfg = (
+    global_cfg: types.RoundedCornersCfg,
+    custom_cfg_list: {
+        [wm_class_instance: string]: types.RoundedCornersCfg
+    },
+    win: Meta.Window
+) => {
+    const k = win.get_wm_class_instance ()
+    if (k == null || !custom_cfg_list[k] || !custom_cfg_list[k].enabled) {
+        return global_cfg
+    }
+
+    const custom_cfg = custom_cfg_list[k]
+    // Need to skip border radius item from custom settings
+    custom_cfg.border_radius = global_cfg.border_radius
+    return custom_cfg
 }
