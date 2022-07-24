@@ -7,6 +7,13 @@
     <property name="icon-name">applications-science-symbolic</property>
     <child>
       <object class="AdwPreferencesGroup">
+        <property name="description">Configure blur effect for rounded corners windows.
+
+The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list.</property>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Effect Settings</property>
         <property name="description" translatable="yes"></property>
         <child>
@@ -15,7 +22,7 @@
             <child>
               <object class="GtkScale">
                 <property name="valign">center</property>
-                <property name="hexpand">true</property>
+                <property name="width-request">280</property>
                 <property name="draw-value">true</property>
                 <property name="round-digits">0</property>
                 <property name="orientation">horizontal</property>
@@ -31,7 +38,7 @@
             <child>
               <object class="GtkScale">
                 <property name="valign">center</property>
-                <property name="hexpand">true</property>
+                <property name="width-request">280</property>
                 <property name="draw-value">true</property>
                 <property name="round-digits">0</property>
                 <property name="orientation">horizontal</property>

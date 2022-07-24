@@ -25,7 +25,7 @@ export default {
     /** Padding of shadow actors */
     SHADOW_PADDING: 80,
     /** Tips when add new items in preferences Page */
-    TIPS_EMPTY: 'Expand this row to edit this settings.',
+    TIPS_EMPTY: 'Expand this row to pick a window.',
     /** Used to mark widget in preferences/page/custom.ts */
     DON_T_CONFIG: 'Don\'t Configuration in Custom Page',
 }

@@ -48,7 +48,7 @@ export class BlurEffectManager {
                 if (blur_actor.visible) {
                     blur_actor.get_effects ()[0].queue_repaint ()
                     ;(win.get_compositor_private () as WindowActor).opacity =
-                        settings ().blur_window_opacity
+                        settings ().blurred_window_opacity
                 }
             })
         }
@@ -192,10 +192,10 @@ export class BlurEffectManager {
 
             this.connections.connect (actor.meta_window, 'size-changed', () => {
                 this.update_coordinates (actor.meta_window)
-                actor.opacity = settings ().blur_window_opacity
+                actor.opacity = settings ().blurred_window_opacity
             })
             this.connections.connect (actor, 'damaged', () => {
-                actor.opacity = settings ().blur_window_opacity
+                actor.opacity = settings ().blurred_window_opacity
                 this.connections.disconnect (actor, 'damage')
             })
         })
@@ -268,7 +268,7 @@ export class BlurEffectManager {
             effect.radius =
                 settings ().global_rounded_corner_settings.border_radius
             effect.sigma = settings ().blur_sigma
-            actor.opacity = settings ().blur_window_opacity
+            actor.opacity = settings ().blurred_window_opacity
         }
     }
 
@@ -293,7 +293,7 @@ export class BlurEffectManager {
             }
             break
         case 'blur-sigma':
-        case 'blur-window-opacity':
+        case 'blurred-window-opacity':
         case 'custom-rounded-corner-settings':
         case 'global-rounded-corner-settings':
             this.blur_actors.forEach ((_, win) => {

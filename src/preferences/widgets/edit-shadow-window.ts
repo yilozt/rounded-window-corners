@@ -48,8 +48,8 @@ export default registerClass (
         private focus_provider = new Gtk.CssProvider ()
 
         // Load box-shadow from settings
-        private focus_shadow: BoxShadow = settings ().focus_shadow
-        private unfocus_shadow: BoxShadow = settings ().unfocus_shadow
+        private focused_shadow: BoxShadow = settings ().focused_shadow
+        private unfocused_shadow: BoxShadow = settings ().unfocused_shadow
 
         constructor () {
             super ()
@@ -80,8 +80,8 @@ export default registerClass (
 
         private update_widget () {
             const shadow = this._focus_toggle_button.get_active ()
-                ? this.focus_shadow
-                : this.unfocus_shadow
+                ? this.focused_shadow
+                : this.unfocused_shadow
             this._vertical_offset_scale.set_value (shadow.vertical_offset)
             this._horizontal_offset_scale.set_value (shadow.horizontal_offset)
             this._blur_offset_scale.set_value (shadow.blur_offset)
@@ -98,14 +98,14 @@ export default registerClass (
                 opacity: this._opacity_scale.get_value (),
             }
             if (this._focus_toggle_button.get_active ()) {
-                this.focus_shadow = shadow
+                this.focused_shadow = shadow
             } else {
-                this.unfocus_shadow = shadow
+                this.unfocused_shadow = shadow
             }
 
             // Store into settings
-            settings ().unfocus_shadow = this.unfocus_shadow
-            settings ().focus_shadow = this.focus_shadow
+            settings ().unfocused_shadow = this.unfocused_shadow
+            settings ().focused_shadow = this.focused_shadow
         }
 
         private update_style () {
@@ -114,6 +114,7 @@ export default registerClass (
                     label {
                         background-color: white;
                         transition: box-shadow 200ms;
+                        color: black;
                         ${box_shadow_css (normal)};
                     }
                     label:hover {
@@ -121,10 +122,10 @@ export default registerClass (
                     }`)
 
             this.unfocus_provider.load_from_data (
-                gen_style (this.unfocus_shadow, this.focus_shadow)
+                gen_style (this.unfocused_shadow, this.focused_shadow)
             )
             this.focus_provider.load_from_data (
-                gen_style (this.focus_shadow, this.unfocus_shadow)
+                gen_style (this.focused_shadow, this.unfocused_shadow)
             )
         }
 

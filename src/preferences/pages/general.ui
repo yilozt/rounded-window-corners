@@ -8,7 +8,7 @@
     <child>
       <object class="AdwPreferencesGroup">
         <property name="title" translatable="yes">Applications</property>
-        <property name="description" translatable="yes">The application written by Libhandy / LibAdwaita have native rounded corners, so we can skip them.</property>
+        <property name="description" translatable="yes">Some applications written by Libhandy / LibAdwaita already have native rounded corners, so we can skip them by those items.</property>
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Skip Libadwaita Applications</property>
@@ -34,6 +34,7 @@
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Window Shadow</property>
+            <property name="subtitle">Customize the shadow of the rounded corner window</property>
             <property name="activatable">True</property>
             <signal name="activated" handler="_show_edit_shadow_window_cb" />
             <child>
@@ -48,7 +49,7 @@
     <child>
       <object class="AdwPreferencesGroup" id="global_settings_preferences_group">
         <property name="title" translatable="yes">Global Settings</property>
-        <property name="description" translatable="yes">This settings will effects all windows</property>
+        <property name="description" translatable="yes">This settings will try to effects all windows</property>
       </object>
     </child>
     <child>
@@ -57,7 +58,7 @@
         <child>
           <object class="AdwActionRow">
             <property name="title">Enable Log</property>
-            <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; to see the log</property>
+            <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; in terminal to see the log</property>
             <property name="activatable-widget">enable_log_switch</property>
             <child>
               <object class="GtkSwitch" id="enable_log_switch">
@@ -71,6 +72,7 @@
     <child>
       <object class="AdwPreferencesGroup">
         <property name="title">Experimental</property>
+        <property name="description">This feature is experimental and may have performances issues</property>
         <child>
           <object class="AdwActionRow" id="blur_effect_row">
             <property name="title">Blur Effect</property>
@@ -87,7 +89,7 @@
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Setup Guide</property>
-            <property name="subtitle" translatable="yes">Check this guide to install blur effect.</property>
+            <property name="subtitle" translatable="yes">Check this guide to setup blur effect</property>
             <property name="activatable">True</property>
             <signal name="activated" handler="_show_setup_guide_page" />
             <child>
@@ -136,7 +138,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">This extensions patched Shell.BlurEffect from gnome-shell project, to provide rounded corners. It is written by C, so you have to compile it manually.</property>
+                    <property name="label" translatable="yes">This extensions use a patched Blur Effect with rounded corners,  which is extend the Shell.BlurEffect of gnome-shell. It is written by C, so you have to compile it manually.</property>
                     <property name="use-markup">True</property>
                     <property name="xalign">0</property>
                     <property name="wrap">True</property>
@@ -161,7 +163,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">1. Prepare Build Tools</property>
+                    <property name="label" translatable="yes">1. Prepare</property>
                     <style>
                       <class name="title-2" />
                     </style>
@@ -169,7 +171,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">You need install &lt;b&gt;meson&lt;/b&gt; to your system, and other dependencies to build blur effect.</property>
+                    <property name="label" translatable="yes">You need install &lt;b&gt;meson&lt;/b&gt; in your system, all dependencies will be checked in step 2. You can remove it once you have installed this effect.</property>
                     <property name="use-markup">True</property>
                     <property name="xalign">0</property>
                     <property name="wrap">True</property>
@@ -205,7 +207,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Once you have installed the build tools, just need run</property>
+                    <property name="label" translatable="yes">Once you have installed meson, just need run</property>
                     <property name="use-markup">True</property>
                     <property name="xalign">0</property>
                     <property name="wrap">True</property>
@@ -233,7 +235,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">This command will check all dependencies you need. If you failed with decencies error, &lt;a href="https://pkgs.org/"&gt;https://pkgs.org&lt;/a&gt; may be a good place to solve this problem. Try to install the missing packages.
+                    <property name="label" translatable="yes">This command checks all dependencies and configure build directory. If that fails, &lt;a href="https://pkgs.org/"&gt;https://pkgs.org&lt;/a&gt; may help you find the missing package.
 
 It will create a directory named &lt;b&gt;_build&lt;/b&gt; in current folder.</property>
                     <property name="use-markup">True</property>
@@ -248,7 +250,7 @@ It will create a directory named &lt;b&gt;_build&lt;/b&gt; in current folder.</p
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">3. Build &apos; Install</property>
+                    <property name="label" translatable="yes">3. Build &amp; Install</property>
                     <style>
                       <class name="title-2" />
                     </style>
@@ -256,7 +258,7 @@ It will create a directory named &lt;b&gt;_build&lt;/b&gt; in current folder.</p
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">DESTDIR=$HOME/.local meson install -C build</property>
+                    <property name="label" translatable="yes">meson install -C build --destdir=$HOME/.local</property>
                     <property name="use-markup">True</property>
                     <property name="xalign">0</property>
                     <property name="wrap">True</property>
@@ -272,7 +274,7 @@ It will create a directory named &lt;b&gt;_build&lt;/b&gt; in current folder.</p
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">This command will compile source code in _build directory, and install
+                    <property name="label" translatable="yes">This command will compile source code in &lt;b&gt;_build&lt;/b&gt; directory, and install
 it into ~/.local directory, extensions will try to load it automatically.</property>
                     <property name="use-markup">True</property>
                     <property name="xalign">0</property>

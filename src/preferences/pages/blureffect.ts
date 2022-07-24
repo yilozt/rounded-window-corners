@@ -63,7 +63,7 @@ export const BlurEffect = GObject.registerClass (
                 SettingsBindFlags.DEFAULT
             )
             settings ().bind (
-                'blur-window-opacity',
+                'blurred-window-opacity',
                 this._opacity_ajustment,
                 'value',
                 SettingsBindFlags.DEFAULT

@@ -5,6 +5,9 @@
   <template class="EditShadowWindow" parent="AdwWindow">
     <property name="resizable">false</property>
     <property name="modal">true</property>
+    <style>
+      <class name="edit-win"/>
+    </style>
     <child>
       <object class="GtkOverlay">
         <child type="overlay">
@@ -225,7 +228,7 @@
                     <property name="height-request">180</property>
                     <property name="margin-top">50</property>
                     <property name="margin-bottom">50</property>
-                    <property name="label">Unfocus Style</property>
+                    <property name="label">Unfocused Style</property>
                     <style>
                       <class name="view" />
                     </style>
@@ -238,7 +241,7 @@
                     <property name="width-request">180</property>
                     <property name="height-request">180</property>
                     <property name="margin-bottom">50</property>
-                    <property name="label">Focus Style</property>
+                    <property name="label">Focused Style</property>
                     <style>
                       <class name="view" />
                     </style>

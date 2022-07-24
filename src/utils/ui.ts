@@ -83,7 +83,7 @@ export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
         try {
             openPrefs ()
         } catch (err) {
-            /**/
+            openPrefs ()
         }
     })
 }

@@ -200,7 +200,7 @@ export class RoundedCornersManager {
     private _update_shadow_actor_style (
         actor: Bin,
         border_radius = this.global_rounded_corners.border_radius,
-        shadow = settings ().focus_shadow,
+        shadow = settings ().focused_shadow,
         { left, right, bottom, top } = this.global_rounded_corners.padding
     ) {
         const child = actor.first_child as Bin
@@ -403,8 +403,8 @@ export class RoundedCornersManager {
         global.get_window_actors ().forEach ((actor) => {
             const shadow = this.shadows.get (actor.meta_window)
             const shadow_cfg = actor.meta_window.appears_focused
-                ? settings ().focus_shadow
-                : settings ().unfocus_shadow
+                ? settings ().focused_shadow
+                : settings ().unfocused_shadow
             if (shadow) {
                 const { border_radius, padding } =
                     this._get_rounded_corners_cfg (actor.meta_window)
@@ -468,8 +468,8 @@ export class RoundedCornersManager {
         case 'black-list':
             this._update_all_window_effect_state ()
             break
-        case 'focus-shadow':
-        case 'unfocus-shadow':
+        case 'focused-shadow':
+        case 'unfocused-shadow':
             this._update_all_shadow_actor_style ()
             break
         case 'global-rounded-corner-settings':
@@ -532,8 +532,8 @@ export class RoundedCornersManager {
         }
 
         const shadow_settings = win.appears_focused
-            ? settings ().focus_shadow
-            : settings ().unfocus_shadow
+            ? settings ().focused_shadow
+            : settings ().unfocused_shadow
 
         const { border_radius, padding } = this._get_rounded_corners_cfg (win)
 

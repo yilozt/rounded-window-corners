@@ -31,12 +31,12 @@ export type SchemasKeys =
     | 'skip-libhandy-app'
     | 'global-rounded-corner-settings'
     | 'custom-rounded-corner-settings'
-    | 'focus-shadow'
-    | 'unfocus-shadow'
+    | 'focused-shadow'
+    | 'unfocused-shadow'
     | 'debug-mode'
     | 'blur-list'
     | 'blur-sigma'
-    | 'blur-window-opacity'
+    | 'blurred-window-opacity'
     | 'blur-enabled'
 
 /**
@@ -50,12 +50,12 @@ class Settings {
     skip_libhandy_app              !: boolean
     global_rounded_corner_settings !: RoundedCornersCfg
     custom_rounded_corner_settings !: CustomRoundedCornersCfg
-    focus_shadow                   !: BoxShadow
-    unfocus_shadow                 !: BoxShadow
+    focused_shadow                 !: BoxShadow
+    unfocused_shadow               !: BoxShadow
     debug_mode                     !: boolean
     blur_list                      !: string[]
     blur_sigma                     !: number
-    blur_window_opacity            !: number
+    blurred_window_opacity         !: number
     blur_enabled                   !: boolean
 
     /** GSettings, which used to store and load settings */

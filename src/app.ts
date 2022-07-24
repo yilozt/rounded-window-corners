@@ -194,7 +194,7 @@ export class Extension {
                     }
                 })
 
-                window_container.opacity = settings ().blur_window_opacity
+                window_container.opacity = settings ().blurred_window_opacity
                 clone.insert_child_below (blur_clone, window_container)
             }
 
@@ -278,7 +278,7 @@ export class Extension {
                                 clone.translation_z - 0.006)
                     )
 
-                    clone.opacity = settings ().blur_window_opacity
+                    clone.opacity = settings ().blurred_window_opacity
                     this.insert_child_below (blur_clone, clone)
                 }
             })

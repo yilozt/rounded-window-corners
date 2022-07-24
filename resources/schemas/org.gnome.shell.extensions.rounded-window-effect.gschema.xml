@@ -15,19 +15,20 @@
     </key>
 
     <key name="skip-libadwaita-app" type="b">
-      <summary>Skip applications writen by Libadwaita</summary>
+      <summary>Skip Libadwaita applications</summary>
       <default>true</default>
     </key>
 
     <key name="skip-libhandy-app" type="b">
-      <summary>Skip applications writen by LibHandy</summary>
+      <summary>Skip Libadwaita applications</summary>
       <default>true</default>
     </key>
     
     <key name="global-rounded-corner-settings" type="a{sv}">
+      <summary>Global rounded corners settings for all windows</summary>
       <default>
         <!--
-          GLib.Variant is express as <type_name, value> in gsettings, but '<' and '>'
+          GLib.Variant is express as <type_name, value> in GSettings, but '<' and '>'
           is used to close tag in xml, so we have to use '&lt;' and '&rt;' when we
           want to set default value to Variant type.
         -->
@@ -45,11 +46,13 @@
     </key>
 
     <key name="custom-rounded-corner-settings" type="a{sv}">
+      <summary>A directory to setup custom paddings for special windows</summary>
       <default>{}</default>
     </key>
 
 
-    <key name="focus-shadow" type="a{si}">
+    <key name="focused-shadow" type="a{si}">
+      <summary>Shadow for focused window</summary>
       <default>
         {
           'horizontal_offset': 0,
@@ -61,7 +64,8 @@
       </default>
     </key>
 
-    <key name="unfocus-shadow" type="a{si}">
+    <key name="unfocused-shadow" type="a{si}">
+      <summary>Shadow for unfocused window</summary>
       <default>
         {
           'horizontal_offset': 0,
@@ -74,23 +78,28 @@
     </key>
 
     <key name="debug-mode" type="b">
+      <summary>If enabled, extension will show debug info into journalctl</summary>
       <default>false</default>
     </key>
 
     <key name="blur-enabled" type="b">
+      <summary>Whether enable blur effect</summary>
       <default>false</default>
     </key>
 
     <key name="blur-list" type="as">
+      <summary>Window list to enable blur effects, every item is instance part of WM_CLASS property in a window</summary>
       <default>[]</default>
     </key>
 
     <key name="blur-sigma" type="i">
+      <summary>Blur Sigma</summary>
       <range min="0" max="200"/>
       <default>20</default>
     </key>
 
-    <key name="blur-window-opacity" type="i">
+    <key name="blurred-window-opacity" type="i">
+      <summary>Opacity of Blurred Window</summary>
       <range min="0" max="255"/>
       <default>200</default>
     </key>

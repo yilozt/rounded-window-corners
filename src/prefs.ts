@@ -33,7 +33,11 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
         })
 
     const css = new Gtk.CssProvider ()
-    css.load_from_data ('.code { padding: 10px 16px;}')
+    css.load_from_data (
+        '' +
+            '.code { padding: 10px 16px;}' +
+            '.edit-win { background: #eeeeee; color: black; }'
+    )
 
     const display = Gdk.Display.get_default ()
     if (display) {

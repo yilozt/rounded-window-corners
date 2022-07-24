@@ -6,8 +6,14 @@
     <property name="title" translatable="yes">Blacklist</property>
     <property name="icon-name">action-unavailable-symbolic</property>
     <child>
+      <object class="AdwPreferencesGroup">
+        <property name="description">Not all application can works well with rounded corners effects, add them to this list to disable effects.
+
+The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list.</property>
+      </object>
+    </child>
+    <child>
       <object class="AdwPreferencesGroup" id="black_list_group">
-        <property name="description">Not all application can works well with rounded corners effects, you can add them to this list to disable effects.</property>
         <child type="header-suffix">
           <object class="GtkButton" id="add_row_btn">
             <property name="valign">end</property>
