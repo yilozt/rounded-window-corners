@@ -25,9 +25,7 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
     import ('./preferences/index.js')
         .then ((index) => {
             window.remove (loading)
-            index.pages ().forEach ((page) => {
-                window.add (page)
-            })
+            index.setup (window)
         })
         .catch ((e) => {
             log ('[prefs] Failed to load ui')

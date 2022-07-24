@@ -37,6 +37,7 @@ export type SchemasKeys =
     | 'blur-list'
     | 'blur-sigma'
     | 'blur-window-opacity'
+    | 'blur-enabled'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -55,6 +56,7 @@ class Settings {
     blur_list                      !: string[]
     blur_sigma                     !: number
     blur_window_opacity            !: number
+    blur_enabled                   !: boolean
 
     /** GSettings, which used to store and load settings */
     g_settings: Gio.Settings = getSettings (

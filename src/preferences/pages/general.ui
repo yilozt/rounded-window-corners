@@ -60,7 +60,7 @@
             <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; to see the log</property>
             <property name="activatable-widget">enable_log_switch</property>
             <child>
-              <object class="GtkSwitch" id="enable_blur_switch">
+              <object class="GtkSwitch" id="enable_log_switch">
                 <property name="valign">center</property>
               </object>
             </child>
@@ -72,11 +72,13 @@
       <object class="AdwPreferencesGroup">
         <property name="title">Experimental</property>
         <child>
-          <object class="AdwActionRow">
+          <object class="AdwActionRow" id="blur_effect_row">
             <property name="title">Blur Effect</property>
+            <property name="activatable">True</property>
+            <property name="activatable-widget">enable_blur_switch</property>
             <property name="subtitle">Enable blur effect to rounded corners windows</property>
             <child>
-              <object class="GtkSwitch" id="enable_log_switch">
+              <object class="GtkSwitch" id="enable_blur_switch">
                 <property name="valign">center</property>
               </object>
             </child>
@@ -85,6 +87,7 @@
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Setup Guide</property>
+            <property name="subtitle" translatable="yes">Check this guide to install blur effect.</property>
             <property name="activatable">True</property>
             <signal name="activated" handler="_show_setup_guide_page" />
             <child>
@@ -121,9 +124,8 @@
       </object>
     </child>
     <child>
-      <object class="AdwStatusPage">
+      <object class="AdwStatusPage" id="status_page">
         <property name="title" translatable="yes">Setup Guide</property>
-        <property name="description" translatable="yes">Patched blur effect have not installed yet.</property>
         <property name="child">
           <object class="AdwClamp">
             <property name="maximum-size">600</property>

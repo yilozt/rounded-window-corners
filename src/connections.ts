@@ -67,7 +67,6 @@ export class Connections {
         const handlers: { [signal: string]: number } = {}
         handlers[signal] = source.connect (signal, cb)
         this.connections.set (source, handlers)
-        _log (`Signal ${signal} of ${source} registered`)
     }
 
     disconnect<T extends GObject.Object>(
@@ -86,9 +85,7 @@ export class Connections {
             if (handler !== undefined) {
                 source.disconnect (handler)
                 delete handlers[signal]
-                _log (`Signal ${signal} of ${source} has been removed`)
                 if (Object.keys (handler).length == 0) {
-                    _log (`${source} has been removed from connections map`)
                     this.connections.delete (source)
                 }
                 return
@@ -112,7 +109,6 @@ export class Connections {
                     delete handlers[signal]
                 })
                 this.connections.delete (source)
-                _log (`All signal of ${source} has been clean`)
             }
             return
         }
@@ -125,7 +121,6 @@ export class Connections {
             })
         })
         this.connections.clear ()
-        _log ('Signal of all objects removed')
     }
 }
 

@@ -77,6 +77,10 @@
       <default>false</default>
     </key>
 
+    <key name="blur-enabled" type="b">
+      <default>false</default>
+    </key>
+
     <key name="blur-list" type="as">
       <default>[]</default>
     </key>

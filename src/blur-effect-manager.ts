@@ -1,15 +1,12 @@
 // imports.gi
 import { BindConstraint, BindCoordinate } from '@gi/Clutter'
-import { Repository }                     from '@gi/GIRepository'
 import { BindingFlags }                   from '@gi/GObject'
 import { BlurMode }                       from '@gi/Shell'
 import { Bin }                            from '@gi/St'
-import { get_home_dir }                   from '@gi/GLib'
 
 // local modules
 import RepaintSignal                      from './effect/repaint-signal'
 import { Connections }                    from './connections'
-import { _log }                           from './utils/log'
 import settings                           from './utils/settings'
 import * as UI                            from './utils/ui'
 import constants                          from './utils/constants'
@@ -30,16 +27,16 @@ let blurEffect: typeof BlurEffect | null = null
 
 export class BlurEffectManager {
     private blur_actors = new Map<Window, Bin> ()
-
+    private _enabled = false
     private connections = new Connections ()
 
     /** Called when extension is enable  */
     enable () {
-        this.try_load_patched_blur_effect ()
-        if (!blurEffect) {
-            // load failed, just return
+        if (!this._check_lib ()) {
             return
         }
+
+        this._enabled = true
 
         // try to add blur effect to windows have opened
         global.get_window_actors ().forEach ((a) => {
@@ -98,6 +95,7 @@ export class BlurEffectManager {
         global.get_window_actors ().forEach ((a) => this._remove_effect (a))
         this.connections.disconnect_all ()
         global.window_group.first_child.remove_effect_by_name ('Repaint Effect')
+        this._enabled = false
     }
 
     query_blur (win: Window): Bin | undefined {
@@ -106,48 +104,21 @@ export class BlurEffectManager {
 
     // ------------------------------------------------------- [private methods]
 
-    /**
-     * This method used to load patched blur effect that with rounded corners,
-     * Because there is still no way to get this feature in Gjs, unless
-     * gnome-shell official decide to support it. Now we just load a patched
-     * version manually.
-     *
-     * Actually, We can load any library that has binding with gjs manually,
-     * according to this gist:
-     *
-     * https://gist.github.com/buzztaiki/1492431
-     *
-     * @returns - true if patched blur effect has been load.
-     */
-    private try_load_patched_blur_effect () {
+    private _check_lib (): boolean {
+        if (this._enabled) {
+            return false
+        }
+
         try {
             blurEffect = imports.gi.Patched.BlurEffect
-            _log ('Patch Blur Effect has been loaded: ' + blurEffect)
-            return true
         } catch (e) {
-            // Try to load effect
-
-            // Path to search
-            const paths = [
-                '/usr/lib64/patched-blur-effect',
-                `${get_home_dir ()}/.local/lib64/patched-blur-effect`,
-                `${get_home_dir ()}/.local/lib/patched-blur-effect`,
-            ]
-            for (const path of paths) {
-                Repository.prepend_library_path (path)
-                Repository.prepend_search_path (path)
-                try {
-                    blurEffect = imports.gi.Patched.BlurEffect
-                    _log ('Patch Blur Effect has been loaded: ' + blurEffect)
-                    return true
-                } catch (e) {
-                    // return if load failed
-
-                    _log ('Failed to load Effect: ' + (e as Error).message)
-                    return false
-                }
-            }
+            return false
         }
+
+        if (!blurEffect) {
+            return false
+        }
+        return true
     }
 
     /** Decide wether should add blur effect to a window */
@@ -273,7 +244,7 @@ export class BlurEffectManager {
         ]
     }
 
-    private update_coordinates (win: Window) {
+    update_coordinates (win: Window) {
         const blur_actor = this.blur_actors.get (win)
         if (!blur_actor) {
             return
@@ -285,7 +256,7 @@ export class BlurEffectManager {
         )
     }
 
-    private update_blur_effect (actor: WindowActor) {
+    update_blur_effect (actor: WindowActor) {
         const win = actor.meta_window
         const _effect = this.blur_actors.get (win)?.get_effects ()[0]
         const effect = _effect as BlurEffect

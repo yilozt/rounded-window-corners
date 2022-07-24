@@ -4,5 +4,6 @@
     <signal name="picked">
       <arg name="window" type="s"/>
     </signal>
+    <property name="blur_loaded" type="b" access="read"/>
   </interface>
 </node>

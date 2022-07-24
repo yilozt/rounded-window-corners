@@ -25,9 +25,12 @@ export const General = GObject.registerClass (
         InternalChildren: [
             'global_settings_preferences_group',
             'enable_log_switch',
+            'enable_blur_switch',
             'skip_libadwaita_app_switch',
             'skip_libhandy_app_switch',
+            'blur_effect_row',
             'setup_guide_page',
+            'status_page',
             'meson_setup_label',
             'source_code_label',
             'deps_cmd_label',
@@ -37,12 +40,15 @@ export const General = GObject.registerClass (
         // Those properties come from 'InternalChildren'
         private _global_settings_preferences_group !: Adw.PreferencesGroup
         private _enable_log_switch                 !: Gtk.Switch
+        private _enable_blur_switch                !: Gtk.Switch
         private _skip_libhandy_app_switch          !: Gtk.Switch
         private _skip_libadwaita_app_switch        !: Gtk.Switch
         private _setup_guide_page                  !: Gtk.Widget
         private _meson_setup_label                 !: Gtk.Label
         private _source_code_label                 !: Gtk.Label
         private _deps_cmd_label                    !: Gtk.Label
+        private _blur_effect_row                   !: Adw.ActionRow
+        private _status_page                       !: Adw.StatusPage
 
         private edit_shadow_window = new EditShadowWindow ()
         private config_items = new RoundedCornersItem ()
@@ -50,6 +56,12 @@ export const General = GObject.registerClass (
         constructor () {
             super ()
             this.build_ui ()
+
+            this._blur_effect_row.sensitive = false
+            this._status_page.description =
+                'Patched Blur Effect has not installed yet'
+            this._status_page.icon_name = 'computer-fail-symbolic'
+
             settings ().bind (
                 'debug-mode',
                 this._enable_log_switch,
@@ -65,6 +77,12 @@ export const General = GObject.registerClass (
             settings ().bind (
                 'skip-libhandy-app',
                 this._skip_libhandy_app_switch,
+                'active',
+                Gio.SettingsBindFlags.DEFAULT
+            )
+            settings ().bind (
+                'blur-enabled',
+                this._enable_blur_switch,
                 'active',
                 Gio.SettingsBindFlags.DEFAULT
             )
@@ -84,6 +102,13 @@ export const General = GObject.registerClass (
                 'You can check the source code <a href="file://' +
                 source_path +
                 '">here</a>.'
+        }
+
+        on_blur_loaded () {
+            this._blur_effect_row.sensitive = true
+            this._status_page.description =
+                'Patched Blur effect has been loaded'
+            this._status_page.icon_name = 'emblem-ok-symbolic'
         }
 
         private build_ui () {

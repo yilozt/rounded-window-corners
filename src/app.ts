@@ -3,6 +3,7 @@ import { Point }                   from '@gi/Graphene'
 import { BindConstraint, Clone }   from '@gi/Clutter'
 import { BlurMode }                from '@gi/Shell'
 import { Bin }                     from '@gi/St'
+import { Variant }                 from '@gi/GLib'
 
 // gnome-shell modules
 import { Workspace }               from '@imports/ui/workspace'
@@ -20,9 +21,10 @@ import { SetupBackgroundMenu }     from './utils/ui'
 import { scaleFactor }             from './utils/ui'
 import { ChoiceRoundedCornersCfg } from './utils/ui'
 import { connections }             from './connections'
-import settings                    from './utils/settings'
+import settings, { SchemasKeys }   from './utils/settings'
 import { Padding }                 from './utils/types'
 import Services                    from './dbus/services'
+import BlurLoader                  from './blur-loader'
 
 // types, which will be removed in output
 import { WM }                      from '@gi/Shell'
@@ -30,6 +32,7 @@ import { WindowPreview }           from '@imports/ui/windowPreview'
 import { BlurEffect, imports }     from '@global'
 import { RoundedCornersCfg }       from './utils/types'
 import { Window, WindowActor }     from '@gi/Meta'
+import * as Gio                    from '@gi/Gio'
 
 // --------------------------------------------------------------- [end imports]
 export class Extension {
@@ -38,6 +41,7 @@ export class Extension {
     private _size_changed_patch    !: (wm: WM, actor: WindowActor) => void
     private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
     private _services              !: Services
+    private _blur_loader           !: InstanceType<typeof BlurLoader>
 
     private _rounded_corners_manager = new RoundedCornersManager ()
     private _blur_effect_manager = new BlurEffectManager ()
@@ -53,10 +57,40 @@ export class Extension {
         this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._rounded_corners_manager.enable ()
-        this._blur_effect_manager.enable ()
 
         this._services = new Services ()
         this._services.export ()
+
+        this._blur_loader = new BlurLoader ()
+        this._blur_loader.connect ('loaded', () => {
+            this._services.DBusImpl.emit_property_changed (
+                'blur_loaded',
+                Variant.new_boolean (true)
+            )
+            log ('Emit property changed blur_loaded to client')
+            if (settings ().blur_enabled) {
+                this._blur_effect_manager.enable ()
+            }
+        })
+        this._blur_loader.enable ()
+
+        if (settings ().blur_enabled) {
+            this._blur_effect_manager.enable ()
+        }
+
+        connections ().connect (
+            settings ().g_settings,
+            'changed',
+            (_: Gio.Settings, key: string) => {
+                if ((key as SchemasKeys) == 'blur-enabled') {
+                    if (settings ().blur_enabled) {
+                        this._blur_effect_manager.enable ()
+                    } else {
+                        this._blur_effect_manager.disable ()
+                    }
+                }
+            }
+        )
 
         const self = this
 
@@ -257,6 +291,8 @@ export class Extension {
             // Update shadow actor
             self._rounded_corners_manager.on_size_changed (actor)
             self._rounded_corners_manager._on_focus_changed (actor.meta_window)
+            self._blur_effect_manager.update_blur_effect (actor)
+            self._blur_effect_manager.update_coordinates (actor.meta_window)
         }
 
         SetupBackgroundMenu ()

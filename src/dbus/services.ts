@@ -12,6 +12,7 @@ import { loadFile }    from '../utils/io'
 
 // types
 import { WindowActor } from '@gi/Meta'
+import { imports }     from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -59,6 +60,16 @@ export default class {
                 )
             }
         )
+    }
+
+    /** Property export to DBus client  */
+    get blur_loaded (): boolean {
+        try {
+            imports.gi.Patched
+            return true
+        } catch (e) {
+            return false
+        }
     }
 
     export () {
