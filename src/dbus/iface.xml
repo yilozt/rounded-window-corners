@@ -1,0 +1,8 @@
+<node>
+  <interface name="yi.github.RoundedCornersEffect">
+    <method name="pick" />
+    <signal name="picked">
+      <arg name="window" type="s"/>
+    </signal>
+  </interface>
+</node>

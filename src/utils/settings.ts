@@ -34,7 +34,6 @@ export type SchemasKeys =
     | 'focus-shadow'
     | 'unfocus-shadow'
     | 'debug-mode'
-    | 'picked-window'
     | 'blur-list'
     | 'blur-sigma'
     | 'blur-window-opacity'
@@ -53,7 +52,6 @@ class Settings {
     focus_shadow                   !: BoxShadow
     unfocus_shadow                 !: BoxShadow
     debug_mode                     !: boolean
-    picked_window                  !: string
     blur_list                      !: string[]
     blur_sigma                     !: number
     blur_window_opacity            !: number

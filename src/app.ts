@@ -2,6 +2,7 @@
 import { Point }                   from '@gi/Graphene'
 import { BindConstraint, Clone }   from '@gi/Clutter'
 import { BlurMode }                from '@gi/Shell'
+import { Bin }                     from '@gi/St'
 
 // gnome-shell modules
 import { Workspace }               from '@imports/ui/workspace'
@@ -18,11 +19,10 @@ import { AddBackgroundMenuItem }   from './utils/ui'
 import { SetupBackgroundMenu }     from './utils/ui'
 import { scaleFactor }             from './utils/ui'
 import { ChoiceRoundedCornersCfg } from './utils/ui'
-import * as WindowPicker           from './utils/pick-window'
 import { connections }             from './connections'
-import { Bin }                     from '@gi/St'
 import settings                    from './utils/settings'
 import { Padding }                 from './utils/types'
+import Services                    from './dbus/services'
 
 // types, which will be removed in output
 import { WM }                      from '@gi/Shell'
@@ -37,6 +37,7 @@ export class Extension {
     private _switch_ws_patch       !: () => void
     private _size_changed_patch    !: (wm: WM, actor: WindowActor) => void
     private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
+    private _services              !: Services
 
     private _rounded_corners_manager = new RoundedCornersManager ()
     private _blur_effect_manager = new BlurEffectManager ()
@@ -54,7 +55,8 @@ export class Extension {
         this._rounded_corners_manager.enable ()
         this._blur_effect_manager.enable ()
 
-        WindowPicker.init ()
+        this._services = new Services ()
+        this._services.export ()
 
         const self = this
 
@@ -273,6 +275,8 @@ export class Extension {
 
         this._rounded_corners_manager.disable ()
         this._blur_effect_manager.disable ()
+
+        this._services.unexport ()
 
         connections ().disconnect_all ()
     }

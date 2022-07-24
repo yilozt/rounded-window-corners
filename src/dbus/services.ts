@@ -1,33 +1,33 @@
+// imports.gi
+import * as Gio        from '@gi/Gio'
+import { Variant }     from '@gi/GLib'
+
 // gnome modules
 import { Inspector }   from '@imports/ui/lookingGlass'
 import * as Main       from '@imports/ui/main'
 
 // local modules
-import { connections } from '../connections'
-import settings        from './settings'
-import { _log }        from './log'
+import { _log }        from '../utils/log'
+import { loadFile }    from '../utils/io'
 
 // types
-import * as Gio        from '@gi/Gio'
 import { WindowActor } from '@gi/Meta'
-import { SchemasKeys } from './settings'
 
 // --------------------------------------------------------------- [end imports]
 
-/** Waiting pick window button from preferences window clicked  */
-export const init = () => {
-    const g_settings = settings ().g_settings
-    connections ().connect (
-        g_settings,
-        'changed',
-        (_: Gio.Settings, key: string) => on_setting_changed (key)
-    )
-}
+const iface = loadFile (import.meta.url, './iface.xml')
 
-const on_setting_changed = (key: string) => {
-    if ((key as SchemasKeys) == 'picked-window') {
-        if (settings ().picked_window != '') {
-            return
+export default class {
+    DBusImpl = Gio.DBusExportedObject.wrapJSObject (iface, this)
+
+    /** Pick Window for Preferences Page, export to DBus client */
+    pick () {
+        /** Emit `picked` signal */
+        const _send_wm_class_instance = (wm_instance_class: string) => {
+            this.DBusImpl.emit_signal (
+                'picked',
+                new Variant ('(s)', [wm_instance_class])
+            )
         }
 
         new Inspector (Main.createLookingGlass ()).connect (
@@ -42,21 +42,34 @@ const on_setting_changed = (key: string) => {
                     .filter ((e) => e.toString ().includes (effect_name))
                     .forEach ((e) => target.remove_effect (e))
 
-                // Get wm_class_instance property of window, then pass it to
-                // preferences by GSettings
+                // Get wm_class_instance property of window, then pass it DBus
+                // client
                 const type_str = target.toString ()
                 let actor = target as WindowActor
                 if (type_str.includes ('MetaSurfaceActor')) {
                     actor = target.get_parent () as WindowActor
                 } else if (!type_str.includes ('WindowActor')) {
-                    settings ().picked_window = 'window-not-found'
+                    _send_wm_class_instance ('window-not-found')
                     return
                 }
 
-                settings ().picked_window =
+                _send_wm_class_instance (
                     actor.meta_window.get_wm_class_instance () ??
-                    'window-not-found'
+                        'window-not-found'
+                )
             }
         )
+    }
+
+    export () {
+        this.DBusImpl.export (
+            Gio.DBus.session,
+            '/yi/github/RoundedCornersEffect'
+        )
+        _log ('Dbus Services exported')
+    }
+
+    unexport () {
+        this.DBusImpl.unexport ()
     }
 }

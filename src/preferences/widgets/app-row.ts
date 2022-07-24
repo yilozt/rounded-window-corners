@@ -1,15 +1,14 @@
 // imports.gi
-import * as GObject              from '@gi/GObject'
-import * as Adw                  from '@gi/Adw'
-import * as Gtk                  from '@gi/Gtk'
+import * as GObject        from '@gi/GObject'
+import * as Adw            from '@gi/Adw'
+import * as Gtk            from '@gi/Gtk'
 
 // local Modules
-import { template_url }          from '../../utils/io'
-import { show_toast }            from '../../utils/prefs'
-import { connections }           from '../../connections'
-import constants                 from '../../utils/constants'
-import settings, { SchemasKeys } from '../../utils/settings'
-import * as Gio                  from '@gi/Gio'
+import { template_url }    from '../../utils/io'
+import { show_toast }      from '../../utils/prefs'
+import { connections }     from '../../connections'
+import constants           from '../../utils/constants'
+import { on_picked, pick } from '../../dbus/client'
 
 // ----------------------------------------------------------------- end imports
 
@@ -75,36 +74,22 @@ export default GObject.registerClass (
             })
 
             connections ().connect (this._pick_window_btn, 'clicked', () => {
-                settings ().picked_window = ''
-                connections ().connect (
-                    settings ().g_settings,
-                    'changed',
-                    (_: Gio.Settings, key: string) => {
-                        // just need connect once
-                        connections ().disconnect_all (settings ().g_settings)
-
-                        if ((key as SchemasKeys) == 'picked-window') {
-                            const str = settings ().picked_window
-                            if (str == '') {
-                                return
-                            }
-                            const title =
-                                'Can\'t pick a window window from this position'
-                            if (str == 'window-not-found') {
-                                show_toast (
-                                    this.root,
-                                    new Adw.Toast ({
-                                        title,
-                                        timeout: 2,
-                                    })
-                                )
-                                return
-                            }
-
-                            this._entry_buffer.text = str
-                        }
+                on_picked ((wm_instance_class) => {
+                    const title =
+                        'Can\'t pick a window window from this position'
+                    if (wm_instance_class == 'window-not-found') {
+                        show_toast (
+                            this.root,
+                            new Adw.Toast ({
+                                title,
+                                timeout: 2,
+                            })
+                        )
+                        return
                     }
-                )
+                    this._entry_buffer.text = wm_instance_class
+                })
+                pick ()
             })
         }
 
