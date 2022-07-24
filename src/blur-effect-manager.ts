@@ -44,9 +44,11 @@ export class BlurEffectManager {
         })
 
         const repaint = () => {
-            this.blur_actors.forEach ((blur_actor) => {
+            this.blur_actors.forEach ((blur_actor, win) => {
                 if (blur_actor.visible) {
                     blur_actor.get_effects ()[0].queue_repaint ()
+                    ;(win.get_compositor_private () as WindowActor).opacity =
+                        settings ().blur_window_opacity
                 }
             })
         }
@@ -190,6 +192,11 @@ export class BlurEffectManager {
 
             this.connections.connect (actor.meta_window, 'size-changed', () => {
                 this.update_coordinates (actor.meta_window)
+                actor.opacity = settings ().blur_window_opacity
+            })
+            this.connections.connect (actor, 'damaged', () => {
+                actor.opacity = settings ().blur_window_opacity
+                this.connections.disconnect (actor, 'damage')
             })
         })
     }
@@ -200,10 +207,7 @@ export class BlurEffectManager {
 
         const blur_actor = this.blur_actors.get (actor.meta_window)
         if (blur_actor) {
-            const surface = actor.get_first_child ()
-            if (surface) {
-                surface.opacity = 255
-            }
+            actor.opacity = 255
 
             blur_actor.destroy ()
             this.blur_actors.delete (actor.meta_window)
@@ -264,7 +268,7 @@ export class BlurEffectManager {
             effect.radius =
                 settings ().global_rounded_corner_settings.border_radius
             effect.sigma = settings ().blur_sigma
-            actor.first_child.opacity = settings ().blur_window_opacity
+            actor.opacity = settings ().blur_window_opacity
         }
     }
 

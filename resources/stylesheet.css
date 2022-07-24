@@ -1,5 +1,6 @@
 .shadow {
-  transition-duration: 100ms;
+  box-shadow: 2 2px 3px 5px rgba(83, 83, 83, 0.205);
+  transition-duration: 300ms;
   transition-property: box-shadow;
-  transition-timing-function:cubic-bezier();
+  transition-timing-function: linear;
 }
