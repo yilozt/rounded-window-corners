@@ -11,3 +11,4 @@ docs.json
 *.log
 .tmp
 .vscode
+*.zip

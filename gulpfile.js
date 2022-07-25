@@ -2,14 +2,15 @@ const {series, parallel } = require('gulp')
 const { build, copy_extension }  = require('./gulp/build')
 const { vagrant } = require('./gulp/vagrant')
 const { watch } = require('./gulp/watch')
-const { gi } = require('./gulp/gi')
 
 // Generate @gi Folder
-exports.gi      = gi
+exports.gi      = require('./gulp/gi').gi
 // Build Extension
 exports.build   = build
 // Build & Install extension
-exports.install = series(this.build, copy_extension)
+exports.install = series(build, copy_extension)
+// Package extensions
+exports.pack    = require('./gulp/pack').pack
 
 // ----------------------------------------------- [Development Options]
 

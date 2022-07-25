@@ -23,8 +23,10 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
+    "gi": "gulp gi",
+    "ext:pack": "gulp pack",
     "build": "gulp build",
-    "install:ext": "gulp install",
+    "ext:install": "gulp install",
     "watch": "gulp watch",
     "vm": "gulp vm"
   }
