@@ -1,6 +1,6 @@
 {
   "name": "Rounded Corners Effect",
-  "description": "Rounded corners effect to windows that not written by libhandy / libadwaita",
+  "description": "Try to add rounded corners for all windows",
   "uuid": "rounded-corners-effect@yilozt",
   "version": "v1",
   "shell-version": ["40", "41", "42"]

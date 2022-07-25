@@ -1,9 +1,9 @@
 {
   "name": "gnome-shell-extension-rounded-corners-effect",
-  "version": "0.0.1",
-  "description": "test",
-  "author": "LuoYi <langisme@qq.com>",
-  "license": "GPLv2",
+  "version": "v1",
+  "description": "A gnome-shell extensions that try to add rounded corners for all windows",
+  "author": "Luo Yi <langisme@qq.com>",
+  "license": "GPL-3.0-or-later",
   "main": "src/extension.ts",
   "devDependencies": {
     "@gi.ts/cli": "^1.5.7",
@@ -24,10 +24,10 @@
   },
   "scripts": {
     "gi": "gulp gi",
-    "ext:pack": "gulp pack",
     "build": "gulp build",
-    "ext:install": "gulp install",
     "watch": "gulp watch",
-    "vm": "gulp vm"
+    "vm": "gulp vm",
+    "ext:install": "gulp install",
+    "ext:pack": "gulp pack"
   }
 }

@@ -8,7 +8,7 @@ const filename_zip = `${uuid}.shell-extension.zip`
 
 const clean = async () => {
   rmSync(outDir, { recursive: true, force: true })
-  rmSync(filename_zip)
+  rmSync(filename_zip, { recursive: true, force: true })
 }
 
 const zip = (cb) => require('child_process')
