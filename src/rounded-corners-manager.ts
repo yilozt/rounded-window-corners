@@ -492,10 +492,7 @@ export class RoundedCornersManager {
                 win,
                 effect
             )
-            effect.update_uniforms (
-                this._get_rounded_corners_cfg (win),
-                this._compute_bounds (actor)
-            )
+            effect.update_uniforms (cfg, this._compute_bounds (actor))
         }
 
         // Update BindConstraint for shadow

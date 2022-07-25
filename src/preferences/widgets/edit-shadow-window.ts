@@ -117,16 +117,15 @@ export default registerClass (
 
         private update_style () {
             const gen_style = (normal: BoxShadow, hover: BoxShadow) =>
-                new TextEncoder ().encode (`
-                    label {
-                        background-color: white;
-                        transition: box-shadow 200ms;
-                        color: black;
-                        ${box_shadow_css (normal)};
-                    }
-                    label:hover {
-                        ${box_shadow_css (hover)};
-                    }`)
+                `label {
+                    background-color: white;
+                    transition: box-shadow 200ms;
+                    color: black;
+                    ${box_shadow_css (normal)};
+                }
+                label:hover {
+                    ${box_shadow_css (hover)};
+                }`
 
             this.unfocus_provider.load_from_data (
                 gen_style (this.unfocused_shadow, this.focused_shadow)

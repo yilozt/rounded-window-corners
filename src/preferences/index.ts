@@ -23,7 +23,7 @@ import { imports }       from '@global'
 
 const Prefs = registerClass (
     {},
-    class extends Adw.Application {
+    class extends Gtk.Application {
         private win !: Adw.PreferencesWindow
 
         _init () {
@@ -67,6 +67,8 @@ const Prefs = registerClass (
 
         vfunc_startup (): void {
             super.vfunc_startup ()
+
+            Adw.init ()
 
             Notify.init (this.application_id)
 

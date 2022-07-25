@@ -15,7 +15,7 @@ The item of list is instance part of WM_CLASS property with window. You can pick
     </child>
     <child>
       <object class="AdwPreferencesGroup">
-        <child type="header-suffix">
+        <child>
           <object class="GtkButton" id="add_row_btn">
             <property name="halign">end</property>
             <property name="valign">end</property>

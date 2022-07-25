@@ -23,7 +23,7 @@ sources = [
   enums,
 ]
 
-mutter_cogl_dep = dependency('mutter-clutter-@0@'.format(version))
+mutter_clutter_dep = dependency('mutter-clutter-@0@'.format(version))
 mutter_dep = dependency('libmutter-@0@'.format(version))
 mutter_typelibdir = mutter_dep.get_variable('typelibdir')
 
@@ -33,7 +33,7 @@ pkglibdir = join_paths(libdir, 'patched-blur-effect')
 
 lib = library('patched-blureffect', 
   sources: sources,
-  dependencies: [mutter_cogl_dep, mutter_dep],
+  dependencies: [mutter_clutter_dep, mutter_dep],
   install: true,
   build_rpath: mutter_typelibdir,
   install_rpath: mutter_typelibdir,
