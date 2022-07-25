@@ -255,14 +255,7 @@ export class RoundedCornersManager {
             // Need to listen 'damaged' signal, overwise XWayland client
             // will don't show contents, util you resize it manually
             this.connections.connect (actor, 'damaged', () => {
-                // Skip update shaders when window is maximized
-                const max =
-                    win.fullscreen ||
-                    win.maximized_vertically ||
-                    win.maximized_vertically
-                if (actor.meta_window.appears_focused && !max) {
-                    this.on_size_changed (actor)
-                }
+                this.on_size_changed (actor)
             })
 
             // Update shadow actor when focus of window has changed.

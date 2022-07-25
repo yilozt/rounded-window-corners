@@ -26,8 +26,10 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "fedora/36-cloud-base"
-  config.vm.box_version = "36-20220504.1"
+  config.vm.box = "fedora/35-cloud-base"
+  config.vm.box_url = "https://download.fedoraproject.org/pub/fedora/"\
+    "linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-Vagrant-35-1."\
+    "2.x86_64.vagrant-virtualbox.box"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

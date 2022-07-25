@@ -22,7 +22,7 @@ export function pick () {
         'pick',
         null,
         null,
-        Gio.DBusCallFlags.NONE,
+        Gio.DBusCallFlags.NO_AUTO_START,
         -1,
         null,
         null

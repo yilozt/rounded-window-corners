@@ -14,9 +14,10 @@ The item of list is instance part of WM_CLASS property with window. You can pick
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup" id="custom_group">
+      <object class="AdwPreferencesGroup">
         <child type="header-suffix">
           <object class="GtkButton" id="add_row_btn">
+            <property name="halign">end</property>
             <property name="valign">end</property>
             <child>
               <object class="GtkBox">
@@ -40,6 +41,10 @@ The item of list is instance part of WM_CLASS property with window. You can pick
             </style>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwPreferencesGroup" id="custom_group">
       </object>
     </child>
   </template>

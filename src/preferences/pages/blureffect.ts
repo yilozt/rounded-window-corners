@@ -8,7 +8,7 @@ import { template_url }      from '../../utils/io'
 import settings              from '../../utils/settings'
 import constants             from '../../utils/constants'
 import { connections }       from '../../connections'
-import { show_toast }        from '../../utils/prefs'
+import { show_err_msg }      from '../../utils/prefs'
 import appRow                from '../widgets/app-row'
 
 // types
@@ -38,10 +38,11 @@ export const BlurEffect = GObject.registerClass (
         private _blur_list         !: Adw.PreferencesGroup
 
         /** List to store into settings  */
-        private blur_list: string[] = settings ().blur_list
+        private blur_list: string[] = []
 
-        constructor () {
-            super ()
+        _init () {
+            super._init ()
+            this.blur_list = settings ().blur_list
 
             for (const title of this.blur_list) {
                 this._add_row (title)
@@ -77,7 +78,7 @@ export const BlurEffect = GObject.registerClass (
                         const title =
                             `[${new_title}] has been added into list` +
                             ', settings will not effect'
-                        show_toast (this, new Adw.Toast ({ title, timeout: 2 }))
+                        show_err_msg (this.root, title)
                         return false
                     }
 

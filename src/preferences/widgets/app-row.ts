@@ -5,7 +5,7 @@ import * as Gtk            from '@gi/Gtk'
 
 // local Modules
 import { template_url }    from '../../utils/io'
-import { show_toast }      from '../../utils/prefs'
+import { show_err_msg }    from '../../utils/prefs'
 import { connections }     from '../../connections'
 import constants           from '../../utils/constants'
 import { on_picked, pick } from '../../dbus/client'
@@ -35,11 +35,11 @@ export default GObject.registerClass (
         /** Store event handlers for this widget */
         private cb?: AppRowHandler
 
-        constructor (
-            config?: Adw.ExpanderRow.ConstructorProperties,
+        _init (
+            config?: Partial<Adw.ExpanderRow.ConstructorProperties>,
             cb?: AppRowHandler
         ) {
-            super (config)
+            super._init (config)
             this.cb = cb
 
             connections ().connect (this, 'notify::expanded', () => {
@@ -78,13 +78,7 @@ export default GObject.registerClass (
                     const title =
                         'Can\'t pick a window window from this position'
                     if (wm_instance_class == 'window-not-found') {
-                        show_toast (
-                            this.root,
-                            new Adw.Toast ({
-                                title,
-                                timeout: 2,
-                            })
-                        )
+                        show_err_msg (this.root, title)
                         return
                     }
                     this._entry_buffer.text = wm_instance_class

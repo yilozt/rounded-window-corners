@@ -5,7 +5,7 @@ import * as Adw          from '@gi/Adw'
 // Local Modules
 import { _log }          from '../../utils/log'
 import { template_url }  from '../../utils/io'
-import { show_toast }    from '../../utils/prefs'
+import { show_err_msg }  from '../../utils/prefs'
 import settings          from '../../utils/settings'
 import constants         from '../../utils/constants'
 import { connections }   from '../../connections'
@@ -31,8 +31,9 @@ export const Blacklist = GObject.registerClass (
         /** Store value of settings */
         private black_list: Array<string> = []
 
-        constructor () {
-            super ()
+        _init () {
+            super._init ()
+            this.black_list = []
 
             // Read blacklist from settings, and add it to this._black_list
             settings ().black_list.forEach ((name) => this.on_add_row (name))
@@ -45,12 +46,9 @@ export const Blacklist = GObject.registerClass (
             })
         }
 
-        private show_err_msg (title: string) {
-            const toast = new Adw.Toast ({
-                timeout: 3,
-                title: `"${title}": Can't add into list, because it has exists`,
-            })
-            show_toast (this.root, toast)
+        private show_err_msg (item: string) {
+            const title = `"${item}": Can't add to list, because it has exists`
+            show_err_msg (this.root, title)
         }
 
         // --------------------------------------------------- [signal handlers]

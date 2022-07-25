@@ -26,7 +26,8 @@
   "libraries_prefs": {
     "Adw": [ "1" ],
     "Gtk": [ "4.0" ],
-    "Gdk": [ "4.0" ]
+    "Gdk": [ "4.0" ],
+    "Notify": ["0.7"]
   },
   "libraries_ext": {
     "Cogl":     [ "10" ],

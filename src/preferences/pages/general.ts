@@ -16,6 +16,9 @@ import { _log }               from '../../utils/log'
 
 // --------------------------------------------------------------- [end imports]
 
+type _Item = InstanceType<typeof RoundedCornersItem>
+type _Win = InstanceType<typeof EditShadowWindow>
+
 export const General = GObject.registerClass (
     {
         Template: template_url (import.meta.url, './general.ui'),
@@ -50,11 +53,15 @@ export const General = GObject.registerClass (
         private _blur_effect_row                   !: Adw.ActionRow
         private _status_page                       !: Adw.StatusPage
 
-        private edit_shadow_window = new EditShadowWindow ()
-        private config_items = new RoundedCornersItem ()
+        private edit_shadow_window                 !: _Win
+        private config_items                       !: _Item
 
-        constructor () {
-            super ()
+        _init () {
+            super._init ()
+
+            this.edit_shadow_window = new EditShadowWindow ()
+            this.config_items = new RoundedCornersItem ()
+
             this.build_ui ()
 
             this._blur_effect_row.sensitive = false
@@ -116,10 +123,8 @@ export const General = GObject.registerClass (
                 this.config_items.remove (i)
                 this._global_settings_preferences_group.add (i)
             })
-
             // Bind Variants
             this.config_items.cfg = settings ().global_rounded_corner_settings
-
             this.config_items.watch ((cfg) => {
                 settings ().global_rounded_corner_settings = cfg
             })
@@ -129,7 +134,7 @@ export const General = GObject.registerClass (
 
         /** Called when click 'Window Shadow' action row */
         _show_edit_shadow_window_cb () {
-            this.edit_shadow_window.show ()
+            this.edit_shadow_window?.show ()
         }
 
         _show_setup_guide_page () {

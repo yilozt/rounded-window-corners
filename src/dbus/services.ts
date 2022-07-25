@@ -23,7 +23,7 @@ export default class {
 
     /** Pick Window for Preferences Page, export to DBus client */
     pick () {
-        /** Emit `picked` signal */
+        /** Emit `picked` signal, send wm_instance_class of got */
         const _send_wm_class_instance = (wm_instance_class: string) => {
             this.DBusImpl.emit_signal (
                 'picked',
@@ -31,35 +31,51 @@ export default class {
             )
         }
 
-        new Inspector (Main.createLookingGlass ()).connect (
-            'target',
-            (me, target, x, y) => {
-                _log (`${me}: pick ${target} in ${x}, ${y}`)
+        // A very interesting way to pick a window:
+        // 1. Open LookingGlass to mask all event handles of window
+        // 2. Use inspector to pick window, thats is also lookingGlass do
+        // 3. Close LookingGlass when done
+        //    It will restore event handles of window
 
-                // Remove border effect when window is picked.
-                const effect_name = 'lookingGlass_RedBorderEffect'
-                target
-                    .get_effects ()
-                    .filter ((e) => e.toString ().includes (effect_name))
-                    .forEach ((e) => target.remove_effect (e))
+        // Open then hide LookingGlass
+        const looking_class = Main.createLookingGlass ()
+        looking_class.open ()
+        looking_class.hide ()
 
-                // Get wm_class_instance property of window, then pass it DBus
-                // client
-                const type_str = target.toString ()
-                let actor = target as WindowActor
-                if (type_str.includes ('MetaSurfaceActor')) {
-                    actor = target.get_parent () as WindowActor
-                } else if (!type_str.includes ('WindowActor')) {
-                    _send_wm_class_instance ('window-not-found')
-                    return
-                }
+        // Inspect window now
+        const inspector = new Inspector (Main.createLookingGlass ())
+        inspector.connect ('target', (me, target, x, y) => {
+            _log (`${me}: pick ${target} in ${x}, ${y}`)
 
-                _send_wm_class_instance (
-                    actor.meta_window.get_wm_class_instance () ??
-                        'window-not-found'
-                )
+            // Remove border effect when window is picked.
+            const effect_name = 'lookingGlass_RedBorderEffect'
+            target
+                .get_effects ()
+                .filter ((e) => e.toString ().includes (effect_name))
+                .forEach ((e) => target.remove_effect (e))
+
+            // Get wm_class_instance property of window, then pass it DBus
+            // client
+            const type_str = target.toString ()
+
+            let actor = target as WindowActor
+            if (type_str.includes ('MetaSurfaceActor')) {
+                actor = target.get_parent () as WindowActor
             }
-        )
+
+            if (!actor.toString ().includes ('WindowActor')) {
+                _send_wm_class_instance ('window-not-found')
+                return
+            }
+
+            _send_wm_class_instance (
+                actor.meta_window.get_wm_class_instance () ?? 'window-not-found'
+            )
+        })
+        inspector.connect ('closed', () => {
+            // Close LookingGlass When we done
+            looking_class.close ()
+        })
     }
 
     /** Property export to DBus client  */
@@ -77,7 +93,7 @@ export default class {
             Gio.DBus.session,
             '/yi/github/RoundedCornersEffect'
         )
-        _log ('Dbus Services exported')
+        _log ('DBus Services exported')
     }
 
     unexport () {

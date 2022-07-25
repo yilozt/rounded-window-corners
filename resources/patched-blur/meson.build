@@ -3,6 +3,12 @@ project('lib-patched-blureffect', 'c',
   license: 'GPLv2+'
 )
 
+# Match version of gnome-shell dynamically
+r = run_command('gnome-shell', '--version').stdout()
+version = r.split(' ')[2].split('.')[0].to_int() - 32
+message(':: Gnome shell version: ', r)
+message(':: Fetch Api version: ', version)
+
 gnome = import('gnome')
 
 enums = gnome.mkenums_simple('shell-enum-types',
@@ -17,8 +23,8 @@ sources = [
   enums,
 ]
 
-mutter_cogl_dep = dependency('mutter-clutter-10')
-mutter_dep = dependency('libmutter-10')
+mutter_cogl_dep = dependency('mutter-clutter-@0@'.format(version))
+mutter_dep = dependency('libmutter-@0@'.format(version))
 mutter_typelibdir = mutter_dep.get_variable('typelibdir')
 
 prefix = get_option('prefix')
@@ -42,8 +48,8 @@ gnome.generate_gir(lib,
   symbol_prefix: 'patched',
   includes: [
     'GObject-2.0',
-    'Clutter-10',
-    'Meta-10',
+    'Clutter-@0@'.format(version),
+    'Meta-@0@'.format(version),
   ],
   install: true,
   install_dir_gir: pkglibdir,

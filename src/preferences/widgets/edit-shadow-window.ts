@@ -1,3 +1,5 @@
+imports.gi.versions.Gtk = '4.0'
+
 // imports.gi
 import * as Adw           from '@gi/Adw'
 import * as Gtk           from '@gi/Gtk'
@@ -10,6 +12,7 @@ import settings           from '../../utils/settings'
 
 // just used to mark type of value, will be remove in output javascript
 import { BoxShadow }      from '../../utils/types'
+import { imports }        from '@global'
 
 // ----------------------------------------------------------------- end imports
 
@@ -44,15 +47,19 @@ export default registerClass (
         private _focus_toggle_button     !: Gtk.ToggleButton
 
         // CssProvider to change style of preview widgets in edit window
-        private unfocus_provider = new Gtk.CssProvider ()
-        private focus_provider = new Gtk.CssProvider ()
+        private unfocus_provider         !: Gtk.CssProvider
+        private focus_provider           !: Gtk.CssProvider
 
         // Load box-shadow from settings
-        private focused_shadow: BoxShadow = settings ().focused_shadow
-        private unfocused_shadow: BoxShadow = settings ().unfocused_shadow
+        private focused_shadow           !: BoxShadow
+        private unfocused_shadow         !: BoxShadow
 
-        constructor () {
-            super ()
+        _init () {
+            this.unfocus_provider = new Gtk.CssProvider ()
+            this.focus_provider = new Gtk.CssProvider ()
+            this.focused_shadow = settings ().focused_shadow
+            this.unfocused_shadow = settings ().unfocused_shadow
+            super._init ()
 
             // Init style of preview widgets
             this._unfocus_shadow_widget

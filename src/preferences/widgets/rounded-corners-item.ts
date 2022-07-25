@@ -1,3 +1,5 @@
+imports.gi.versions.Gtk = '4.0'
+
 // imports.gi
 import * as GObject          from '@gi/GObject'
 import * as Gtk              from '@gi/Gtk'
@@ -6,6 +8,7 @@ import * as Gtk              from '@gi/Gtk'
 import { template_url }      from '../../utils/io'
 import { RoundedCornersCfg } from '../../utils/types'
 import { connections }       from '../../connections'
+import { imports }           from '@global'
 
 // ------------------------------------------------------------------ end import
 
@@ -30,21 +33,17 @@ export default GObject.registerClass (
         private _padding_top_scale           !: Gtk.Scale
         private _padding_bottom_scale        !: Gtk.Scale
 
-        private _scales = [
-            this._border_radius_scale,
-            this._padding_bottom_scale,
-            this._padding_left_scale,
-            this._padding_right_scale,
-            this._padding_top_scale,
-        ]
-        constructor () {
-            super ()
-            //     this._scales.forEach ((scale) =>
-            //         scale.set_format_value_func ((scale, val) => {
-            //             _log (scale)
-            //             return val + ' px'
-            //         })
-            //     )
+        private _scales                      !: Gtk.Scale[]
+
+        _init () {
+            super._init ()
+            this._scales = [
+                this._border_radius_scale,
+                this._padding_bottom_scale,
+                this._padding_left_scale,
+                this._padding_right_scale,
+                this._padding_top_scale,
+            ]
         }
 
         watch (on_cfg_changed: (cfg: RoundedCornersCfg) => void) {

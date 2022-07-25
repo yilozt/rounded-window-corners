@@ -9,7 +9,7 @@ set -ex
 
 # Setup software mirror from https://mirrors.tuna.tsinghua.edu.cn
 
-export releasever=36
+export releasever=35
 export basearch=x86_64
 
 {

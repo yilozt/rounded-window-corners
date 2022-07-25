@@ -1,20 +1,21 @@
 // imports.gi
-import * as GObject                  from '@gi/GObject'
-import * as Adw                      from '@gi/Adw'
+import * as GObject                    from '@gi/GObject'
+import * as Adw                        from '@gi/Adw'
 
 // local modules
-import { list_children, show_toast } from '../../utils/prefs'
-import { template_url }              from '../../utils/io'
-import constants                     from '../../utils/constants'
-import { connections }               from '../../connections'
-import settings                      from '../../utils/settings'
-import AppRow                        from '../widgets/app-row'
-import RoundedCornersItem            from '../widgets/rounded-corners-item'
+import { list_children, show_err_msg } from '../../utils/prefs'
+import { template_url }                from '../../utils/io'
+import constants                       from '../../utils/constants'
+import { connections }                 from '../../connections'
+import settings                        from '../../utils/settings'
+import AppRow                          from '../widgets/app-row'
+import RoundedCornersItem              from '../widgets/rounded-corners-item'
 
 // types
-import { Align, Switch, Button }     from '@gi/Gtk'
-import { AppRowHandler }             from '../widgets/app-row'
-import { RoundedCornersCfg }         from 'utils/types'
+import { Align, Switch, Button }       from '@gi/Gtk'
+import { AppRowHandler }               from '../widgets/app-row'
+import { CustomRoundedCornersCfg }     from 'utils/types'
+import { RoundedCornersCfg }           from 'utils/types'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -28,10 +29,11 @@ export const Custom = GObject.registerClass (
         private _custom_group !: Adw.PreferencesGroup
         private _add_row_btn  !: Button
 
-        private _settings_cfg = settings ().custom_rounded_corner_settings
+        private _settings_cfg !: CustomRoundedCornersCfg
 
-        constructor () {
-            super ()
+        _init () {
+            super._init ()
+            this._settings_cfg = settings ().custom_rounded_corner_settings
 
             for (const k in this._settings_cfg) {
                 this.add_row (k, this._settings_cfg[k])
@@ -148,13 +150,7 @@ export const Custom = GObject.registerClass (
             const tip =
                 `'${title}': ` +
                 'can\'t add into list, because this item has exists'
-            show_toast (
-                this.root,
-                new Adw.Toast ({
-                    title: tip,
-                    timeout: 2,
-                })
-            )
+            show_err_msg (this.root, tip)
         }
 
         private _on_cfg_changed (k: string, v: RoundedCornersCfg) {

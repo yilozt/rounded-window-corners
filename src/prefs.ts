@@ -1,46 +1,29 @@
-import * as Gtk                                                 from '@gi/Gtk'
-import * as Gdk                                                 from '@gi/Gdk'
-import { PreferencesGroup, PreferencesPage, PreferencesWindow } from '@gi/Adw'
-import { log, logError }                                        from '@global'
+import * as Gtk                from '@gi/Gtk'
+import * as GLib               from '@gi/GLib'
+import * as Gio                from '@gi/Gio'
+import { imports, log }        from '@global'
+
+import { getCurrentExtension } from '@imports/misc/extensionUtils'
 
 export function init () {
-    // TODO: Add i18n initialize in here
+    /** Do nothing here  */
 }
 
-/**
- * Loader of preferences pages, we will fill `window` with pages export
- * from ./preferences/index.ts
- * @param window Preferences Window to show
- */
-export function fillPreferencesWindow (window: PreferencesWindow) {
-    // Loading text...
-    const loading = new PreferencesPage ()
-    const group = new PreferencesGroup ({ title: 'Loading....' })
-    loading.add (group)
-    window.add (loading)
+export function buildPrefsWidget () {
+    // throw Error when libadwaita have not installed.
+    imports.gi.Adw
 
-    window.search_enabled = true
+    GLib.idle_add (GLib.PRIORITY_DEFAULT_IDLE, () => {
+        (widget.get_root () as Gtk.Window).close ()
+        return false
+    })
 
-    // Load module async
-    import ('./preferences/index.js')
-        .then ((index) => {
-            window.remove (loading)
-            index.setup (window)
-        })
-        .catch ((e) => {
-            log ('[prefs] Failed to load ui')
-            logError (e)
-        })
+    const widget = new Gtk.Box ()
 
-    const css = new Gtk.CssProvider ()
-    css.load_from_data (
-        '' +
-            '.code { padding: 10px 16px;}' +
-            '.edit-win { background: #eeeeee; color: black; }'
-    )
+    const script = `${getCurrentExtension ().path}/preferences/index.js`
+    const cmd = ['gjs', '-m', script]
+    log ('Launch ' + cmd)
 
-    const display = Gdk.Display.get_default ()
-    if (display) {
-        Gtk.StyleContext.add_provider_for_display (display, css, 1024)
-    }
+    Gio.Subprocess.new (cmd, Gio.SubprocessFlags.NONE)
+    return widget
 }

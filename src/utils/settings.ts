@@ -1,20 +1,45 @@
 // imports.gi
 import * as GLib                   from '@gi/GLib'
-
-// gnome-shell modules
-import { getSettings }             from '@imports/misc/extensionUtils'
-
-// local modules
-import { _log as log }             from './log'
+import * as Gio                    from '@gi/Gio'
 
 // used to mark types, will be remove in output files.
-import * as Gio                    from '@gi/Gio'
 import * as GObject                from '@gi/GObject'
 import { BoxShadow }               from './types'
 import { CustomRoundedCornersCfg } from './types'
 import { RoundedCornersCfg }       from './types'
+import { log }                     from '@global'
 
 // --------------------------------------------------------------- [end imports]
+
+/**
+ * This function is base on getSettings() in
+ * https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/misc/
+ * extensionUtils.js#L211
+ *
+ * Need this function because preferences is launched in a new process.
+ */
+function getSettings (schema: string) {
+    const GioSSS = Gio.SettingsSchemaSource
+    const schemaDir = Gio.File.new_for_uri (import.meta.url)
+        .get_parent ()
+        ?.get_parent ()
+        ?.get_child ('schemas')
+    let schemaSource
+    if (schemaDir?.query_exists (null)) {
+        schemaSource = GioSSS.new_from_directory (
+            schemaDir.get_path () ?? '',
+            GioSSS.get_default (),
+            false
+        )
+    } else {
+        schemaSource = GioSSS.get_default ()
+    }
+
+    const schemaObj = schemaSource?.lookup (schema, true)
+    if (!schemaObj) throw new Error (`Schema ${schema} could not be found`)
+
+    return new Gio.Settings ({ settings_schema: schemaObj })
+}
 
 /** This object use to store key of settings and its type string */
 const type_of_keys: {
