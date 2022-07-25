@@ -13,18 +13,18 @@ import BackgroundMenu              from '@imports/ui/backgroundMenu'
 
 // local modules
 import constants                   from './utils/constants'
-import { RoundedCornersManager }   from './rounded-corners-manager'
-import { BlurEffectManager }       from './blur-effect-manager'
+import { RoundedCornersManager }   from './manager/rounded-corners-manager'
+import { BlurEffectManager }       from './manager/blur-effect-manager'
 import { _log as log }             from './utils/log'
 import { AddBackgroundMenuItem }   from './utils/ui'
 import { SetupBackgroundMenu }     from './utils/ui'
 import { scaleFactor }             from './utils/ui'
 import { ChoiceRoundedCornersCfg } from './utils/ui'
-import { connections }             from './connections'
+import { connections }             from './utils/connections'
 import settings, { SchemasKeys }   from './utils/settings'
 import { Padding }                 from './utils/types'
 import Services                    from './dbus/services'
-import BlurLoader                  from './blur-loader'
+import BlurLoader                  from './loader/blur-loader'
 
 // types, which will be removed in output
 import { WM }                      from '@gi/Shell'

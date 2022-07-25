@@ -2,8 +2,8 @@ import * as GLib       from '@gi/GLib'
 import * as GObject    from '@gi/GObject'
 import * as Gio        from '@gi/Gio'
 import { Repository }  from '@gi/GIRepository'
-import { _log }        from './utils/log'
-import { connections } from './connections'
+import { _log }        from '../utils/log'
+import { connections } from '../utils/connections'
 
 // types
 import { imports }     from '@global'

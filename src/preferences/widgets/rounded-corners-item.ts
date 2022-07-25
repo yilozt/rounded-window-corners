@@ -7,7 +7,7 @@ import * as Gtk              from '@gi/Gtk'
 // local modules
 import { template_url }      from '../../utils/io'
 import { RoundedCornersCfg } from '../../utils/types'
-import { connections }       from '../../connections'
+import { connections }       from '../../utils/connections'
 import { imports }           from '@global'
 
 // ------------------------------------------------------------------ end import

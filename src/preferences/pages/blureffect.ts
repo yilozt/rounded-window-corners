@@ -7,7 +7,7 @@ import { SettingsBindFlags } from '@gi/Gio'
 import { template_url }      from '../../utils/io'
 import settings              from '../../utils/settings'
 import constants             from '../../utils/constants'
-import { connections }       from '../../connections'
+import { connections }       from '../../utils/connections'
 import { show_err_msg }      from '../../utils/prefs'
 import appRow                from '../widgets/app-row'
 

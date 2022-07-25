@@ -8,7 +8,7 @@ import { template_url }  from '../../utils/io'
 import { show_err_msg }  from '../../utils/prefs'
 import settings          from '../../utils/settings'
 import constants         from '../../utils/constants'
-import { connections }   from '../../connections'
+import { connections }   from '../../utils/connections'
 import BlackListRow      from '../widgets/app-row'
 
 // types

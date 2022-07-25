@@ -11,7 +11,7 @@ import { _logError }   from './log'
 // types
 import { global }      from '@global'
 import * as types      from './types'
-import { Connections } from '../connections'
+import { Connections } from '../utils/connections'
 
 // --------------------------------------------------------------- [end imports]
 

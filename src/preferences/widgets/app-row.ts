@@ -6,7 +6,7 @@ import * as Gtk            from '@gi/Gtk'
 // local Modules
 import { template_url }    from '../../utils/io'
 import { show_err_msg }    from '../../utils/prefs'
-import { connections }     from '../../connections'
+import { connections }     from '../../utils/connections'
 import constants           from '../../utils/constants'
 import { on_picked, pick } from '../../dbus/client'
 

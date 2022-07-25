@@ -5,19 +5,19 @@ import { BlurMode }                       from '@gi/Shell'
 import { Bin }                            from '@gi/St'
 
 // local modules
-import RepaintSignal                      from './effect/repaint-signal'
-import { Connections }                    from './connections'
-import settings                           from './utils/settings'
-import * as UI                            from './utils/ui'
-import constants                          from './utils/constants'
-import { Padding }                        from './utils/types'
+import RepaintSignal                      from '../effect/repaint-signal'
+import { Connections }                    from '../utils/connections'
+import settings                           from '../utils/settings'
+import * as UI                            from '../utils/ui'
+import constants                          from '../utils/constants'
+import { Padding }                        from '../utils/types'
 import { RoundedCornersManager }          from './rounded-corners-manager'
 
 // types
 import { WindowActor, Window }            from '@gi/Meta'
 import { WM }                             from '@gi/Shell'
 import { imports, BlurEffect, global }    from '@global'
-import { SchemasKeys }                    from './utils/settings'
+import { SchemasKeys }                    from '../utils/settings'
 import { Settings }                       from '@gi/Gio'
 
 // --------------------------------------------------------------- [end imports]
