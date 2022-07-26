@@ -17,6 +17,7 @@ import { RoundedCornersManager }   from './manager/rounded-corners-manager'
 import { BlurEffectManager }       from './manager/blur-effect-manager'
 import { _log as log }             from './utils/log'
 import { AddBackgroundMenuItem }   from './utils/ui'
+import { RestoreBackgroundMenu }   from './utils/ui'
 import { SetupBackgroundMenu }     from './utils/ui'
 import { scaleFactor }             from './utils/ui'
 import { ChoiceRoundedCornersCfg } from './utils/ui'
@@ -312,6 +313,8 @@ export class Extension {
         WorkspaceGroup.prototype._createWindows = this._switch_ws_patch
         WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
+
+        RestoreBackgroundMenu ()
 
         this._rounded_corners_manager.disable ()
         this._blur_effect_manager.disable ()

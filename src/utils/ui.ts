@@ -1,17 +1,19 @@
 // imports.gi
-import * as Meta       from '@gi/Meta'
+import * as Meta           from '@gi/Meta'
 
 // gnome modules
-import { openPrefs }   from '@imports/misc/extensionUtils'
+import { openPrefs }       from '@imports/misc/extensionUtils'
 
 // local modules
-import { load }        from './io'
-import { _logError }   from './log'
+import { load }            from './io'
+import { _log, _logError } from './log'
+import constants           from './constants'
 
 // types
-import { global }      from '@global'
-import * as types      from './types'
-import { Connections } from '../utils/connections'
+import { global }          from '@global'
+import * as types          from './types'
+import { Connections }     from '../utils/connections'
+import { Actor }           from '@gi/Clutter'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -60,6 +62,7 @@ export const scaleFactor = () =>
 type BackgroundMenu = {
     _getMenuItems: () => { label?: { text: string } }[]
     addAction: (label: string, action: () => void) => void
+    moveMenuItem(item: { label?: { text: string } }, index: number): void
 }
 type BackgroundExtra = {
     _backgroundMenu: BackgroundMenu
@@ -71,15 +74,13 @@ type BackgroundExtra = {
  * @param menu - BackgroundMenu to add
  */
 export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
-    const to_add = 'Rounded Corners Settings'
-
     for (const item of menu._getMenuItems ()) {
-        if (item.label?.text === to_add) {
+        if (item.label?.text === constants.ITEM_LABEL) {
             return
         }
     }
 
-    menu.addAction (to_add, () => {
+    menu.addAction (constants.ITEM_LABEL, () => {
         try {
             openPrefs ()
         } catch (err) {
@@ -93,6 +94,25 @@ export const SetupBackgroundMenu = () => {
     for (const _bg of global.window_group.first_child.get_children ()) {
         const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
         AddBackgroundMenuItem (menu)
+    }
+}
+
+export const RestoreBackgroundMenu = () => {
+    const remove_menu_item = (menu: BackgroundMenu) => {
+        const items = menu._getMenuItems ()
+
+        for (const i of items) {
+            if (i?.label?.text === constants.ITEM_LABEL) {
+                (i as Actor).destroy ()
+                break
+            }
+        }
+    }
+
+    for (const _bg of global.window_group.first_child.get_children ()) {
+        const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
+        remove_menu_item (menu)
+        _log ('Added Item of ' + menu + 'Removed')
     }
 }
 
