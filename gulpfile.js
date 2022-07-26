@@ -1,5 +1,5 @@
 const {series, parallel } = require('gulp')
-const { build, copy_extension }  = require('./gulp/build')
+const { build, copy_extension, github_action }  = require('./gulp/build')
 const { vagrant } = require('./gulp/vagrant')
 const { watch } = require('./gulp/watch')
 
@@ -19,3 +19,6 @@ exports.watch   = series(this.build, watch)
 // Watch changes & run extensions in virtual machine
 // Need vagrant installed.
 exports.vm      = series(this.build, parallel(vagrant, watch))
+
+
+exports.github_action = github_action

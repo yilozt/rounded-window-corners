@@ -6,7 +6,7 @@ const align_imports = () => through.obj(function (file, enc, cb) {
     return
   }
   /** @type string[] */
-  const lines = file.contents?.toString().split('\n')
+  const lines = file.contents.toString().split('\n')
   
   const imports = []
   const props = []

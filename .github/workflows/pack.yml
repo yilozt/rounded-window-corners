@@ -1,0 +1,51 @@
+name: Pack extensions
+
+on:
+  push:
+    paths-ignore:
+      - README.md
+    branches: [ "main" ]
+  pull_request:
+    paths-ignore:
+      - README.md
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    container: archlinux:base-devel
+    env:
+      XDG_DATA_DIRS: /usr/local/share/:/usr/share/
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules
+      
+      - name: Prepare
+        run: |
+          pacman -Sy
+          pacman -S --noconfirm base gnome-shell libnotify gtk3 libadwaita gtk4 glib2 gobject-introspection
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build
+        run: |
+          npm install
+          npm run github_action
+        
+      - name: Upload Extension Pack
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: rounded-corners-effect@yilozt.shell-extension
+          path: _build/

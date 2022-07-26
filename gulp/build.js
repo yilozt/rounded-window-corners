@@ -91,6 +91,7 @@ const install_extension = () => {
 // -------------------------------------------------------- [Export gulp tasks]
 
 exports.build = series(gi, format, compile_ts, copy_resources, compile_schema)
+exports.github_action = series(gi, compile_ts, copy_resources, compile_schema)
 exports.copy_extension = install_extension
 
 // ---------------------------------------------------------- [Private methods]
