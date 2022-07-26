@@ -124,10 +124,8 @@ export default registerClass (
             const border_width = border.width * scale_factor
             const border_color = border.color
 
-            let radius = corners_cfg.border_radius * scale_factor
+            const radius = corners_cfg.border_radius * scale_factor
             const { padding } = corners_cfg
-
-            radius *= scale_factor
 
             const bounds = [
                 outer_bounds.x1 + padding.left * scale_factor,

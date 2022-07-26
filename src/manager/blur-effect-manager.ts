@@ -9,6 +9,7 @@ import RepaintSignal                      from '../effect/repaint-signal'
 import { Connections }                    from '../utils/connections'
 import settings                           from '../utils/settings'
 import * as UI                            from '../utils/ui'
+import { _log }                           from '../utils/log'
 import constants                          from '../utils/constants'
 import { Padding }                        from '../utils/types'
 import { RoundedCornersManager }          from './rounded-corners-manager'
@@ -258,6 +259,21 @@ export class BlurEffectManager {
         this.compute_offset_of_blur (win).forEach (
             (offset, i) => (constraints[i].offset = offset)
         )
+
+        const maximized =
+            win.maximized_horizontally ||
+            win.maximized_vertically ||
+            win.fullscreen
+        const cfg = UI.ChoiceRoundedCornersCfg (
+            settings ().global_rounded_corner_settings,
+            settings ().custom_rounded_corner_settings,
+            win
+        )
+        const has_rounded_corners = cfg.keep_rounded_corners || !maximized
+        const effect = blur_actor.get_effects ()[0] as BlurEffect
+        effect.radius = has_rounded_corners
+            ? UI.scaleFactor () * cfg.border_radius
+            : 0
     }
 
     update_blur_effect (actor: WindowActor) {
@@ -265,11 +281,21 @@ export class BlurEffectManager {
         const _effect = this.blur_actors.get (win)?.get_effects ()[0]
         const effect = _effect as BlurEffect
         if (effect) {
-            effect.radius =
-                settings ().global_rounded_corner_settings.border_radius
+            let { border_radius } = settings ().global_rounded_corner_settings
+            border_radius *= UI.scaleFactor ()
+            _log ('Setup radius of blur: ' + border_radius)
+            effect.radius = border_radius
             effect.sigma = settings ().blur_sigma
             actor.opacity = settings ().blurred_window_opacity
         }
+    }
+
+    update_all_blur_effects () {
+        this.blur_actors.forEach ((_, win) => {
+            const actor = win.get_compositor_private ()
+            this.update_blur_effect (actor as WindowActor)
+            this.update_coordinates (win)
+        })
     }
 
     private _settings_changed (k: string) {
@@ -296,11 +322,7 @@ export class BlurEffectManager {
         case 'blurred-window-opacity':
         case 'custom-rounded-corner-settings':
         case 'global-rounded-corner-settings':
-            this.blur_actors.forEach ((_, win) => {
-                const actor = win.get_compositor_private ()
-                this.update_blur_effect (actor as WindowActor)
-                this.update_coordinates (win)
-            })
+            this.update_all_blur_effects ()
             break
         }
     }
