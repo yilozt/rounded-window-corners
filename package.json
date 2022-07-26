@@ -26,6 +26,7 @@
     "gi": "gulp gi",
     "build": "gulp build",
     "watch": "gulp watch",
+    "dev": "gulp dev",
     "vm": "gulp vm",
     "ext:install": "gulp install",
     "ext:pack": "gulp pack"
