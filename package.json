@@ -28,6 +28,7 @@
     "watch": "gulp watch",
     "vm": "gulp vm",
     "ext:install": "gulp install",
-    "ext:pack": "gulp pack"
+    "ext:pack": "gulp pack",
+    "github_action": "gulp github_action"
   }
 }

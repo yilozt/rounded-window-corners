@@ -116,10 +116,7 @@ const generate_gi_prefs = (cb) => {
     'libraries': conf.libraries_prefs,
     ...conf
   }))
-  return exec("cd .tmp/prefs && gi-ts generate", (err, stdout, stderr) => {
-    stdout && console.log(stdout)
-    stderr && console.log(stderr)
-  })
+  exec("cd .tmp/prefs && gi-ts generate", cb)
 }
 
 const generate_gi_ext = (cb) => {
@@ -129,7 +126,9 @@ const generate_gi_ext = (cb) => {
   }
 
   const extra_lib = [
-    execSync('find /usr/lib -maxdepth 1 -type d -name \'mutter-*\'').toString().split('\n')[0],
+    '/usr/lib64/mutter-10',
+    '/usr/lib64/mutter-9',
+    '/usr/lib64/mutter-8',
     '/usr/share/gnome-shell'
   ].join(':')
   mkdirSync('.tmp/ext', { recursive: true })
@@ -137,10 +136,7 @@ const generate_gi_ext = (cb) => {
     'libraries': conf.libraries_ext,
     ...conf
   }))
-  return exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
-    stdout && console.log(stdout)
-    stderr && console.log(stderr)
-  })
+  exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`, cb)
 }
 
 const generate_gi = series(
