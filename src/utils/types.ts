@@ -1,15 +1,3 @@
-/** Location of uniform variants of rounded corners effect */
-export class Uniforms {
-    bounds = 0
-    clip_radius = 0
-    inner_bounds = 0
-    inner_clip_radius = 0
-    pixel_step = 0
-    skip = 0
-    border_width = 0
-    border_brightness = 0
-}
-
 /** Bounds of rounded corners  */
 export class Bounds {
     x1 = 0

@@ -1,7 +1,7 @@
 // imports.gi
 import * as GObject           from '@gi/GObject'
 import * as Adw               from '@gi/Adw'
-import * as Gtk               from '@gi/Gtk'
+import * as Gdk               from '@gi/Gdk'
 import * as Gio               from '@gi/Gio'
 
 // local modules
@@ -13,6 +13,9 @@ import { distribution_id }    from '../../utils/io'
 import { path, template_url } from '../../utils/io'
 import deps                   from '../../utils/deps'
 import { _log }               from '../../utils/log'
+
+// types
+import * as Gtk               from '@gi/Gtk'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -37,6 +40,8 @@ export const General = GObject.registerClass (
             'meson_setup_label',
             'source_code_label',
             'deps_cmd_label',
+            'border_width_ajustment',
+            'border_color_button',
         ],
     },
     class extends Adw.PreferencesPage {
@@ -52,6 +57,8 @@ export const General = GObject.registerClass (
         private _deps_cmd_label                    !: Gtk.Label
         private _blur_effect_row                   !: Adw.ActionRow
         private _status_page                       !: Adw.StatusPage
+        private _border_width_ajustment            !: Gtk.Adjustment
+        private _border_color_button               !: Gtk.ColorButton
 
         private edit_shadow_window                 !: _Win
         private config_items                       !: _Item
@@ -93,6 +100,12 @@ export const General = GObject.registerClass (
                 'active',
                 Gio.SettingsBindFlags.DEFAULT
             )
+            settings ().bind (
+                'border-width',
+                this._border_width_ajustment,
+                'value',
+                Gio.SettingsBindFlags.DEFAULT
+            )
 
             const source_path = path (import.meta.url, '../../patched-blur')
             const id = distribution_id ()
@@ -109,6 +122,24 @@ export const General = GObject.registerClass (
                 'You can check the source code <a href="file://' +
                 source_path +
                 '">here</a>.'
+
+            const color = settings ().border_color
+            this._border_color_button.rgba = new Gdk.RGBA ({
+                red: color[0],
+                green: color[1],
+                blue: color[2],
+                alpha: color[3],
+            })
+
+            this._border_color_button.connect ('color-set', (source) => {
+                const color = source.get_rgba ()
+                settings ().border_color = [
+                    color.red,
+                    color.green,
+                    color.blue,
+                    color.alpha,
+                ]
+            })
         }
 
         on_blur_loaded () {

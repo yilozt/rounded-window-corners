@@ -63,6 +63,8 @@ export type SchemasKeys =
     | 'blur-sigma'
     | 'blurred-window-opacity'
     | 'blur-enabled'
+    | 'border-width'
+    | 'border-color'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -82,6 +84,8 @@ class Settings {
     blur_sigma                     !: number
     blurred_window_opacity         !: number
     blur_enabled                   !: boolean
+    border_width                   !: number
+    border_color                   !: [number, number, number, number]
 
     /** GSettings, which used to store and load settings */
     g_settings: Gio.Settings = getSettings (

@@ -13,7 +13,7 @@ uniform float inner_clip_radius;
 uniform vec2  pixel_step;
 uniform float skip;
 uniform float border_width;
-uniform float border_brightness;
+uniform vec4  border_color;
 
 float rounded_rect_coverage(vec2 p, vec4 bounds, float clip_radius) {
   // Outside the bounds
@@ -68,10 +68,8 @@ void main() {
       float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_clip_radius);
       float border_alpha = clamp(outer_alpha - inner_alpha, 0.0, 1.0) * cogl_color_out.a;
 
-      cogl_color_out *= smoothstep(0.0, 0.6, inner_alpha);
-      cogl_color_out = mix(cogl_color_out, vec4(vec3(border_brightness), 1.0), border_alpha);
-    } else {
-      cogl_color_out *=  outer_alpha;
+      cogl_color_out = mix(cogl_color_out, border_color, border_alpha);
     }
+    cogl_color_out *=  outer_alpha;
   }
 }

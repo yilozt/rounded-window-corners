@@ -19,6 +19,18 @@ const { declarations, code } = loadShader (
     './shader/rounded_corners.frag'
 )
 
+/** Location of uniform variants of rounded corners effect */
+class Uniforms {
+    bounds = 0
+    clip_radius = 0
+    inner_bounds = 0
+    inner_clip_radius = 0
+    pixel_step = 0
+    skip = 0
+    border_width = 0
+    border_color = 0
+}
+
 export default registerClass (
     {},
     class Effect extends GLSLEffect {
@@ -27,7 +39,7 @@ export default registerClass (
          * when shader has been setup in `vfunc_build_pipeline()`, sot that
          * avoid to yse `this.get_uniform_location()` to query too much times.
          */
-        static uniforms: types.Uniforms = new types.Uniforms ()
+        static uniforms: Uniforms = new Uniforms ()
 
         /**
          * Wether skip rounded corners effect, its useful to disable rounded
@@ -48,11 +60,11 @@ export default registerClass (
                 pixel_step: 0,
                 skip: 0,
                 border_width: 0,
-                border_brightness: 0,
+                border_color: 0,
             }
             Object.keys (Effect.uniforms).forEach ((k) => {
                 if (!Effect.uniforms) return
-                Effect.uniforms[k as keyof types.Uniforms] =
+                Effect.uniforms[k as keyof Uniforms] =
                     this.get_uniform_location (k)
             })
         }
@@ -94,22 +106,26 @@ export default registerClass (
 
         /**
          * Used to update uniform variants of shader
-         * @param settings   - Rounded corners settings of window
+         * @param corners_cfg   - Rounded corners settings of window
          * @param bounds_cfg - Outer bounds of rounded corners
          */
         update_uniforms (
-            settings: types.RoundedCornersCfg,
-            outer_bounds: types.Bounds
+            corners_cfg: types.RoundedCornersCfg,
+            outer_bounds: types.Bounds,
+            border: {
+                width: number
+                color: [number, number, number, number]
+            }
         ) {
             const actor = this.actor
 
             const scale_factor = UI.scaleFactor ()
 
-            const border_width = 0 * scale_factor
-            const brightness = 0
+            const border_width = border.width * scale_factor
+            const border_color = border.color
 
-            let radius = settings.border_radius * scale_factor
-            const { padding } = settings
+            let radius = corners_cfg.border_radius * scale_factor
+            const { padding } = corners_cfg
 
             radius *= scale_factor
 
@@ -141,7 +157,7 @@ export default registerClass (
             this.set_uniform_float (location.pixel_step, 2, pixel_step)
             this.set_uniform_float (location.border_width, 1, [border_width])
             this.set_uniform_float (location.clip_radius, 1, [radius])
-            this.set_uniform_float (location.border_brightness, 1, [brightness])
+            this.set_uniform_float (location.border_color, 4, border_color)
             this.set_uniform_float (location.inner_clip_radius, 1, [
                 inner_radius,
             ])

@@ -50,6 +50,32 @@
       <object class="AdwPreferencesGroup" id="global_settings_preferences_group">
         <property name="title" translatable="yes">Global Settings</property>
         <property name="description" translatable="yes">This settings will try to effects all windows</property>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Border Width</property>
+            <child>
+              <object class="GtkScale" id="border_width_scale">
+                <property name="valign">center</property>
+                <property name="width-request">280</property>
+                <property name="draw-value">true</property>
+                <property name="round-digits">0</property>
+                <property name="orientation">horizontal</property>
+                <property name="adjustment">border_width_ajustment</property>
+                <property name="value-pos">right</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow">
+            <property name="title" translatable="yes">Border Color</property>
+            <child>
+              <object class="GtkColorButton" id="border_color_button">
+                <property name="valign">center</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -102,6 +128,14 @@
       </object>
     </child>
   </template>
+  
+  <object class="GtkAdjustment" id="border_width_ajustment">
+    <property name="lower">0</property>
+    <property name="upper">40</property>
+    <property name="page-increment">1</property>
+    <property name="step-increment">1</property>
+  </object>
+
   <object class="GtkBox" id="setup_guide_page">
     <property name="orientation">vertical</property>
     <child>

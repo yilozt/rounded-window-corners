@@ -302,6 +302,8 @@ export class Extension {
             this._add_background_menu (actor, layout)
             AddBackgroundMenuItem (actor._backgroundMenu)
         }
+
+        log ('Enabled')
     }
 
     disable () {
@@ -317,5 +319,7 @@ export class Extension {
         this._services.unexport ()
 
         connections ().disconnect_all ()
+
+        log ('Disabled')
     }
 }

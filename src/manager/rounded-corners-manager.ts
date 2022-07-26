@@ -233,7 +233,10 @@ export class RoundedCornersManager {
                 const cfg = this._get_rounded_corners_cfg (actor.meta_window)
                 const skip_cfg = cfg.keep_rounded_corners
                 this._setup_effect_skip_property (skip_cfg, win, effect)
-                effect.update_uniforms (cfg, this._compute_bounds (actor))
+                effect.update_uniforms (cfg, this._compute_bounds (actor), {
+                    width: settings ().border_width,
+                    color: settings ().border_color,
+                })
             }
 
             // turn off original shadow for x11 window
@@ -467,6 +470,8 @@ export class RoundedCornersManager {
             break
         case 'global-rounded-corner-settings':
         case 'custom-rounded-corner-settings':
+        case 'border-color':
+        case 'border-width':
             this._update_rounded_corners_settings ()
             break
         default:
@@ -492,7 +497,10 @@ export class RoundedCornersManager {
                 win,
                 effect
             )
-            effect.update_uniforms (cfg, this._compute_bounds (actor))
+            effect.update_uniforms (cfg, this._compute_bounds (actor), {
+                width: settings ().border_width,
+                color: settings ().border_color,
+            })
         }
 
         // Update BindConstraint for shadow
