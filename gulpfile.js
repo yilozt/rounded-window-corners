@@ -15,7 +15,11 @@ exports.pack    = require('./gulp/pack').pack
 // ----------------------------------------------- [Development Options]
 
 // Watch changes in src/
-exports.watch   = series(this.build, watch)
+exports.watch   = series(this.build, watch(this.build))
+
+// Watch changes and install extensions
+exports.dev     = series(this.install, watch(this.install))
+
 // Watch changes & run extensions in virtual machine
 // Need vagrant installed.
 exports.vm      = series(this.build, parallel(vagrant, watch))
