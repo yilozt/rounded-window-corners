@@ -43,9 +43,9 @@ export const getAppType = (meta_window: Meta.Window) => {
     try {
         // May cause Permission error
         const contents = load (`/proc/${meta_window.get_pid ()}/maps`)
-        if (contents.match (/libhandy.*?so/)) {
+        if (contents.match (/libhandy-1.so/)) {
             return AppType.LibHandy
-        } else if (contents.match (/libadwaita.*?so/)) {
+        } else if (contents.match (/libadwaita-1.so/)) {
             return AppType.LibAdwaita
         } else {
             return AppType.Other
