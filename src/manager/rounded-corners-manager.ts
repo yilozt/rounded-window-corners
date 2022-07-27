@@ -36,7 +36,10 @@ export class RoundedCornersManager {
     private global_rounded_corners = settings ().global_rounded_corner_settings
     private custom_rounded_corners = settings ().custom_rounded_corner_settings
 
-    constructor () {
+    // -------------------------------------------------------- [public methods]
+
+    /** Call When enable extension */
+    enable () {
         // watch settings
         this.connections.connect (
             settings ().g_settings,
@@ -44,12 +47,7 @@ export class RoundedCornersManager {
             (_: Gio.Settings, key: string) =>
                 this._on_settings_changed (key as SchemasKeys)
         )
-    }
 
-    // -------------------------------------------------------- [public methods]
-
-    /** Call When enable extension */
-    enable () {
         const wm = global.window_manager
 
         // Try to add rounded corners effect to all windows
@@ -167,7 +165,13 @@ export class RoundedCornersManager {
     private _compute_shadow_actor_offset (actor: WindowActor): number[] {
         const [offset_x, offset_y, offset_width, offset_height] =
             UI.computeWindowContentsOffset (actor.meta_window)
+
         const shadow_padding = constants.SHADOW_PADDING * UI.scaleFactor ()
+
+        // If remove UI.scaleFactor(), it should can be works if
+        // experimental-features of mutter  'scale-monitor-framebuffer' enabled
+        // (Fractional scaling in Wayland)
+        // const shadow_padding = constants.SHADOW_PADDING * UI.scaleFactor ()
         return [
             offset_x - shadow_padding,
             offset_y - shadow_padding,
@@ -205,7 +209,7 @@ export class RoundedCornersManager {
     ) {
         const child = actor.first_child as Bin
         child.style = `background: white;
-                       border-radius: ${border_radius * UI.scaleFactor ()}px;
+                       border-radius: ${border_radius}px;
                        ${types.box_shadow_css (shadow)};
                        margin: ${top}px ${right}px ${bottom}px ${left}px;`
         child.queue_redraw ()
@@ -259,6 +263,7 @@ export class RoundedCornersManager {
             // will don't show contents, util you resize it manually
             this.connections.connect (actor, 'damaged', () => {
                 this.on_size_changed (actor)
+                this.connections.disconnect (actor, 'damaged')
             })
 
             // Update shadow actor when focus of window has changed.
@@ -396,22 +401,21 @@ export class RoundedCornersManager {
 
     /** Update style for all shadow actors */
     private _update_all_shadow_actor_style () {
-        global.get_window_actors ().forEach ((actor) => {
-            const shadow = this.shadows.get (actor.meta_window)
+        this.shadows.forEach ((shadow, win) => {
+            const actor: WindowActor = win.get_compositor_private ()
             const shadow_cfg = actor.meta_window.appears_focused
                 ? settings ().focused_shadow
                 : settings ().unfocused_shadow
-            if (shadow) {
-                const { border_radius, padding } =
-                    this._get_rounded_corners_cfg (actor.meta_window)
+            const { border_radius, padding } = this._get_rounded_corners_cfg (
+                actor.meta_window
+            )
 
-                this._update_shadow_actor_style (
-                    shadow,
-                    border_radius,
-                    shadow_cfg,
-                    padding
-                )
-            }
+            this._update_shadow_actor_style (
+                shadow,
+                border_radius,
+                shadow_cfg,
+                padding
+            )
         })
     }
 
@@ -426,14 +430,14 @@ export class RoundedCornersManager {
     /**
      * This method will be called when global rounded corners settings changed.
      */
-    private _update_rounded_corners_settings () {
+    update_all_rounded_corners_settings () {
         this.global_rounded_corners = settings ().global_rounded_corner_settings
         this.custom_rounded_corners = settings ().custom_rounded_corner_settings
 
-        global
-            .get_window_actors ()
-            .filter ((actor) => this._get_rounded_corners (actor) != null)
-            .forEach ((actor) => this.on_size_changed (actor))
+        this.shadows.forEach ((shadow, win) => {
+            const actor: WindowActor = win.get_compositor_private ()
+            this.on_size_changed (actor)
+        })
         this._update_all_shadow_actor_style ()
     }
 
@@ -447,8 +451,9 @@ export class RoundedCornersManager {
             win.maximized_horizontally ||
             win.maximized_vertically ||
             win.fullscreen
-        effect.skip = !keep_rounded_corners && maximized
-        return effect.skip
+        const skip = !keep_rounded_corners && maximized
+        effect.skip = skip
+        return skip
     }
 
     // ------------------------------------------------------- [signal handlers]
@@ -472,7 +477,7 @@ export class RoundedCornersManager {
         case 'custom-rounded-corner-settings':
         case 'border-color':
         case 'border-width':
-            this._update_rounded_corners_settings ()
+            this.update_all_rounded_corners_settings ()
             break
         default:
         }
@@ -490,9 +495,11 @@ export class RoundedCornersManager {
         // When size changed. update uniforms for window
         const effect = this._get_rounded_corners (actor)
 
+        let should_skip = false
+
         if (effect) {
             const cfg = this._get_rounded_corners_cfg (win)
-            this._setup_effect_skip_property (
+            should_skip = this._setup_effect_skip_property (
                 cfg.keep_rounded_corners,
                 win,
                 effect
@@ -515,6 +522,15 @@ export class RoundedCornersManager {
                 constraint.offset = offsets[i]
             }
         })
+
+        // Hide shadow actor when window is maximized & keep_rounded_corners
+        // is disabled
+        if (should_skip) {
+            _log ('Hide shadow of ' + win.title)
+            shadow.opacity = 0
+        } else {
+            shadow.opacity = 255
+        }
     }
 
     /**
