@@ -74,7 +74,7 @@ export class RoundedCornersManager {
                 }
                 const shadow = this.shadows.get (actor.meta_window)
                 if (shadow) {
-                    global.window_group.set_child_above_sibling (shadow, actor)
+                    global.window_group.set_child_below_sibling (shadow, actor)
                 }
             })
         })
@@ -152,7 +152,7 @@ export class RoundedCornersManager {
         // Insert shadow actor below window actor, now shadow actor
         // will show below window actor
         const parent = actor.get_parent ()
-        parent != null && parent.insert_child_above (shadow, actor)
+        parent != null && parent.insert_child_below (shadow, actor)
 
         // Add shadow into map so we can manager it later
         this.shadows.set (actor.meta_window, shadow)

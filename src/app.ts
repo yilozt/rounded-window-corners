@@ -350,6 +350,7 @@ export class Extension {
         RestoreBackgroundMenu ()
 
         this._services.unexport ()
+        this._disable_effect_managers ()
 
         connections ().disconnect_all ()
 

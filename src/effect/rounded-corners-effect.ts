@@ -6,7 +6,6 @@ import { GLSLEffect, SnippetHook } from '@gi/Shell'
 // local modules
 import { loadShader }              from '../utils/io'
 import * as types                  from '../utils/types'
-import * as UI                     from '../utils/ui'
 
 // types
 import { PaintNode, PaintContext } from '@gi/Clutter'
