@@ -4,6 +4,7 @@ import { ShadowMode, WindowType } from '@gi/Meta'
 import { WindowClientType }       from '@gi/Meta'
 import { Bin }                    from '@gi/St'
 import { BindingFlags }           from '@gi/GObject'
+import { ThemeContext }           from '@gi/St'
 
 // local modules
 import * as UI                    from '../utils/ui'
@@ -73,7 +74,7 @@ export class RoundedCornersManager {
                 }
                 const shadow = this.shadows.get (actor.meta_window)
                 if (shadow) {
-                    global.window_group.set_child_below_sibling (shadow, actor)
+                    global.window_group.set_child_above_sibling (shadow, actor)
                 }
             })
         })
@@ -117,8 +118,6 @@ export class RoundedCornersManager {
     private _create_shadow (actor: WindowActor) {
         const shadow = new Bin ({
             name: 'Shadow Actor',
-            style: `padding: ${constants.SHADOW_PADDING}px
-                             /*background: yellow*/;`,
             child: new Bin ({
                 x_expand: true,
                 y_expand: true,
@@ -126,7 +125,7 @@ export class RoundedCornersManager {
         })
         ;(shadow.first_child as Bin).add_style_class_name ('shadow')
 
-        this._update_shadow_actor_style (shadow)
+        this._update_shadow_actor_style (actor.meta_window, shadow)
 
         // We have to clip the shadow because of this issues:
         // https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/4474
@@ -153,7 +152,7 @@ export class RoundedCornersManager {
         // Insert shadow actor below window actor, now shadow actor
         // will show below window actor
         const parent = actor.get_parent ()
-        parent != null && parent.insert_child_below (shadow, actor)
+        parent != null && parent.insert_child_above (shadow, actor)
 
         // Add shadow into map so we can manager it later
         this.shadows.set (actor.meta_window, shadow)
@@ -166,7 +165,9 @@ export class RoundedCornersManager {
         const [offset_x, offset_y, offset_width, offset_height] =
             UI.computeWindowContentsOffset (actor.meta_window)
 
-        const shadow_padding = constants.SHADOW_PADDING * UI.scaleFactor ()
+        const win = actor.meta_window
+        const shadow_padding =
+            constants.SHADOW_PADDING * UI.WindowScaleFactor (win)
 
         // If remove UI.scaleFactor(), it should can be works if
         // experimental-features of mutter  'scale-monitor-framebuffer' enabled
@@ -202,16 +203,40 @@ export class RoundedCornersManager {
 
     /** Update css style of shadow actor */
     private _update_shadow_actor_style (
+        win: Window,
         actor: Bin,
         border_radius = this.global_rounded_corners.border_radius,
         shadow = settings ().focused_shadow,
         { left, right, bottom, top } = this.global_rounded_corners.padding
     ) {
+        // Sadly, the scale of style of St.Widget may be different between scale
+        // of window if there are two monitor with different scale factor.
+        // - Scale of Style always as same as primary monitor
+        // - Scale of window as same as the monitor window located.
+        //
+        // So, we have to adjustment this different
+
+        const original_scale = ThemeContext.get_for_stage (
+            global.stage as Clutter.Stage
+        ).scale_factor
+        const win_scale = UI.WindowScaleFactor (win)
+
+        // Now scale factor for shadow actor should be correct.
+        const scale_of_style = win_scale / original_scale
+
+        // _log (JSON.stringify ({ original_scale, win_scale }))
+
+        actor.style = `padding: ${constants.SHADOW_PADDING * scale_of_style}px
+        /*background: yellow*/;`
+
         const child = actor.first_child as Bin
         child.style = `background: white;
-                       border-radius: ${border_radius}px;
-                       ${types.box_shadow_css (shadow)};
-                       margin: ${top}px ${right}px ${bottom}px ${left}px;`
+                       border-radius: ${border_radius * scale_of_style}px;
+                       ${types.box_shadow_css (shadow, scale_of_style)};
+                       margin: ${top * scale_of_style}px
+                               ${right * scale_of_style}px
+                               ${bottom * scale_of_style}px
+                               ${left * scale_of_style}px;`
         child.queue_redraw ()
     }
 
@@ -237,10 +262,15 @@ export class RoundedCornersManager {
                 const cfg = this._get_rounded_corners_cfg (actor.meta_window)
                 const skip_cfg = cfg.keep_rounded_corners
                 this._setup_effect_skip_property (skip_cfg, win, effect)
-                effect.update_uniforms (cfg, this._compute_bounds (actor), {
-                    width: settings ().border_width,
-                    color: settings ().border_color,
-                })
+                effect.update_uniforms (
+                    UI.WindowScaleFactor (win),
+                    cfg,
+                    this._compute_bounds (actor),
+                    {
+                        width: settings ().border_width,
+                        color: settings ().border_color,
+                    }
+                )
             }
 
             // turn off original shadow for x11 window
@@ -269,6 +299,16 @@ export class RoundedCornersManager {
             // Update shadow actor when focus of window has changed.
             this.connections.connect (source, 'notify::appears-focused', () => {
                 this._on_focus_changed (source)
+            })
+
+            // When window is switch between different monitor,
+            // 'workspace-changed' signal emit.
+            this.connections.connect (source, 'workspace-changed', () => {
+                const shadow = this.shadows.get (source)
+                if (shadow) {
+                    _log ('Recompute style of shadow...')
+                    this._update_shadow_actor_style (actor.meta_window, shadow)
+                }
             })
         }
 
@@ -411,6 +451,7 @@ export class RoundedCornersManager {
             )
 
             this._update_shadow_actor_style (
+                win,
                 shadow,
                 border_radius,
                 shadow_cfg,
@@ -504,10 +545,15 @@ export class RoundedCornersManager {
                 win,
                 effect
             )
-            effect.update_uniforms (cfg, this._compute_bounds (actor), {
-                width: settings ().border_width,
-                color: settings ().border_color,
-            })
+            effect.update_uniforms (
+                UI.WindowScaleFactor (win),
+                cfg,
+                this._compute_bounds (actor),
+                {
+                    width: settings ().border_width,
+                    color: settings ().border_color,
+                }
+            )
         }
 
         // Update BindConstraint for shadow
@@ -552,6 +598,7 @@ export class RoundedCornersManager {
         const { border_radius, padding } = this._get_rounded_corners_cfg (win)
 
         this._update_shadow_actor_style (
+            win,
             shadow,
             border_radius,
             shadow_settings,

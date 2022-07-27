@@ -20,7 +20,7 @@ import { _log as log }                  from './utils/log'
 import { AddBackgroundMenuItem }        from './utils/ui'
 import { RestoreBackgroundMenu }        from './utils/ui'
 import { SetupBackgroundMenu }          from './utils/ui'
-import { scaleFactor }                  from './utils/ui'
+import { WindowScaleFactor }            from './utils/ui'
 import { ChoiceRoundedCornersCfg }      from './utils/ui'
 import { connections }                  from './utils/connections'
 import settings, { SchemasKeys }        from './utils/settings'
@@ -125,7 +125,8 @@ export class Extension {
         const self = this
 
         // When there is new window added into overview, this function will be
-        // called. We need add our shadow actor for rounded corners windows.
+        // called. We need add our shadow actor and blur actor of rounded
+        // corners window into overview.
         Workspace.prototype._addWindowClone = function (window) {
             const clone = self._orig_add_window_clone.apply (this, [window])
             const window_container = clone.window_container
@@ -170,7 +171,7 @@ export class Extension {
                     const paddings =
                         (window_container.width /
                             window.get_frame_rect ().width) *
-                        (constants.SHADOW_PADDING * scaleFactor ())
+                        (constants.SHADOW_PADDING * WindowScaleFactor (window))
 
                     shadow_clone.get_constraints ().forEach ((_c, i) => {
                         const c = _c as BindConstraint
@@ -231,7 +232,9 @@ export class Extension {
             return clone
         }
 
-        // Switching workspace
+        // Just Like the monkey patch when enter overview, need to add shadow
+        // actor and blur actor into WorkspaceGroup to see them when switching
+        // workspace
         WorkspaceGroup.prototype._createWindows = function () {
             self._switch_ws_patch.apply (this)
 
@@ -258,7 +261,8 @@ export class Extension {
                     // Copy shadow actor to workspace group, so that to see
                     // shadow when switching workspace
                     const shadow_clone = new Clone ({ source: shadow })
-                    const paddings = constants.SHADOW_PADDING * scaleFactor ()
+                    const paddings =
+                        constants.SHADOW_PADDING * WindowScaleFactor (win)
 
                     shadow_clone.width = frame_rect.width + paddings * 2
                     shadow_clone.height = frame_rect.height + paddings * 2
@@ -284,7 +288,7 @@ export class Extension {
                         ? cfg.padding
                         : new Padding ()
 
-                    const scale = scaleFactor ()
+                    const scale = WindowScaleFactor (win)
                     const blur_clone = new Bin ({
                         pivot_point: new Point ({ x: 0.5, y: 0.5 }),
                         x: clone.x + frame_rect.x - actor.x + left * scale,

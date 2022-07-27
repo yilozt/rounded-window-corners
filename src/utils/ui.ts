@@ -56,8 +56,16 @@ export const getAppType = (meta_window: Meta.Window) => {
     }
 }
 
-export const scaleFactor = () =>
-    global.display.get_monitor_scale (global.display.get_current_monitor ())
+/**
+ * Get scale factor of a Meta.window, if win is undefined, return
+ * scale factor of current monitor
+ */
+export const WindowScaleFactor = (win?: Meta.Window) => {
+    const monitor = win
+        ? win.get_monitor ()
+        : global.display.get_current_monitor ()
+    return global.display.get_monitor_scale (monitor)
+}
 
 type BackgroundMenu = {
     _getMenuItems: () => { label?: { text: string } }[]

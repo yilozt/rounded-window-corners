@@ -239,7 +239,7 @@ export class BlurEffectManager {
         // Set padding to zero when window should skip rounded corners
         const padding = should_have_padding ? cfg.padding : new Padding ()
 
-        const scale = UI.scaleFactor ()
+        const scale = UI.WindowScaleFactor (win)
 
         return [
             x + padding.left * scale,
@@ -272,7 +272,7 @@ export class BlurEffectManager {
         const has_rounded_corners = cfg.keep_rounded_corners || !maximized
         const effect = blur_actor.get_effects ()[0] as BlurEffect
         effect.radius = has_rounded_corners
-            ? UI.scaleFactor () * cfg.border_radius
+            ? UI.WindowScaleFactor (win) * cfg.border_radius
             : 0
     }
 
@@ -282,7 +282,7 @@ export class BlurEffectManager {
         const effect = _effect as BlurEffect
         if (effect) {
             let { border_radius } = settings ().global_rounded_corner_settings
-            border_radius *= UI.scaleFactor ()
+            border_radius *= UI.WindowScaleFactor (win)
             _log ('Setup radius of blur: ' + border_radius)
             effect.radius = border_radius
             effect.sigma = settings ().blur_sigma

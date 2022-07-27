@@ -22,7 +22,7 @@ exports.dev     = series(this.install, watch(this.install))
 
 // Watch changes & run extensions in virtual machine
 // Need vagrant installed.
-exports.vm      = series(this.build, parallel(vagrant, watch))
+exports.vm      = series(this.build, parallel(vagrant, watch(this.build)))
 
 
 exports.github_action = github_action

@@ -110,6 +110,7 @@ export default registerClass (
          * @param bounds_cfg - Outer bounds of rounded corners
          */
         update_uniforms (
+            scale_factor: number,
             corners_cfg: types.RoundedCornersCfg,
             outer_bounds: types.Bounds,
             border: {
@@ -118,8 +119,6 @@ export default registerClass (
             }
         ) {
             const actor = this.actor
-
-            const scale_factor = UI.scaleFactor ()
 
             const border_width = border.width * scale_factor
             const border_color = border.color

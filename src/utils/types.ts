@@ -33,10 +33,10 @@ export interface BoxShadow {
     horizontal_offset: number
 }
 
-export const box_shadow_css = (box_shadow: BoxShadow) => {
-    return `box-shadow: ${box_shadow.horizontal_offset}px
-            ${box_shadow.vertical_offset}px
-            ${box_shadow.blur_offset}px
-            ${box_shadow.spread_radius}px
+export const box_shadow_css = (box_shadow: BoxShadow, scale = 1) => {
+    return `box-shadow: ${box_shadow.horizontal_offset * scale}px
+            ${box_shadow.vertical_offset * scale}px
+            ${box_shadow.blur_offset * scale}px
+            ${box_shadow.spread_radius * scale}px
             rgba(0,0,0, ${box_shadow.opacity / 100})`
 }
