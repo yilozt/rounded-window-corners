@@ -47,5 +47,5 @@ jobs:
       - name: Upload Extension Pack
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: rounded-corners-effect@yilozt.shell-extension
+          name: rounded-window-corners@yilozt.shell-extension
           path: _build/

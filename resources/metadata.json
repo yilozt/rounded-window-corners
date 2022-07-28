@@ -1,7 +1,8 @@
 {
-  "name": "Rounded Corners Effect",
-  "description": "Try to add rounded corners for all windows",
-  "uuid": "rounded-corners-effect@yilozt",
+  "name": "Rounded Window Corners",
+  "description": "Add rounded corners for all windows",
+  "uuid": "rounded-window-corners@yilozt",
   "version": "v1",
-  "shell-version": ["40", "41", "42"]
+  "url": "https://github.com/yilozt/rounded-widnow-corners",
+  "shell-version": ["42"]
 }
