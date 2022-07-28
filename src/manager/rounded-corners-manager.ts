@@ -30,8 +30,20 @@ export class RoundedCornersManager {
     /** Store connect handles of GObject, to disconnect when we needn't */
     private connections: Connections | null = null
 
-    /** Shadow actors of window */
-    private shadows: Map<Window, Bin> | null = null
+    /**
+     * This map is used to store Meta.Window, and some information about it.
+     * Cache those information can reduce repeat compute.
+     * include:
+     * - Shadow Actor
+     * - AppType: Libhandy | LibAdwaita | Other
+     */
+    private rounded_windows: Map<
+        Window,
+        {
+            shadow: Bin
+            app_type: UI.AppType
+        }
+    > | null = null
 
     /** Rounded corners settings */
     private global_rounded_corners: types.RoundedCornersCfg | null = null
@@ -42,7 +54,7 @@ export class RoundedCornersManager {
     /** Call When enable extension */
     enable () {
         this.connections = new Connections ()
-        this.shadows = new Map ()
+        this.rounded_windows = new Map ()
         this.global_rounded_corners = settings ().global_rounded_corner_settings
         this.custom_rounded_corners = settings ().custom_rounded_corner_settings
 
@@ -77,7 +89,9 @@ export class RoundedCornersManager {
                 if (!actor.visible) {
                     return
                 }
-                const shadow = this.shadows?.get (actor.meta_window)
+                const shadow = this.rounded_windows?.get (
+                    actor.meta_window
+                )?.shadow
                 if (shadow) {
                     global.window_group.set_child_below_sibling (shadow, actor)
                 }
@@ -93,33 +107,34 @@ export class RoundedCornersManager {
             .forEach ((actor) => this._remove_effect (actor))
 
         // Remove all shadows store in map
-        this.shadows?.clear ()
+        this.rounded_windows?.clear ()
 
         // Disconnect all signal
         this.connections?.disconnect_all ()
 
         // Set all props to null
-        this.shadows = null
+        this.rounded_windows = null
         this.connections = null
         this.global_rounded_corners = null
         this.custom_rounded_corners = null
     }
 
     query_shadow (win: Window): Bin | undefined {
-        return this.shadows?.get (win)
+        return this.rounded_windows?.get (win)?.shadow
     }
 
     /** Return all rounded corners window  */
     windows (): IterableIterator<Window> | undefined {
-        return this.shadows?.keys ()
+        return this.rounded_windows?.keys ()
     }
 
     // ------------------------------------------------------- [private methods]
 
     /** Compute outer bound of rounded corners for window actor */
-    private _compute_bounds (actor: WindowActor): types.Bounds {
-        const win = actor.meta_window
-        const [x, y, width, height] = UI.computeWindowContentsOffset (win)
+    private _compute_bounds (
+        actor: WindowActor,
+        [x, y, width, height]: [number, number, number, number]
+    ): types.Bounds {
         return {
             x1: x + 1,
             y1: y + 1,
@@ -132,11 +147,7 @@ export class RoundedCornersManager {
      * Create Shadow for rounded corners window
      * @param actor -  window actor which has been setup rounded corners effect
      */
-    private _create_shadow (actor: WindowActor) {
-        if (!this.shadows) {
-            return
-        }
-
+    private _create_shadow (actor: WindowActor): Bin {
         const shadow = new Bin ({
             name: 'Shadow Actor',
             child: new Bin ({
@@ -173,17 +184,23 @@ export class RoundedCornersManager {
         const parent = actor.get_parent ()
         parent != null && parent.insert_child_below (shadow, actor)
 
-        // Add shadow into map so we can manager it later
-        this.shadows.set (actor.meta_window, shadow)
+        // Return the shadow we create, it will be store into
+        // this.rounded_windows
 
-        // Bind position and size
         this._bind_shadow_constraint (actor, shadow)
+
+        return shadow
     }
 
-    private _compute_shadow_actor_offset (actor: WindowActor): number[] {
-        const [offset_x, offset_y, offset_width, offset_height] =
-            UI.computeWindowContentsOffset (actor.meta_window)
-
+    private _compute_shadow_actor_offset (
+        actor: WindowActor,
+        [offset_x, offset_y, offset_width, offset_height]: [
+            number,
+            number,
+            number,
+            number
+        ]
+    ): number[] {
         const win = actor.meta_window
         const shadow_padding =
             constants.SHADOW_PADDING * UI.WindowScaleFactor (win)
@@ -201,7 +218,6 @@ export class RoundedCornersManager {
     }
 
     private _bind_shadow_constraint (actor: WindowActor, shadow: Bin) {
-        const offsets = this._compute_shadow_actor_offset (actor)
         const coordinates = [
             Clutter.BindCoordinate.X,
             Clutter.BindCoordinate.Y,
@@ -210,11 +226,11 @@ export class RoundedCornersManager {
         ]
         coordinates
             .map (
-                (coordinate, i) =>
+                (coordinate) =>
                     new Clutter.BindConstraint ({
                         source: actor,
                         coordinate,
-                        offset: offsets[i],
+                        offset: 0,
                     })
             )
             .forEach ((constraint) => shadow.add_constraint (constraint))
@@ -269,7 +285,12 @@ export class RoundedCornersManager {
      * @param actor - window to add effect
      */
     private _add_effect (actor: WindowActor & { shadow_mode?: ShadowMode }) {
-        if (!RoundedCornersManager.should_enable_effect (actor.meta_window)) {
+        // If application failed check, just return and don't add rounded
+        // corners to it.
+        const [should_rounded, app_type] = this.should_enable_effect (
+            actor.meta_window
+        )
+        if (!should_rounded) {
             return
         }
 
@@ -277,38 +298,36 @@ export class RoundedCornersManager {
 
         // Add rounded corners to window actor when actor_to_setup is ready
         const ready = (actor_to_add_effect: Clutter.Actor) => {
-            if (!this.connections || !this.shadows) {
+            if (!this.connections || !this.rounded_windows) {
                 return
             }
+
+            // Add rounded corers to window
             {
                 const effect = new RoundedCornersEffect ()
                 const name = constants.ROUNDED_CORNERS_EFFECT
 
                 actor_to_add_effect.add_effect_with_name (name, effect)
-
-                const cfg = this._get_rounded_corners_cfg (actor.meta_window)
-                const skip_cfg = cfg.keep_rounded_corners
-                this._setup_effect_skip_property (skip_cfg, win, effect)
-                effect.update_uniforms (
-                    UI.WindowScaleFactor (win),
-                    cfg,
-                    this._compute_bounds (actor),
-                    {
-                        width: settings ().border_width,
-                        color: settings ().border_color,
-                    }
-                )
             }
+
+            // The shadow of window
+            const shadow = this._create_shadow (actor)
+
+            this.rounded_windows.set (win, {
+                shadow,
+                app_type,
+            })
 
             // turn off original shadow for x11 window
             if (actor.shadow_mode !== undefined) {
                 actor.shadow_mode = ShadowMode.FORCED_OFF
             }
 
-            // Create shadow actor for window
-            this._create_shadow (actor)
-
+            // Update shadows and rounded corners bounds
             this.on_size_changed (actor)
+
+            // Connect signals of window, those signals will be disconnected
+            // when window is destroyed
 
             // Update uniform variables when changed window size
             const source = actor.meta_window
@@ -331,7 +350,7 @@ export class RoundedCornersManager {
             // When window is switch between different monitor,
             // 'workspace-changed' signal emit.
             this.connections.connect (source, 'workspace-changed', () => {
-                const shadow = this.shadows?.get (source)
+                const shadow = this.rounded_windows?.get (source)?.shadow
                 if (shadow) {
                     _log ('Recompute style of shadow...')
                     this._update_shadow_actor_style (actor.meta_window, shadow)
@@ -357,7 +376,7 @@ export class RoundedCornersManager {
      * need remove rounded corners.
      */
     private _remove_effect (actor: WindowActor & { shadow_mode?: ShadowMode }) {
-        if (!this.shadows || !this.connections) {
+        if (!this.rounded_windows || !this.connections) {
             return
         }
 
@@ -375,11 +394,11 @@ export class RoundedCornersManager {
         }
 
         // Remove shadow actor
-        const shadow = this.shadows.get (win)
+        const shadow = this.rounded_windows.get (win)?.shadow
         if (shadow) {
             global.window_group.remove_child (shadow)
             shadow.destroy ()
-            this.shadows.delete (win)
+            this.rounded_windows.delete (win)
         }
 
         // Remove handle for window, those handle has been added
@@ -391,18 +410,19 @@ export class RoundedCornersManager {
     /**
      * Check whether a window should be enable rounded corners effect
      * @param win WindowActor to test
+     * @return {[boolean, UI.AppType]}
      */
-    static should_enable_effect (win: Window): boolean {
+    should_enable_effect (win: Window): [boolean, UI.AppType] {
         // Skip when application in black list.
 
         const wm_class_instance = win.get_wm_class_instance ()
         if (wm_class_instance == null) {
             _log (`Warning: wm_class_instance of ${win}: ${win.title} is null`)
-            return false
+            return [false, UI.AppType.Other]
         }
 
         if (settings ().black_list.includes (wm_class_instance)) {
-            return false
+            return [false, UI.AppType.Other]
         }
 
         // Check type of window, only need to add rounded corners to normal
@@ -414,27 +434,29 @@ export class RoundedCornersManager {
             WindowType.MODAL_DIALOG,
         ].includes (win.window_type)
         if (!normal_type) {
-            return false
+            return [false, UI.AppType.Other]
         }
 
         // Skip libhandy / libadwaita applications according the settings.
         const { getAppType, AppType } = UI
 
-        const app_type = getAppType (win)
+        // Try cache first
+        const app_type =
+            this.rounded_windows?.get (win)?.app_type ?? getAppType (win)
         _log ('Check Type of window:' + `${win.title} => ${AppType[app_type]}`)
 
         if (settings ().skip_libadwaita_app) {
             if (getAppType (win) === AppType.LibAdwaita) {
-                return false
+                return [false, app_type]
             }
         }
         if (settings ().skip_libhandy_app) {
             if (getAppType (win) === AppType.LibHandy) {
-                return false
+                return [false, app_type]
             }
         }
 
-        return true
+        return [true, app_type]
     }
 
     /** Query rounded corners effect of window actor  */
@@ -456,17 +478,17 @@ export class RoundedCornersManager {
     /** Traversal all windows, add or remove rounded corners for them */
     private _update_all_window_effect_state () {
         global.get_window_actors ().forEach ((actor) => {
-            const should_enable = RoundedCornersManager.should_enable_effect (
+            const [should_have_effect] = this.should_enable_effect (
                 actor.meta_window
             )
             const has_effect = this._get_rounded_corners (actor) != null
 
-            if (should_enable && !has_effect) {
+            if (should_have_effect && !has_effect) {
                 this._add_effect (actor)
                 return
             }
 
-            if (!should_enable && has_effect) {
+            if (!should_have_effect && has_effect) {
                 this._remove_effect (actor)
                 return
             }
@@ -475,7 +497,7 @@ export class RoundedCornersManager {
 
     /** Update style for all shadow actors */
     private _update_all_shadow_actor_style () {
-        this.shadows?.forEach ((shadow, win) => {
+        this.rounded_windows?.forEach (({ shadow }, win) => {
             const actor: WindowActor = win.get_compositor_private ()
             const shadow_cfg = actor.meta_window.appears_focused
                 ? settings ().focused_shadow
@@ -511,7 +533,7 @@ export class RoundedCornersManager {
         this.global_rounded_corners = settings ().global_rounded_corner_settings
         this.custom_rounded_corners = settings ().custom_rounded_corner_settings
 
-        this.shadows?.forEach ((shadow, win) => {
+        this.rounded_windows?.forEach ((shadow, win) => {
             const actor: WindowActor = win.get_compositor_private ()
             this.on_size_changed (actor)
         })
@@ -569,10 +591,19 @@ export class RoundedCornersManager {
     on_size_changed (actor: WindowActor): void {
         const win = actor.meta_window
 
+        const window_info = this.rounded_windows?.get (win)
+        if (!window_info) {
+            return
+        }
+
+        // Cache the offset, so that we can calculate this value once
+        const content_offset_of_win = UI.computeWindowContentsOffset (win)
+
         // When size changed. update uniforms for window
         const effect = this._get_rounded_corners (actor)
-
         if (effect) {
+            // Cache the value
+
             const cfg = this._get_rounded_corners_cfg (win)
 
             // Skip rounded corners when
@@ -585,7 +616,7 @@ export class RoundedCornersManager {
             effect.update_uniforms (
                 UI.WindowScaleFactor (win),
                 cfg,
-                this._compute_bounds (actor),
+                this._compute_bounds (actor, content_offset_of_win),
                 {
                     width: settings ().border_width,
                     color: settings ().border_color,
@@ -594,11 +625,14 @@ export class RoundedCornersManager {
         }
 
         // Update BindConstraint for shadow
-        const shadow = this.shadows?.get (win)
+        const shadow = window_info.shadow
         if (!shadow) {
             return
         }
-        const offsets = this._compute_shadow_actor_offset (actor)
+        const offsets = this._compute_shadow_actor_offset (
+            actor,
+            content_offset_of_win
+        )
         const constraints = shadow.get_constraints ()
         constraints.forEach ((constraint, i) => {
             if (constraint instanceof Clutter.BindConstraint) {
@@ -614,7 +648,7 @@ export class RoundedCornersManager {
      * @params win - Meta.Window
      */
     _on_focus_changed (win: Window) {
-        const shadow = this.shadows?.get (win)
+        const shadow = this.rounded_windows?.get (win)?.shadow
         if (!shadow) {
             return
         }

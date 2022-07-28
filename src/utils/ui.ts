@@ -17,7 +17,9 @@ import { Actor }           from '@gi/Clutter'
 
 // --------------------------------------------------------------- [end imports]
 
-export const computeWindowContentsOffset = (meta_window: Meta.Window) => {
+export const computeWindowContentsOffset = (
+    meta_window: Meta.Window
+): [number, number, number, number] => {
     const bufferRect = meta_window.get_buffer_rect ()
     const frameRect = meta_window.get_frame_rect ()
     return [
