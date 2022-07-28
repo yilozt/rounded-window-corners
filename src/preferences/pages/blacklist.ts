@@ -8,7 +8,7 @@ import { template_url }  from '../../utils/io'
 import { show_err_msg }  from '../../utils/prefs'
 import settings          from '../../utils/settings'
 import constants         from '../../utils/constants'
-import { connections }   from '../../utils/connections'
+import connections       from '../../utils/connections'
 import BlackListRow      from '../widgets/app-row'
 
 // types
@@ -40,7 +40,7 @@ export const Blacklist = GObject.registerClass (
 
             _log (this.black_list.toString ())
 
-            connections ().connect (this._add_row_btn, 'clicked', () => {
+            connections.get ().connect (this._add_row_btn, 'clicked', () => {
                 this.on_add_row ()
                 settings ().black_list = this.black_list
             })

@@ -124,14 +124,19 @@ export class Connections {
     }
 }
 
+/** A singleton of connections */
 let _connections: Connections | null = null
 
-/** A singleton of connections */
-export const connections = () => {
-    if (_connections === null) {
-        _connections = new Connections ()
-    }
-    return _connections
+export default {
+    get: () => {
+        if (_connections === null) {
+            _connections = new Connections ()
+        }
+        return _connections
+    },
+    del: () => {
+        _connections = null
+    },
 }
 
 //              Signal source     signal name            it's handler

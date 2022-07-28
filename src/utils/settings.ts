@@ -2,6 +2,9 @@
 import * as GLib                   from '@gi/GLib'
 import * as Gio                    from '@gi/Gio'
 
+// gnome-modules
+import { getSettings }             from '@imports/misc/extensionUtils'
+
 // used to mark types, will be remove in output files.
 import * as GObject                from '@gi/GObject'
 import { BoxShadow }               from './types'
@@ -10,36 +13,6 @@ import { RoundedCornersCfg }       from './types'
 import { log }                     from '@global'
 
 // --------------------------------------------------------------- [end imports]
-
-/**
- * This function is base on getSettings() in
- * https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/misc/
- * extensionUtils.js#L211
- *
- * Need this function because preferences is launched in a new process.
- */
-function getSettings (schema: string) {
-    const GioSSS = Gio.SettingsSchemaSource
-    const schemaDir = Gio.File.new_for_uri (import.meta.url)
-        .get_parent ()
-        ?.get_parent ()
-        ?.get_child ('schemas')
-    let schemaSource
-    if (schemaDir?.query_exists (null)) {
-        schemaSource = GioSSS.new_from_directory (
-            schemaDir.get_path () ?? '',
-            GioSSS.get_default (),
-            false
-        )
-    } else {
-        schemaSource = GioSSS.get_default ()
-    }
-
-    const schemaObj = schemaSource?.lookup (schema, true)
-    if (!schemaObj) throw new Error (`Schema ${schema} could not be found`)
-
-    return new Gio.Settings ({ settings_schema: schemaObj })
-}
 
 /** This object use to store key of settings and its type string */
 const type_of_keys: {
@@ -59,10 +32,6 @@ export type SchemasKeys =
     | 'focused-shadow'
     | 'unfocused-shadow'
     | 'debug-mode'
-    | 'blur-list'
-    | 'blur-sigma'
-    | 'blurred-window-opacity'
-    | 'blur-enabled'
     | 'border-width'
     | 'border-color'
 
@@ -80,10 +49,6 @@ class Settings {
     focused_shadow                 !: BoxShadow
     unfocused_shadow               !: BoxShadow
     debug_mode                     !: boolean
-    blur_list                      !: string[]
-    blur_sigma                     !: number
-    blurred_window_opacity         !: number
-    blur_enabled                   !: boolean
     border_width                   !: number
     border_color                   !: [number, number, number, number]
 

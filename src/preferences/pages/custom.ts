@@ -9,8 +9,8 @@ import { ListBox }                       from '@gi/Gtk'
 import { list_children, show_err_msg }   from '../../utils/prefs'
 import { template_url }                  from '../../utils/io'
 import constants                         from '../../utils/constants'
-import { connections }                   from '../../utils/connections'
 import settings                          from '../../utils/settings'
+import connections                       from '../../utils/connections'
 import AppRow                            from '../widgets/app-row'
 import RoundedCornersItem                from '../widgets/rounded-corners-item'
 
@@ -44,7 +44,7 @@ export const Custom = GObject.registerClass (
                 this.add_row (k, this._settings_cfg[k])
             }
 
-            connections ().connect (this._add_row_btn, 'clicked', () => {
+            connections.get ().connect (this._add_row_btn, 'clicked', () => {
                 const title = ''
 
                 if (this._settings_cfg[title]) {
@@ -78,7 +78,7 @@ export const Custom = GObject.registerClass (
                     const title = row.title
 
                     rounded_corners_item.unwatch ()
-                    connections ().disconnect_all (enabled_switch)
+                    connections.get ().disconnect_all (enabled_switch)
                     this._custom_group.remove (row)
 
                     delete this._settings_cfg[title]
@@ -105,16 +105,18 @@ export const Custom = GObject.registerClass (
                         cfg.enabled = enabled_switch.active
                         this._on_cfg_changed (row.title, cfg)
                     })
-                    connections ().connect (enabled_switch, 'state-set', () => {
-                        const cfg = rounded_corners_item.cfg
-                        cfg.enabled = enabled_switch.active
-                        this._on_cfg_changed (row.title, cfg)
-                        return false
-                    })
+                    connections
+                        .get ()
+                        .connect (enabled_switch, 'state-set', () => {
+                            const cfg = rounded_corners_item.cfg
+                            cfg.enabled = enabled_switch.active
+                            this._on_cfg_changed (row.title, cfg)
+                            return false
+                        })
                 },
                 on_close: () => {
                     rounded_corners_item.unwatch ()
-                    connections ().disconnect_all (enabled_switch)
+                    connections.get ().disconnect_all (enabled_switch)
                 },
             } as AppRowHandler
 

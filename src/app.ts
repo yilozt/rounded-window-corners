@@ -1,94 +1,63 @@
 // imports.gi
-import { Point }                        from '@gi/Graphene'
-import { BindConstraint, Clone }        from '@gi/Clutter'
-import { BlurMode }                     from '@gi/Shell'
-import { Bin }                          from '@gi/St'
-import { Variant, timeout_add_seconds } from '@gi/GLib'
-import { MonitorManager }               from '@gi/Meta'
+import { Point }                   from '@gi/Graphene'
+import { BindConstraint, Clone }   from '@gi/Clutter'
+import { timeout_add_seconds }     from '@gi/GLib'
+import { MonitorManager }          from '@gi/Meta'
 
 // gnome-shell modules
-import { Workspace }                    from '@imports/ui/workspace'
-import { WorkspaceGroup }               from '@imports/ui/workspaceAnimation'
-import { WindowManager }                from '@imports/ui/windowManager'
-import BackgroundMenu                   from '@imports/ui/backgroundMenu'
+import { Workspace }               from '@imports/ui/workspace'
+import { WorkspaceGroup }          from '@imports/ui/workspaceAnimation'
+import { WindowManager }           from '@imports/ui/windowManager'
+import BackgroundMenu              from '@imports/ui/backgroundMenu'
 
 // local modules
-import constants                        from './utils/constants'
-import { RoundedCornersManager }        from './manager/rounded-corners-manager'
-import { BlurEffectManager }            from './manager/blur-effect-manager'
-import { _log as log }                  from './utils/log'
-import { AddBackgroundMenuItem }        from './utils/ui'
-import { RestoreBackgroundMenu }        from './utils/ui'
-import { SetupBackgroundMenu }          from './utils/ui'
-import { WindowScaleFactor }            from './utils/ui'
-import { ChoiceRoundedCornersCfg }      from './utils/ui'
-import { connections }                  from './utils/connections'
-import settings, { SchemasKeys }        from './utils/settings'
-import { Padding }                      from './utils/types'
-import Services                         from './dbus/services'
-import BlurLoader                       from './loader/blur-loader'
+import constants                   from './utils/constants'
+import { RoundedCornersManager }   from './manager/rounded-corners-manager'
+import { _log as log }             from './utils/log'
+import { AddBackgroundMenuItem }   from './utils/ui'
+import { RestoreBackgroundMenu }   from './utils/ui'
+import { SetupBackgroundMenu }     from './utils/ui'
+import { WindowScaleFactor }       from './utils/ui'
+import { ChoiceRoundedCornersCfg } from './utils/ui'
+import Connections                 from './utils/connections'
+import settings                    from './utils/settings'
+import Services                    from './dbus/services'
 
 // types, which will be removed in output
-import { WM }                           from '@gi/Shell'
-import { WindowPreview }                from '@imports/ui/windowPreview'
-import { BlurEffect, global, imports }  from '@global'
-import { RoundedCornersCfg }            from './utils/types'
-import { Window, WindowActor }          from '@gi/Meta'
-import * as Gio                         from '@gi/Gio'
+import { WM }                      from '@gi/Shell'
+import { WindowPreview }           from '@imports/ui/windowPreview'
+import { RoundedCornersCfg }       from './utils/types'
+import { Window, WindowActor }     from '@gi/Meta'
 
 // --------------------------------------------------------------- [end imports]
 export class Extension {
+    // The methods of gnome-shell to monkey patch
     private _orig_add_window_clone !: (_: Window) => WindowPreview
     private _switch_ws_patch       !: () => void
     private _size_changed_patch    !: (wm: WM, actor: WindowActor) => void
     private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
-    private _services              !: Services
-    private _blur_loader           !: InstanceType<typeof BlurLoader>
 
-    private _rounded_corners_manager = new RoundedCornersManager ()
-    private _blur_effect_manager = new BlurEffectManager ()
+    private _services: Services | null = null
+    private _rounded_corners_manager: RoundedCornersManager | null = null
 
     constructor () {
+        // Show loaded message in debug mode
         log (constants.LOADED_MSG)
     }
 
     enable () {
+        // Restore original methods, those methods will be restore when
+        // extensions is disabled
         this._orig_add_window_clone = Workspace.prototype._addWindowClone
         this._switch_ws_patch = WorkspaceGroup.prototype._createWindows
         this._size_changed_patch = WindowManager.prototype._sizeChangeWindowDone
         this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._services = new Services ()
+        this._rounded_corners_manager = new RoundedCornersManager ()
+
         this._services.export ()
-
-        this._blur_loader = new BlurLoader ()
-        this._blur_loader.connect ('loaded', () => {
-            this._services.DBusImpl.emit_property_changed (
-                'blur_loaded',
-                Variant.new_boolean (true)
-            )
-            log ('Emit property changed blur_loaded to client')
-            if (settings ().blur_enabled) {
-                this._blur_effect_manager.enable ()
-            }
-        })
-        this._blur_loader.enable ()
-
         this._enable_effect_managers ()
-
-        connections ().connect (
-            settings ().g_settings,
-            'changed',
-            (_: Gio.Settings, key: string) => {
-                if ((key as SchemasKeys) == 'blur-enabled') {
-                    if (settings ().blur_enabled) {
-                        this._blur_effect_manager.enable ()
-                    } else {
-                        this._blur_effect_manager.disable ()
-                    }
-                }
-            }
-        )
 
         // Have to toggle fullscreen for all windows when changed scale factor
         // of windows because rounded-corners-manager may got incorrect frame
@@ -97,22 +66,20 @@ export class Extension {
         // FIXME: This is an ugly way but works. Should found a better way to
         // solve this problem.
         const monitor_manager = MonitorManager.get ()
-        connections ().connect (monitor_manager, 'monitors-changed', () => {
+        Connections.get ().connect (monitor_manager, 'monitors-changed', () => {
             this._disable_effect_managers ()
             this._enable_effect_managers ()
-            for (const { meta_window } of global.get_window_actors ()) {
-                if (meta_window && !meta_window.is_fullscreen ()) {
-                    // markup which windows has been fullscreen
-                    (meta_window as Window & { __fs?: 1 }).__fs = 1
-                    meta_window.make_fullscreen ()
-                }
+
+            for (const win of this._rounded_corners_manager?.windows () ?? []) {
+                (win as Window & { __fs?: 1 }).__fs = 1
+                win.make_fullscreen ()
             }
 
-            // waiting 2 seconds then unmake-fullscreen marked windows.
-            timeout_add_seconds (0, 2, () => {
-                for (const { meta_window } of global.get_window_actors ()) {
-                    const win = meta_window as Window & { __fs?: 1 }
-                    // restore them
+            // waiting 3 seconds then restore marked windows.
+            timeout_add_seconds (0, 3, () => {
+                for (const _win of this._rounded_corners_manager?.windows () ??
+                    []) {
+                    const win = _win as Window & { __fs?: 1 }
                     if (win && win.__fs == 1) {
                         win.unmake_fullscreen ()
                         delete win.__fs
@@ -134,10 +101,9 @@ export class Extension {
             let cfg: RoundedCornersCfg | null = null
             let has_rounded_corners = false
 
-            const shadow = self._rounded_corners_manager.query_shadow (window)
-            const blur = self._blur_effect_manager.query_blur (window)
+            const shadow = self._rounded_corners_manager?.query_shadow (window)
 
-            if (shadow || blur) {
+            if (shadow) {
                 cfg = ChoiceRoundedCornersCfg (
                     settings ().global_rounded_corner_settings,
                     settings ().custom_rounded_corner_settings,
@@ -182,53 +148,6 @@ export class Extension {
                 clone.insert_child_above (shadow_clone, window_container)
             }
 
-            if (blur) {
-                const blur_clone = new Bin ({
-                    pivot_point: new Point ({ x: 0.5, y: 0.5 }),
-                })
-                const { radius, sigma } = blur.get_effects ()[0] as BlurEffect
-                blur_clone.add_effect (
-                    new imports.gi.Patched.BlurEffect ({
-                        mode: BlurMode.BACKGROUND,
-                        radius: has_rounded_corners ? radius : 0,
-                        sigma,
-                    })
-                )
-
-                for (const prop of ['scale-x', 'scale-y']) {
-                    window_container.bind_property (prop, blur_clone, prop, 0)
-                }
-
-                for (let i = 0; i < 4; i++) {
-                    blur_clone.add_constraint (
-                        new BindConstraint ({
-                            coordinate: i,
-                            source: window_container,
-                        })
-                    )
-                }
-
-                const { left, right, top, bottom } =
-                    has_rounded_corners && cfg ? cfg.padding : new Padding ()
-                window_container.connect ('notify::width', () => {
-                    const scale =
-                        window_container.width / window.get_frame_rect ().width
-
-                    const constraints = blur_clone.get_constraints () as
-                        | BindConstraint[]
-                        | null
-                    if (constraints) {
-                        constraints[0].offset = left * scale
-                        constraints[1].offset = top * scale
-                        constraints[2].offset = -(left + right) * scale
-                        constraints[3].offset = -(top + bottom) * scale
-                    }
-                })
-
-                window_container.opacity = settings ().blurred_window_opacity
-                clone.insert_child_below (blur_clone, window_container)
-            }
-
             return clone
         }
 
@@ -253,7 +172,7 @@ export class Extension {
                 const has_rounded_corners =
                     cfg.keep_rounded_corners || !maximized
 
-                const shadow = self._rounded_corners_manager.query_shadow (win)
+                const shadow = self._rounded_corners_manager?.query_shadow (win)
                 if (shadow && has_rounded_corners) {
                     // Only create shadow actor when window should have rounded
                     // corners when switching workspace
@@ -276,44 +195,8 @@ export class Extension {
                                 clone.translation_z + 0.006)
                     )
 
-                    this.insert_child_above (shadow_clone, clone)
-                }
-
-                // Copy shadow actor to workspace group, so that to see shadow
-                // when switching workspace
-                const blur = self._blur_effect_manager.query_blur (win)
-                if (blur) {
-                    // Handle padding of rounded corners window
-                    const { left, right, top, bottom } = has_rounded_corners
-                        ? cfg.padding
-                        : new Padding ()
-
-                    const scale = WindowScaleFactor (win)
-                    const blur_clone = new Bin ({
-                        pivot_point: new Point ({ x: 0.5, y: 0.5 }),
-                        x: clone.x + frame_rect.x - actor.x + left * scale,
-                        y: clone.y + frame_rect.y - actor.y + top * scale,
-                        width: frame_rect.width - (right + left) * scale,
-                        height: frame_rect.height - (top + bottom) * scale,
-                    })
-                    const { radius, sigma } =
-                        blur.get_effects ()[0] as BlurEffect
-                    blur_clone.add_effect (
-                        new imports.gi.Patched.BlurEffect ({
-                            mode: BlurMode.BACKGROUND,
-                            radius: has_rounded_corners ? radius : 0,
-                            sigma,
-                        })
-                    )
-                    clone.connect (
-                        'notify::translation-z',
-                        () =>
-                            (blur_clone.translation_z =
-                                clone.translation_z - 0.006)
-                    )
-
-                    clone.opacity = settings ().blurred_window_opacity
-                    this.insert_child_below (blur_clone, clone)
+                    this.insert_child_below (shadow_clone, clone)
+                    this.set_child_below_sibling (shadow_clone, clone)
                 }
             })
         }
@@ -325,10 +208,11 @@ export class Extension {
         ) {
             self._size_changed_patch.apply (this, [shell_wm, actor])
             // Update shadow actor
+            if (!self._rounded_corners_manager) {
+                return
+            }
             self._rounded_corners_manager.on_size_changed (actor)
             self._rounded_corners_manager._on_focus_changed (actor.meta_window)
-            self._blur_effect_manager.update_blur_effect (actor)
-            self._blur_effect_manager.update_coordinates (actor.meta_window)
         }
 
         SetupBackgroundMenu ()
@@ -347,25 +231,28 @@ export class Extension {
         WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
+        // Remove the item to open preferences page in background menu
         RestoreBackgroundMenu ()
 
-        this._services.unexport ()
+        this._services?.unexport ()
         this._disable_effect_managers ()
 
-        connections ().disconnect_all ()
+        // Disconnect all signals in global Connections.get()
+        Connections.get ().disconnect_all ()
+        Connections.del ()
+
+        // Set all props to null
+        this._rounded_corners_manager = null
+        this._services = null
 
         log ('Disabled')
     }
 
     private _enable_effect_managers () {
-        if (settings ().blur_enabled) {
-            this._blur_effect_manager.enable ()
-        }
-        this._rounded_corners_manager.enable ()
+        this._rounded_corners_manager?.enable ()
     }
 
     private _disable_effect_managers () {
-        this._rounded_corners_manager.disable ()
-        this._blur_effect_manager.disable ()
+        this._rounded_corners_manager?.disable ()
     }
 }

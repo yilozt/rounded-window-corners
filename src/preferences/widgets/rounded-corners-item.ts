@@ -1,5 +1,3 @@
-imports.gi.versions.Gtk = '4.0'
-
 // imports.gi
 import * as GObject          from '@gi/GObject'
 import * as Gtk              from '@gi/Gtk'
@@ -7,8 +5,7 @@ import * as Gtk              from '@gi/Gtk'
 // local modules
 import { template_url }      from '../../utils/io'
 import { RoundedCornersCfg } from '../../utils/types'
-import { connections }       from '../../utils/connections'
-import { imports }           from '@global'
+import connections           from '../../utils/connections'
 
 // ------------------------------------------------------------------ end import
 
@@ -47,23 +44,24 @@ export default GObject.registerClass (
         }
 
         watch (on_cfg_changed: (cfg: RoundedCornersCfg) => void) {
-            connections ().connect (
-                this._rounded_in_maximized_switch,
-                'state-set',
-                () => on_cfg_changed (this.cfg)
-            )
+            connections
+                .get ()
+                .connect (this._rounded_in_maximized_switch, 'state-set', () =>
+                    on_cfg_changed (this.cfg)
+                )
             for (const scale of this._scales) {
-                connections ().connect (scale, 'value-changed', () => {
+                connections.get ().connect (scale, 'value-changed', () => {
                     on_cfg_changed (this.cfg)
                 })
             }
         }
 
         unwatch () {
+            const c = connections.get ()
             for (const scale of this._scales) {
-                connections ().disconnect_all (scale)
+                c.disconnect_all (scale)
             }
-            connections ().disconnect_all (this._rounded_in_maximized_switch)
+            c.disconnect_all (this._rounded_in_maximized_switch)
         }
 
         get cfg (): RoundedCornersCfg {

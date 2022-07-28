@@ -97,7 +97,7 @@ export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
     })
 }
 
-/** Find all Background menu, then add extra item to it */
+/** Find all Background menu, then add a item for open preferences into menu */
 export const SetupBackgroundMenu = () => {
     for (const _bg of global.window_group.first_child.get_children ()) {
         const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu

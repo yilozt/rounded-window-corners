@@ -12,7 +12,6 @@ import { loadFile }    from '../utils/io'
 
 // types
 import { WindowActor } from '@gi/Meta'
-import { imports }     from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -76,16 +75,6 @@ export default class {
             // Close LookingGlass When we done
             looking_class.close ()
         })
-    }
-
-    /** Property export to DBus client  */
-    get blur_loaded (): boolean {
-        try {
-            imports.gi.Patched
-            return true
-        } catch (e) {
-            return false
-        }
     }
 
     export () {

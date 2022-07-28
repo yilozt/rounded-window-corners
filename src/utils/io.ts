@@ -33,13 +33,3 @@ export const loadShader = (mod_url: string, relative_path: string) => {
     main = main.trim ().replace (/^[{}]/gm, '').trim ()
     return { declarations, code: main }
 }
-
-export const distribution_id = () => {
-    for (const line of load ('/etc/os-release').split ('\n')) {
-        const [key, val] = line.split ('=')
-        if (key == 'ID') {
-            return val
-        }
-    }
-    return undefined
-}

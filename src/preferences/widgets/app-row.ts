@@ -6,7 +6,7 @@ import * as Gtk            from '@gi/Gtk'
 // local Modules
 import { template_url }    from '../../utils/io'
 import { show_err_msg }    from '../../utils/prefs'
-import { connections }     from '../../utils/connections'
+import connections         from '../../utils/connections'
 import constants           from '../../utils/constants'
 import { on_picked, pick } from '../../dbus/client'
 
@@ -42,7 +42,7 @@ export default GObject.registerClass (
             super._init (config)
             this.cb = cb
 
-            connections ().connect (this, 'notify::expanded', () => {
+            connections.get ().connect (this, 'notify::expanded', () => {
                 if (this.expanded) {
                     this._entry_buffer.text = this.title
                     this.connect_signals ()
@@ -54,26 +54,25 @@ export default GObject.registerClass (
                 }
             })
 
-            connections ().connect (
-                this._remove_button,
-                'clicked',
-                (btn: Gtk.Button) => {
+            connections
+                .get ()
+                .connect (this._remove_button, 'clicked', (btn: Gtk.Button) => {
                     if (this.expanded) {
                         this.disconnect_signals ()
                     }
-                    connections ().disconnect_all (btn)
-                    connections ().disconnect_all (this)
+                    connections.get ().disconnect_all (btn)
+                    connections.get ().disconnect_all (this)
                     cb && cb.on_delete && cb.on_delete (this)
-                }
-            )
+                })
         }
 
         private connect_signals () {
-            connections ().connect (this._change_title_btn, 'clicked', () => {
+            const c = connections.get ()
+            c.connect (this._change_title_btn, 'clicked', () => {
                 this.change_title ()
             })
 
-            connections ().connect (this._pick_window_btn, 'clicked', () => {
+            c.connect (this._pick_window_btn, 'clicked', () => {
                 on_picked ((wm_instance_class) => {
                     const title =
                         'Can\'t pick a window window from this position'
@@ -89,8 +88,8 @@ export default GObject.registerClass (
 
         private disconnect_signals () {
             this.bind_property_handler?.unbind ()
-            connections ().disconnect_all (this._change_title_btn)
-            connections ().disconnect_all (this._pick_window_btn)
+            connections.get ().disconnect_all (this._change_title_btn)
+            connections.get ().disconnect_all (this._pick_window_btn)
         }
 
         private change_title () {

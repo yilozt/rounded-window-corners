@@ -91,27 +91,5 @@
       <summary>If enabled, extension will show debug info into journalctl</summary>
       <default>false</default>
     </key>
-
-    <key name="blur-enabled" type="b">
-      <summary>Whether enable blur effect</summary>
-      <default>false</default>
-    </key>
-
-    <key name="blur-list" type="as">
-      <summary>Window list to enable blur effects, every item is instance part of WM_CLASS property in a window</summary>
-      <default>[]</default>
-    </key>
-
-    <key name="blur-sigma" type="i">
-      <summary>Blur Sigma</summary>
-      <range min="0" max="200"/>
-      <default>20</default>
-    </key>
-
-    <key name="blurred-window-opacity" type="i">
-      <summary>Opacity of Blurred Window</summary>
-      <range min="0" max="255"/>
-      <default>200</default>
-    </key>
   </schema>
 </schemalist>

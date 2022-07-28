@@ -1,21 +1,18 @@
 // imports.gi
-import * as GObject           from '@gi/GObject'
-import * as Adw               from '@gi/Adw'
-import * as Gdk               from '@gi/Gdk'
-import * as Gio               from '@gi/Gio'
+import * as GObject       from '@gi/GObject'
+import * as Adw           from '@gi/Adw'
+import * as Gdk           from '@gi/Gdk'
+import * as Gio           from '@gi/Gio'
 
 // local modules
-import settings               from '../../utils/settings'
-import RoundedCornersItem     from '../widgets/rounded-corners-item'
-import EditShadowWindow       from '../widgets/edit-shadow-window'
-import { list_children }      from '../../utils/prefs'
-import { distribution_id }    from '../../utils/io'
-import { path, template_url } from '../../utils/io'
-import deps                   from '../../utils/deps'
-import { _log }               from '../../utils/log'
+import settings           from '../../utils/settings'
+import RoundedCornersItem from '../widgets/rounded-corners-item'
+import EditShadowWindow   from '../widgets/edit-shadow-window'
+import { list_children }  from '../../utils/prefs'
+import { template_url }   from '../../utils/io'
 
 // types
-import * as Gtk               from '@gi/Gtk'
+import * as Gtk           from '@gi/Gtk'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -31,15 +28,8 @@ export const General = GObject.registerClass (
         InternalChildren: [
             'global_settings_preferences_group',
             'enable_log_switch',
-            'enable_blur_switch',
             'skip_libadwaita_app_switch',
             'skip_libhandy_app_switch',
-            'blur_effect_row',
-            'setup_guide_page',
-            'status_page',
-            'meson_setup_label',
-            'source_code_label',
-            'deps_cmd_label',
             'border_width_ajustment',
             'border_color_button',
         ],
@@ -48,15 +38,8 @@ export const General = GObject.registerClass (
         // Those properties come from 'InternalChildren'
         private _global_settings_preferences_group !: Adw.PreferencesGroup
         private _enable_log_switch                 !: Gtk.Switch
-        private _enable_blur_switch                !: Gtk.Switch
         private _skip_libhandy_app_switch          !: Gtk.Switch
         private _skip_libadwaita_app_switch        !: Gtk.Switch
-        private _setup_guide_page                  !: Gtk.Widget
-        private _meson_setup_label                 !: Gtk.Label
-        private _source_code_label                 !: Gtk.Label
-        private _deps_cmd_label                    !: Gtk.Label
-        private _blur_effect_row                   !: Adw.ActionRow
-        private _status_page                       !: Adw.StatusPage
         private _border_width_ajustment            !: Gtk.Adjustment
         private _border_color_button               !: Gtk.ColorButton
 
@@ -70,11 +53,6 @@ export const General = GObject.registerClass (
             this.config_items = new RoundedCornersItem ()
 
             this.build_ui ()
-
-            this._blur_effect_row.sensitive = false
-            this._status_page.description =
-                'Patched Blur Effect has not installed yet'
-            this._status_page.icon_name = 'computer-fail-symbolic'
 
             settings ().bind (
                 'debug-mode',
@@ -95,33 +73,11 @@ export const General = GObject.registerClass (
                 Gio.SettingsBindFlags.DEFAULT
             )
             settings ().bind (
-                'blur-enabled',
-                this._enable_blur_switch,
-                'active',
-                Gio.SettingsBindFlags.DEFAULT
-            )
-            settings ().bind (
                 'border-width',
                 this._border_width_ajustment,
                 'value',
                 Gio.SettingsBindFlags.DEFAULT
             )
-
-            const source_path = path (import.meta.url, '../../patched-blur')
-            const id = distribution_id ()
-            _log ('Distribution ID: ' + id)
-            if (id && deps[id]) {
-                this._deps_cmd_label.label = deps[id]
-            } else {
-                this._deps_cmd_label.visible = false
-            }
-
-            this._meson_setup_label.label =
-                'meson --prefix=/ _build ' + source_path
-            this._source_code_label.label =
-                'You can check the source code <a href="file://' +
-                source_path +
-                '">here</a>.'
 
             const color = settings ().border_color
             this._border_color_button.rgba = new Gdk.RGBA ({
@@ -142,13 +98,6 @@ export const General = GObject.registerClass (
             })
         }
 
-        on_blur_loaded () {
-            this._blur_effect_row.sensitive = true
-            this._status_page.description =
-                'Patched Blur effect has been loaded'
-            this._status_page.icon_name = 'emblem-ok-symbolic'
-        }
-
         private build_ui () {
             list_children (this.config_items).forEach ((i) => {
                 this.config_items.remove (i)
@@ -166,16 +115,6 @@ export const General = GObject.registerClass (
         /** Called when click 'Window Shadow' action row */
         _show_edit_shadow_window_cb () {
             this.edit_shadow_window?.show ()
-        }
-
-        _show_setup_guide_page () {
-            (this.root as Adw.PreferencesWindow).present_subpage (
-                this._setup_guide_page
-            )
-        }
-
-        _hide_page_cb () {
-            (this.root as Adw.PreferencesWindow).close_subpage ()
         }
     }
 )

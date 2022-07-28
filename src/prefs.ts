@@ -1,29 +1,32 @@
-import * as Gtk                from '@gi/Gtk'
-import * as GLib               from '@gi/GLib'
-import * as Gio                from '@gi/Gio'
-import { imports, log }        from '@global'
-
-import { getCurrentExtension } from '@imports/misc/extensionUtils'
+import * as Adw from '@gi/Adw'
 
 export function init () {
-    /** Do nothing here  */
+    // TODO: Add i18n initialize in here
 }
 
-export function buildPrefsWidget () {
-    // throw Error when libadwaita have not installed.
-    imports.gi.Adw
+/**
+ * Loader of preferences pages, we will fill `window` with pages export
+ * from ./preferences/index.ts
+ * @param window Preferences Window to show
+ */
+export function fillPreferencesWindow (window: Adw.PreferencesWindow) {
+    // Loading text...
+    const loading = new Adw.PreferencesPage ()
+    const group = new Adw.PreferencesGroup ({ title: 'Loading....' })
+    loading.add (group)
+    window.add (loading)
 
-    GLib.idle_add (GLib.PRIORITY_DEFAULT_IDLE, () => {
-        (widget.get_root () as Gtk.Window).close ()
-        return false
+    window.search_enabled = true
+
+    // Load module async
+    import ('./preferences/index.js').then ((index) => {
+        window.remove (loading)
+        index.pages ().forEach ((page) => {
+            window.add (page)
+        })
+        window.connect ('close-request', () => {
+            index.connections.get ().disconnect_all ()
+            index.connections.del ()
+        })
     })
-
-    const widget = new Gtk.Box ()
-
-    const script = `${getCurrentExtension ().path}/preferences/index.js`
-    const cmd = ['gjs', '-m', script]
-    log ('Launch ' + cmd)
-
-    Gio.Subprocess.new (cmd, Gio.SubprocessFlags.NONE)
-    return widget
 }

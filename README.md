@@ -14,7 +14,6 @@
 ## Notes
 
 - The rounded corners effect for window is base on this [shader](https://gitlab.gnome.org/GNOME/mutter/-/blob/main/src/compositor/meta-background-content.c#L138) from mutter project
-- The Blur effect with rounded corners mix [Shell.BlurEffect](https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/src/shell-blur-effect.c) and the above shader
 
 ## Installation
 
