@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0" />
-  <requires lib="libadwaita" version="1.0" />
-  <template class="Blacklist" parent="AdwPreferencesPage">
+  <requires lib="gtk+" version="3.0" />
+  <template class="Blacklist" parent="HdyPreferencesPage">
     <property name="title" translatable="yes">Blacklist</property>
     <property name="icon-name">action-unavailable-symbolic</property>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="HdyPreferencesGroup">
         <property name="description">Not all application can works well with rounded corners effects, add them to this list to disable effects.
 
 The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list.</property>
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="HdyPreferencesGroup">
         <child>
           <object class="GtkButton" id="add_row_btn">
             <property name="halign">end</property>
@@ -43,7 +42,7 @@ The item of list is instance part of WM_CLASS property with window. You can pick
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup" id="black_list_group">
+      <object class="HdyPreferencesGroup" id="black_list_group">
       </object>
     </child>
   </template>

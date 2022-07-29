@@ -24,9 +24,9 @@
     "gnome-shell extensions."
   ],
   "libraries_prefs": {
-    "Adw": [ "1" ],
-    "Gtk": [ "4.0" ],
-    "Gdk": [ "4.0" ],
+    "Gtk": [ "3.0" ],
+    "Gdk": [ "3.0" ],
+    "Handy": [ "1" ],
     "Notify": ["0.7"]
   },
   "libraries_ext": {

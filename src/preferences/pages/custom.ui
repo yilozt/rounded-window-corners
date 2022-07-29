@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0" />
-  <requires lib="libadwaita" version="1.0" />
-  <template class="CustomPage" parent="AdwPreferencesPage">
+  <requires lib="gtk+" version="3.0" />
+  <template class="CustomPage" parent="HdyPreferencesPage">
     <property name="title" translatable="yes">Custom</property>
     <property name="icon-name">document-edit-symbolic</property>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="HdyPreferencesGroup">
         <property name="description">Setup different clip padding by add window into this list.
 
 The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list.
@@ -14,7 +13,7 @@ The item of list is instance part of WM_CLASS property with window. You can pick
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup">
+      <object class="HdyPreferencesGroup">
         <child>
           <object class="GtkButton" id="add_row_btn">
             <property name="halign">end</property>
@@ -44,7 +43,7 @@ The item of list is instance part of WM_CLASS property with window. You can pick
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesGroup" id="custom_group">
+      <object class="HdyPreferencesGroup" id="custom_group">
       </object>
     </child>
   </template>

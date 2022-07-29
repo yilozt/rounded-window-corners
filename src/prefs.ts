@@ -1,32 +1,30 @@
-import * as Adw from '@gi/Adw'
+import * as Gtk                from '@gi/Gtk'
+import * as GLib               from '@gi/GLib'
+import * as Gio                from '@gi/Gio'
+import { log }                 from '@global'
+
+import { getCurrentExtension } from '@imports/misc/extensionUtils'
 
 export function init () {
-    // TODO: Add i18n initialize in here
+    /** Do nothing here  */
 }
 
-/**
- * Loader of preferences pages, we will fill `window` with pages export
- * from ./preferences/index.ts
- * @param window Preferences Window to show
- */
-export function fillPreferencesWindow (window: Adw.PreferencesWindow) {
-    // Loading text...
-    const loading = new Adw.PreferencesPage ()
-    const group = new Adw.PreferencesGroup ({ title: 'Loading....' })
-    loading.add (group)
-    window.add (loading)
+// Preferences has been written by libhandy, to avoid maintain
+// different UI for different version of Gnome shell.
+// Libhandy is written in Gtk 3, so have to show it in new subprocess.
 
-    window.search_enabled = true
+export function buildPrefsWidget () {
+    const widget: any = new Gtk.Box ()
 
-    // Load module async
-    import ('./preferences/index.js').then ((index) => {
-        window.remove (loading)
-        index.pages ().forEach ((page) => {
-            window.add (page)
-        })
-        window.connect ('close-request', () => {
-            index.connections.get ().disconnect_all ()
-            index.connections.del ()
-        })
+    GLib.idle_add (GLib.PRIORITY_DEFAULT_IDLE, () => {
+        (widget.get_root () as Gtk.Window).close ()
+        return false
     })
+
+    const script = `${getCurrentExtension ().path}/preferences/index.js`
+    const cmd = ['gjs', '-m', script]
+    log ('Launch ' + cmd)
+
+    Gio.Subprocess.new (cmd, Gio.SubprocessFlags.NONE)
+    return widget
 }

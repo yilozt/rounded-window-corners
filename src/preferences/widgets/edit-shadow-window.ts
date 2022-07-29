@@ -1,7 +1,7 @@
-imports.gi.versions.Gtk = '4.0'
+imports.gi.versions.Gtk = '3.0'
 
 // imports.gi
-import * as Adw           from '@gi/Adw'
+import * as Hdy           from '@gi/Handy'
 import * as Gtk           from '@gi/Gtk'
 import { registerClass }  from '@gi/GObject'
 
@@ -34,9 +34,10 @@ export default registerClass (
             'unfocus_shadow_widget',
             'focus_shadow_widget',
             'focus_toggle_button',
+            'unfocus_toggle_button',
         ],
     },
-    class extends Adw.Window {
+    class extends Hdy.Window {
         private _opacity_scale           !: Gtk.Scale
         private _spread_radius_scale     !: Gtk.Scale
         private _blur_offset_scale       !: Gtk.Scale
@@ -45,6 +46,7 @@ export default registerClass (
         private _unfocus_shadow_widget   !: Gtk.Widget
         private _focus_shadow_widget     !: Gtk.Widget
         private _focus_toggle_button     !: Gtk.ToggleButton
+        private _unfocus_toggle_button   !: Gtk.ToggleButton
 
         // CssProvider to change style of preview widgets in edit window
         private unfocus_provider         !: Gtk.CssProvider
@@ -55,11 +57,12 @@ export default registerClass (
         private unfocused_shadow         !: BoxShadow
 
         _init () {
+            super._init ()
+
             this.unfocus_provider = new Gtk.CssProvider ()
             this.focus_provider = new Gtk.CssProvider ()
             this.focused_shadow = settings ().focused_shadow
             this.unfocused_shadow = settings ().unfocused_shadow
-            super._init ()
 
             // Init style of preview widgets
             this._unfocus_shadow_widget
@@ -80,9 +83,16 @@ export default registerClass (
             this.update_style ()
 
             // Update values of controls when click toggle button
-            this._focus_toggle_button.connect ('toggled', () =>
+            this._focus_toggle_button.connect ('toggled', () => {
+                this._unfocus_toggle_button.active =
+                    !this._focus_toggle_button.active
                 this.update_widget ()
-            )
+            })
+            this._unfocus_toggle_button.connect ('toggled', () => {
+                this._focus_toggle_button.active =
+                    !this._unfocus_toggle_button.active
+                this.update_widget ()
+            })
         }
 
         private update_widget () {

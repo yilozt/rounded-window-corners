@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk" version="4.0" />
-  <requires lib="libadwaita" version="1.0" />
-  <template class="AppRow" parent="AdwExpanderRow">
+  <requires lib="gtk+" version="3.0" />
+  <template class="AppRow" parent="HdyExpanderRow">
+    <property name="visible">true</property>
     <child type="action">
       <object class="GtkButton" id="remove_button">
+        <property name="has-tooltip">true</property>
+        <property name="tooltip-text">Remove Window from this List</property>
+        <property name="visible">true</property>
         <property name="valign">center</property>
-        <property name="icon-name">window-close-symbolic</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">true</property>
+            <property name="icon-name">window-close-symbolic</property>            
+          </object>
+        </child>
         <style>
-          <class name="flat" />
-          <class name="circular" />
+          <class name="list-button"/>
+          <class name="flat"/>
         </style>
       </object>
     </child>
     <child>
-      <object class="AdwPreferencesRow" id="wm_name_row">
+      <object class="HdyPreferencesRow" id="wm_name_row">
+        <property name="visible">true</property>
         <property name="activatable">false</property>
         <property name="selectable">false</property>
         <child>
           <object class="GtkBox">
+            <property name="visible">true</property>
             <property name="margin-top">12</property>
             <property name="margin-bottom">12</property>
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
             <child>
               <object class="GtkButton" id="pick_window_btn">
-                <property name="margin-end">12</property>
-                <property name="icon-name">find-location-symbolic</property>
+                <property name="has-tooltip">true</property>
                 <property name="tooltip-text">Pick Window to add into list</property>
-                <style>
-                  <class name="flat" />
-                  <class name="circular" />
-                </style>
+                <property name="visible">true</property>
+                <property name="margin-end">12</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">true</property>
+                    <property name="icon-name">find-location-symbolic</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="change_title_btn">
-                <property name="margin-end">12</property>
-                <property name="icon-name">emblem-ok-symbolic</property>
+                <property name="visible">true</property>
+                <property name="has-tooltip">true</property>
                 <property name="tooltip-text">Apply this title</property>
-                <style>
-                  <class name="flat" />
-                  <class name="circular" />
-                </style>
+                <property name="margin-end">12</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">true</property>
+                    <property name="icon-name">emblem-ok-symbolic</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="wm_class_instance_entry">
+                <property name="visible">true</property>
                 <property name="hexpand">true</property>
-                <property name="buffer">
-                  <object class="GtkEntryBuffer" id="entry_buffer"></object>
-                </property>
               </object>
             </child>
           </object>

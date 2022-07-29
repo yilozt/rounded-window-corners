@@ -1,9 +1,8 @@
 // imports.gi
 import * as GObject      from '@gi/GObject'
-import * as Adw          from '@gi/Adw'
+import * as Hdy          from '@gi/Handy'
 
 // Local Modules
-import { _log }          from '../../utils/log'
 import { template_url }  from '../../utils/io'
 import { show_err_msg }  from '../../utils/prefs'
 import settings          from '../../utils/settings'
@@ -24,8 +23,8 @@ export const Blacklist = GObject.registerClass (
         GTypeName: 'Blacklist',
         InternalChildren: ['black_list_group', 'add_row_btn'],
     },
-    class extends Adw.PreferencesPage {
-        private _black_list_group !: Adw.PreferencesGroup
+    class extends Hdy.PreferencesPage {
+        private _black_list_group !: Hdy.PreferencesGroup
         private _add_row_btn      !: Gtk.Button
 
         /** Store value of settings */
@@ -38,8 +37,6 @@ export const Blacklist = GObject.registerClass (
             // Read blacklist from settings, and add it to this._black_list
             settings ().black_list.forEach ((name) => this.on_add_row (name))
 
-            _log (this.black_list.toString ())
-
             connections.get ().connect (this._add_row_btn, 'clicked', () => {
                 this.on_add_row ()
                 settings ().black_list = this.black_list
@@ -48,12 +45,12 @@ export const Blacklist = GObject.registerClass (
 
         private show_err_msg (item: string) {
             const title = `"${item}": Can't add to list, because it has exists`
-            show_err_msg (this.root, title)
+            show_err_msg (title)
         }
 
         // --------------------------------------------------- [signal handlers]
 
-        private on_delete_row (row: Adw.ExpanderRow) {
+        private on_delete_row (row: Hdy.ExpanderRow) {
             const title = row.title
             this.black_list.splice (this.black_list.indexOf (title), 1)
             settings ().black_list = this.black_list

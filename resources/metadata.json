@@ -4,5 +4,5 @@
   "uuid": "rounded-window-corners@yilozt",
   "version": "v1",
   "url": "https://github.com/yilozt/rounded-widnow-corners",
-  "shell-version": ["42"]
+  "shell-version": ["40", "41", "42"]
 }

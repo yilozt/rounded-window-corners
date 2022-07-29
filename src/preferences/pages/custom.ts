@@ -1,26 +1,26 @@
-imports.gi.versions.Gtk = '4.0'
+imports.gi.versions.Gtk = '3.0'
 
 // imports.gi
-import * as GObject                      from '@gi/GObject'
-import * as Adw                          from '@gi/Adw'
-import { ListBox }                       from '@gi/Gtk'
+import * as GObject                    from '@gi/GObject'
+import * as Hdy                        from '@gi/Handy'
 
 // local modules
-import { list_children, show_err_msg }   from '../../utils/prefs'
-import { template_url }                  from '../../utils/io'
-import constants                         from '../../utils/constants'
-import settings                          from '../../utils/settings'
-import connections                       from '../../utils/connections'
-import AppRow                            from '../widgets/app-row'
-import RoundedCornersItem                from '../widgets/rounded-corners-item'
+import { list_children, show_err_msg } from '../../utils/prefs'
+import { template_url }                from '../../utils/io'
+import { _logError }                   from '../../utils/log'
+import constants                       from '../../utils/constants'
+import settings                        from '../../utils/settings'
+import connections                     from '../../utils/connections'
+import AppRow                          from '../widgets/app-row'
+import RoundedCornersItem              from '../widgets/rounded-corners-item'
 
 // types
-import { Align, Switch, Button, Widget } from '@gi/Gtk'
-import { AppRowHandler }                 from '../widgets/app-row'
-import { CustomRoundedCornersCfg }       from '../../utils/types'
-import { RoundedCornersCfg }             from '../../utils/types'
-import { _log }                          from '../../utils/log'
-import { imports }                       from '@global'
+import { Align, Switch }               from '@gi/Gtk'
+import { Button, Widget, Box }         from '@gi/Gtk'
+import { AppRowHandler }               from '../widgets/app-row'
+import { CustomRoundedCornersCfg }     from '../../utils/types'
+import { RoundedCornersCfg }           from '../../utils/types'
+import { imports }                     from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -30,8 +30,8 @@ export const Custom = GObject.registerClass (
         GTypeName: 'CustomPage',
         InternalChildren: ['custom_group', 'add_row_btn'],
     },
-    class extends Adw.PreferencesPage {
-        private _custom_group !: Adw.PreferencesGroup
+    class extends Hdy.PreferencesPage {
+        private _custom_group !: Hdy.PreferencesGroup
         private _add_row_btn  !: Button
 
         private _settings_cfg !: CustomRoundedCornersCfg
@@ -62,12 +62,13 @@ export const Custom = GObject.registerClass (
         private add_row (
             title: string,
             cfg: RoundedCornersCfg
-        ): Adw.ExpanderRow {
+        ): Hdy.ExpanderRow {
             const rounded_corners_item = new RoundedCornersItem ()
 
             const enabled_switch = new Switch ({
                 valign: Align.CENTER,
                 active: true,
+                visible: true,
             })
 
             rounded_corners_item.cfg = cfg
@@ -128,13 +129,26 @@ export const Custom = GObject.registerClass (
 
             this._custom_group.add (expanded_row)
 
-            const enabled_row = new Adw.ActionRow ({
+            const enabled_row = new Hdy.ActionRow ({
                 title: 'Enabled',
                 subtitle: 'Enable custom settings for this window',
                 activatable_widget: enabled_switch,
+                visible: true,
             })
 
-            enabled_row.add_suffix (enabled_switch)
+            // Add switch into suffix of ActionRow
+            // HdyActionRow not have a method like `hdy_action_row_add_suffix`
+            // So we have to find the child then add it manually
+            try {
+                enabled_row.set_activatable_widget (enabled_switch)
+                const suffix = (
+                    enabled_row.get_child () as Box
+                ).get_children ()[3] as Box
+                suffix.visible = true
+                suffix.pack_end (enabled_switch, false, false, 0)
+            } catch (e) {
+                _logError (e as Error)
+            }
 
             add_row (expanded_row, enabled_row)
 
@@ -158,7 +172,7 @@ export const Custom = GObject.registerClass (
             const tip =
                 `'${title}': ` +
                 'can\'t add into list, because this item has exists'
-            show_err_msg (this.root, tip)
+            show_err_msg (tip)
         }
 
         private _on_cfg_changed (k: string, v: RoundedCornersCfg) {
@@ -168,24 +182,6 @@ export const Custom = GObject.registerClass (
     }
 )
 
-function add_row (parent: Adw.ExpanderRow, child: Widget) {
-    try {
-        parent.add_row (child)
-    } catch (e) {
-        // Use a fallback to add row when libadwaita <= 1.0
-        const list = parent
-            .get_first_child ()
-            ?.get_first_child ()
-            ?.get_next_sibling ()
-            ?.get_first_child ()
-        if (list instanceof ListBox) {
-            list.append (child)
-        } else {
-            _log (
-                'Adw.ExpanderRow.add_row() not exists and' +
-                    ' fallback method is failed.'
-            )
-            throw e
-        }
-    }
+function add_row (parent: Hdy.ExpanderRow, child: Widget) {
+    parent.add (child)
 }

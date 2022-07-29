@@ -1,6 +1,6 @@
 // imports.gi
 import * as GObject        from '@gi/GObject'
-import * as Adw            from '@gi/Adw'
+import * as Hdy            from '@gi/Handy'
 import * as Gtk            from '@gi/Gtk'
 
 // local Modules
@@ -17,18 +17,18 @@ export default GObject.registerClass (
         Template: template_url (import.meta.url, './app-row.ui'),
         GTypeName: 'AppRow',
         InternalChildren: [
-            'entry_buffer',
+            'wm_class_instance_entry',
             'wm_name_row',
             'remove_button',
             'change_title_btn',
             'pick_window_btn',
         ],
     },
-    class extends Adw.ExpanderRow {
-        private _entry_buffer     !: Gtk.EntryBuffer
-        private _remove_button    !: Gtk.Button
-        private _change_title_btn !: Gtk.Button
-        private _pick_window_btn  !: Gtk.Button
+    class extends Hdy.ExpanderRow {
+        private _wm_class_instance_entry !: Gtk.Entry
+        private _remove_button           !: Gtk.Button
+        private _change_title_btn        !: Gtk.Button
+        private _pick_window_btn         !: Gtk.Button
 
         private bind_property_handler?: GObject.Binding
 
@@ -36,7 +36,7 @@ export default GObject.registerClass (
         private cb?: AppRowHandler
 
         _init (
-            config?: Partial<Adw.ExpanderRow.ConstructorProperties>,
+            config?: Partial<Hdy.ExpanderRow.ConstructorProperties>,
             cb?: AppRowHandler
         ) {
             super._init (config)
@@ -44,7 +44,7 @@ export default GObject.registerClass (
 
             connections.get ().connect (this, 'notify::expanded', () => {
                 if (this.expanded) {
-                    this._entry_buffer.text = this.title
+                    this._wm_class_instance_entry.text = this.title
                     this.connect_signals ()
                     cb && cb.on_open && cb.on_open (this)
                 } else {
@@ -77,10 +77,10 @@ export default GObject.registerClass (
                     const title =
                         'Can\'t pick a window window from this position'
                     if (wm_instance_class == 'window-not-found') {
-                        show_err_msg (this.root, title)
+                        show_err_msg (title)
                         return
                     }
-                    this._entry_buffer.text = wm_instance_class
+                    this._wm_class_instance_entry.text = wm_instance_class
                 })
                 pick ()
             })
@@ -96,8 +96,8 @@ export default GObject.registerClass (
             if (
                 !this.cb ||
                 !this.cb.on_title_changed ||
-                this.title == this._entry_buffer.text ||
-                this._entry_buffer.text == ''
+                this.title == this._wm_class_instance_entry.text ||
+                this._wm_class_instance_entry.text == ''
             ) {
                 return
             }
@@ -105,10 +105,10 @@ export default GObject.registerClass (
             if (
                 this.cb.on_title_changed (
                     this.title, // old title
-                    this._entry_buffer.text // new title
+                    this._wm_class_instance_entry.text // new title
                 )
             ) {
-                this.title = this._entry_buffer.text
+                this.title = this._wm_class_instance_entry.text
                 this.subtitle = ''
             } else {
                 if (this.title == '') {
@@ -120,8 +120,8 @@ export default GObject.registerClass (
 )
 
 export type AppRowHandler = {
-    on_delete?: (row: Adw.ExpanderRow) => void
-    on_open?: (row: Adw.ExpanderRow) => void
+    on_delete?: (row: Hdy.ExpanderRow) => void
+    on_open?: (row: Hdy.ExpanderRow) => void
     on_close?: () => void
     on_title_changed?: (old_title: string, new_title: string) => boolean
 }

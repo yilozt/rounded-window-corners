@@ -1,3 +1,5 @@
+imports.gi.versions.Gtk = '3.0'
+
 // imports.gi
 import * as GObject          from '@gi/GObject'
 import * as Gtk              from '@gi/Gtk'
@@ -6,6 +8,7 @@ import * as Gtk              from '@gi/Gtk'
 import { template_url }      from '../../utils/io'
 import { RoundedCornersCfg } from '../../utils/types'
 import connections           from '../../utils/connections'
+import { imports }           from '@global'
 
 // ------------------------------------------------------------------ end import
 

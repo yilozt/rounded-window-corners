@@ -1,6 +1,6 @@
 // imports.gi
 import * as GObject       from '@gi/GObject'
-import * as Adw           from '@gi/Adw'
+import * as Hdy           from '@gi/Handy'
 import * as Gdk           from '@gi/Gdk'
 import * as Gio           from '@gi/Gio'
 
@@ -34,22 +34,22 @@ export const General = GObject.registerClass (
             'border_color_button',
         ],
     },
-    class extends Adw.PreferencesPage {
+    class extends Hdy.PreferencesPage {
         // Those properties come from 'InternalChildren'
-        private _global_settings_preferences_group !: Adw.PreferencesGroup
+        private _global_settings_preferences_group !: Hdy.PreferencesGroup
         private _enable_log_switch                 !: Gtk.Switch
         private _skip_libhandy_app_switch          !: Gtk.Switch
         private _skip_libadwaita_app_switch        !: Gtk.Switch
         private _border_width_ajustment            !: Gtk.Adjustment
         private _border_color_button               !: Gtk.ColorButton
 
-        private edit_shadow_window                 !: _Win
+        private edit_shadow_window: _Win | null = null
         private config_items                       !: _Item
 
         _init () {
             super._init ()
 
-            this.edit_shadow_window = new EditShadowWindow ()
+            this.edit_shadow_window = null
             this.config_items = new RoundedCornersItem ()
 
             this.build_ui ()
@@ -114,7 +114,19 @@ export const General = GObject.registerClass (
 
         /** Called when click 'Window Shadow' action row */
         _show_edit_shadow_window_cb () {
-            this.edit_shadow_window?.show ()
+            if (this.edit_shadow_window) {
+                return
+            }
+
+            const win = this.get_toplevel () as Gtk.Window
+            this.edit_shadow_window = new EditShadowWindow ()
+            win.hide ()
+            this.edit_shadow_window.application = win.application
+            this.edit_shadow_window.show_all ()
+            this.edit_shadow_window.connect ('destroy', () => {
+                win.show_all ()
+                this.edit_shadow_window = null
+            })
         }
     }
 )
