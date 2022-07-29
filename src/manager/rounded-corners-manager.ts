@@ -42,6 +42,10 @@ export class RoundedCornersManager {
         {
             shadow: Bin
             app_type: UI.AppType
+            last_size: {
+                width: number
+                height: number
+            }
         }
     > | null = null
 
@@ -316,6 +320,7 @@ export class RoundedCornersManager {
             this.rounded_windows.set (win, {
                 shadow,
                 app_type,
+                last_size: { width: 0, height: 0 },
             })
 
             // turn off original shadow for x11 window
@@ -338,8 +343,20 @@ export class RoundedCornersManager {
             // Need to listen 'damaged' signal, overwise XWayland client
             // will don't show contents, util you resize it manually
             this.connections.connect (actor, 'damaged', () => {
-                this.on_size_changed (actor)
-                this.connections?.disconnect (actor, 'damaged')
+                const info = this.rounded_windows?.get (source)
+                if (info) {
+                    const { width, height } = source.get_frame_rect ()
+                    const { width: last_w, height: last_h } =
+                        info.last_size ?? {
+                            width: 0,
+                            height: 0,
+                        }
+                    if (width != last_w || height != last_h) {
+                        _log (`[${win.title}] Size changed when damage`)
+                        this.on_size_changed (actor)
+                        info.last_size = { width, height }
+                    }
+                }
             })
 
             // Update shadow actor when focus of window has changed.
@@ -398,8 +415,8 @@ export class RoundedCornersManager {
         if (shadow) {
             global.window_group.remove_child (shadow)
             shadow.destroy ()
-            this.rounded_windows.delete (win)
         }
+        this.rounded_windows.delete (win)
 
         // Remove handle for window, those handle has been added
         // in `_add_effect()`

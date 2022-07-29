@@ -9,6 +9,7 @@ import { Workspace }               from '@imports/ui/workspace'
 import { WorkspaceGroup }          from '@imports/ui/workspaceAnimation'
 import { WindowManager }           from '@imports/ui/windowManager'
 import BackgroundMenu              from '@imports/ui/backgroundMenu'
+import { sessionMode }             from '@imports/ui/main'
 
 // local modules
 import constants                   from './utils/constants'
@@ -65,11 +66,12 @@ export class Extension {
         // corners.
         // FIXME: This is an ugly way but works. Should found a better way to
         // solve this problem.
+
         const monitor_manager = MonitorManager.get ()
         Connections.get ().connect (monitor_manager, 'monitors-changed', () => {
-            this._disable_effect_managers ()
-            this._enable_effect_managers ()
-
+            if (sessionMode.isLocked || sessionMode.isGreeter) {
+                return
+            }
             for (const win of this._rounded_corners_manager?.windows () ?? []) {
                 (win as Window & { __fs?: 1 }).__fs = 1
                 win.make_fullscreen ()
