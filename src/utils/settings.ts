@@ -81,7 +81,7 @@ class Settings {
 
     /** GSettings, which used to store and load settings */
     g_settings: Gio.Settings = getSettings (
-        'org.gnome.shell.extensions.rounded-window-effect'
+        'org.gnome.shell.extensions.rounded-window-corners'
     )
 
     constructor () {

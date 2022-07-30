@@ -7,7 +7,6 @@ import { log, logError } from '@global'
  * Log message Only when debug_mode of settings () is enabled
  */
 export const _log = (...args: unknown[]) => {
-    // Always enable log in virtual machine
     if (settings ().debug_mode) {
         log (`[RoundedCornersEffect] ${args}`)
     }

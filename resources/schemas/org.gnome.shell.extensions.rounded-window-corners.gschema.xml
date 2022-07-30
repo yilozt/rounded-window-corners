@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
   <schema
-    id="org.gnome.shell.extensions.rounded-window-effect"
-    path="/org/gnome/shell/extensions/rounded-window-effect/"
+    id="org.gnome.shell.extensions.rounded-window-corners"
+    path="/org/gnome/shell/extensions/rounded-window-corners/"
   >
     
     <key name="black-list" type="as">

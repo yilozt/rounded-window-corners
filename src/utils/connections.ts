@@ -1,6 +1,3 @@
-// local modules
-import { _log }     from './log'
-
 // Types
 import * as GObject from '@gi/GObject'
 
@@ -11,20 +8,6 @@ import * as GObject from '@gi/GObject'
  * only can be registered once.
  */
 export class Connections {
-    constructor () {
-        try {
-            throw new Error ()
-        } catch (e) {
-            _log (
-                'Connection created in',
-                (e as Error).stack
-                    ?.split ('\n')
-                    .map ((l) => l.split ('@')[0])
-                    .join (',')
-            )
-        }
-    }
-
     // -------------------------------------------------------- [public methods]
 
     /**
