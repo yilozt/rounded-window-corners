@@ -6,6 +6,9 @@
 
 const { series, parallel } = require("gulp");
 
+// UUID of extensions
+const UUID = require('../resources/metadata.json').uuid
+
 const choice_init_script = () => {
   // Choice scripts to init vm 
   const lang = process.env['LANG'].split('.')[0]
@@ -77,4 +80,12 @@ const watch_shell = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o ca
 // Display debug log for our preferences pages
 const watch_gjs   = () => run_cmd('vagrant', ['ssh', '-c', '"journalctl -f -o cat /usr/bin/gjs"'])
 
-exports.vagrant = series(up, init_vm, parallel(watch_shell, watch_gjs))
+// Enable debug-mode
+const enable_debug = () => run_cmd('vagrant', [
+  'ssh', '-c',
+  '"gsettings --schemadir ' + 
+  `/home/vagrant/.local/share/gnome-shell/extensions/${UUID}/schemas set ` +
+  'org.gnome.shell.extensions.rounded-window-corners debug-mode true"'
+])
+
+exports.vagrant = series(up, init_vm, parallel(enable_debug, watch_shell, watch_gjs))
