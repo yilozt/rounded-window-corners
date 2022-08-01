@@ -14,6 +14,7 @@
 ## Notes
 
 - The rounded corners effect for window is base on this [shader](https://gitlab.gnome.org/GNOME/mutter/-/blob/main/src/compositor/meta-background-content.c#L138) from mutter project
+- The TypeScript support for GJS is power by [gi.ts](https://gitlab.gnome.org/ewlsh/gi.ts)
 
 ## Screenshots
 
@@ -33,6 +34,16 @@ yarn install
 yarn ext:install
 ```
 
+### From Releases / Github Actions
+
+Download extensions pack from [Releases](https://github.com/yilozt/rounded-window-corners/releases) Page, or download git version from [Github Actions](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml). Then use `gnome-extensions` to install it. Need to restart gnome-shell to enable this extensions.
+
+[![](https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square)](https://github.com/yilozt/rounded-window-corners/releases) [![](https://img.shields.io/github/workflow/status/yilozt/rounded-window-corners/Pack%20extensions?style=flat-square)](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml)
+
+```
+gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
+```
+
 ## Development
 
 ### Build
@@ -47,9 +58,9 @@ yarn build
 yarn watch
 ```
 
-### Test in Virtual machine
+### Test in Virtual Box by Vagrant
 
-Need to install [`vagrant`](https://github.com/hashicorp/vagrant) and Virtual Box. This command will setup a virtual machine that enable log of extensions in terminal.
+Need to install [`Vagrant`](https://github.com/hashicorp/vagrant) and Virtual Box. This command will setup a virtual machine that enable log of extensions in terminal.
 
 ```
 yarn vm
