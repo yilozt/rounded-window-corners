@@ -1,70 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.0" />
-  <template class="AppRow" parent="HdyExpanderRow">
-    <property name="visible">true</property>
-    <child type="action">
-      <object class="GtkButton" id="remove_button">
-        <property name="has-tooltip">true</property>
-        <property name="tooltip-text">Remove Window from this List</property>
-        <property name="visible">true</property>
-        <property name="valign">center</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">true</property>
-            <property name="icon-name">window-close-symbolic</property>            
-          </object>
-        </child>
-        <style>
-          <class name="list-button"/>
-          <class name="flat"/>
-        </style>
-      </object>
-    </child>
+  <requires lib="gtk" version="4.0" />
+  <template class="AppRow" parent="GtkListBoxRow">
     <child>
-      <object class="HdyPreferencesRow" id="wm_name_row">
-        <property name="visible">true</property>
-        <property name="activatable">false</property>
-        <property name="selectable">false</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">true</property>
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
             <child>
-              <object class="GtkButton" id="pick_window_btn">
-                <property name="has-tooltip">true</property>
-                <property name="tooltip-text">Pick Window to add into list</property>
-                <property name="visible">true</property>
-                <property name="margin-end">12</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">true</property>
-                    <property name="icon-name">find-location-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="change_title_btn">
-                <property name="visible">true</property>
-                <property name="has-tooltip">true</property>
-                <property name="tooltip-text">Apply this title</property>
-                <property name="margin-end">12</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">true</property>
-                    <property name="icon-name">emblem-ok-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="wm_class_instance_entry">
-                <property name="visible">true</property>
+              <object class="GtkBox">
+                <property name="valign">center</property>
                 <property name="hexpand">true</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="title">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes"></property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="description">
+                    <property name="halign">start</property>
+                    <property name="use-markup">true</property>
+                    <property name="label" translatable="yes"></property>
+                    <style>
+                      <class name="caption"/>
+                    </style>  
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="remove_button">
+                <property name="has-tooltip">true</property>
+                <property name="tooltip-text">Remove Window from this List</property>
+                <property name="valign">center</property>
+                <property name="icon-name">window-close-symbolic</property>            
+                <style>
+                  <class name="list-button"/>
+                  <class name="flat"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="expand_img">
+                <property name="visible">true</property>
+                <property name="valign">center</property>
+                <property name="icon-name">go-next-symbolic</property>            
+                <style>
+                  <class name="list-button"/>
+                  <class name="flat"/>
+                  <class name="circular"/>
+                  <class name="expander_img"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="revealer">
+            <child>
+              <object class="GtkListBox" id="expanded_list_box">
+                <property name="selection-mode">none</property>
+                <style>
+                  <class name="rich-list" />
+                </style>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <child>
+                          <object class="GtkButton" id="pick_window_btn">
+                            <property name="has-tooltip">true</property>
+                            <property name="tooltip-text">Pick Window to add into list</property>
+                            <property name="visible">true</property>
+                            <property name="icon-name">find-location-symbolic</property>
+                            <style>
+                              <class name="list-button"/>
+                              <class name="flat"/>
+                              <class name="circular"/>
+                              <class name="expander_img"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="change_title_btn">
+                            <property name="visible">true</property>
+                            <property name="has-tooltip">true</property>
+                            <property name="tooltip-text">Apply this title</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                            <style>
+                              <class name="list-button"/>
+                              <class name="flat"/>
+                              <class name="circular"/>
+                              <class name="expander_img"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="wm_class_instance_entry">
+                            <property name="visible">true</property>
+                            <property name="hexpand">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

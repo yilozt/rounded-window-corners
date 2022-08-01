@@ -4,8 +4,7 @@ import * as GObject from '@gi/GObject'
 // ---------------------------------------------------------------- [end import]
 
 /**
- * This class is used to manager signal and handles of a object, one signal
- * only can be registered once.
+ * This class is used to manager signal and handles of a object
  */
 export class Connections {
     // -------------------------------------------------------- [public methods]
@@ -38,17 +37,18 @@ export class Connections {
             const handlers = this.connections.get (source)
             if (handlers !== undefined) {
                 if (handlers[signal] !== undefined) {
-                    const msg = `signal ${signal} of ${source} has been handled`
-                    throw Error (msg)
+                    handlers[signal].push (source.connect (signal, cb))
+                    return
+                } else {
+                    handlers[signal] = [source.connect (signal, cb)]
+                    return
                 }
-                handlers[signal] = source.connect (signal, cb)
-                return
             }
         }
 
         // Source is first time register signal
-        const handlers: { [signal: string]: number } = {}
-        handlers[signal] = source.connect (signal, cb)
+        const handlers: { [signal: string]: number[] } = {}
+        handlers[signal] = [source.connect (signal, cb)]
         this.connections.set (source, handlers)
     }
 
@@ -66,7 +66,7 @@ export class Connections {
         if (handlers !== undefined) {
             const handler = handlers[signal]
             if (handler !== undefined) {
-                source.disconnect (handler)
+                handler.forEach ((id) => source.disconnect (id))
                 delete handlers[signal]
                 if (Object.keys (handler).length == 0) {
                     this.connections.delete (source)
@@ -88,7 +88,7 @@ export class Connections {
             const handlers = this.connections.get (source)
             if (handlers !== undefined) {
                 Object.keys (handlers).forEach ((signal) => {
-                    source.disconnect (handlers[signal])
+                    handlers[signal].forEach ((id) => source.disconnect (id))
                     delete handlers[signal]
                 })
                 this.connections.delete (source)
@@ -99,7 +99,7 @@ export class Connections {
         // otherwise clear signal for all objects.
         this.connections.forEach ((handlers, source) => {
             Object.keys (handlers).forEach ((signal) => {
-                source.disconnect (handlers[signal])
+                handlers[signal].forEach ((id) => source.disconnect (id))
                 delete handlers[signal]
             })
         })
@@ -123,7 +123,7 @@ export default {
 }
 
 //              Signal source     signal name            it's handler
-type _Map = Map<GObject.Object, { [signal_name: string]: number }>
+type _Map = Map<GObject.Object, { [signal_name: string]: number[] }>
 
 type Handler<T extends GObject.Object> = Parameters<T['connect']>
 type DefaultHandler = [string, (_: unknown[]) => unknown]

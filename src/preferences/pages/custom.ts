@@ -1,37 +1,34 @@
-imports.gi.versions.Gtk = '3.0'
-
 // imports.gi
 import * as GObject                    from '@gi/GObject'
-import * as Hdy                        from '@gi/Handy'
+import * as Gtk                        from '@gi/Gtk'
 
 // local modules
 import { list_children, show_err_msg } from '../../utils/prefs'
 import { template_url }                from '../../utils/io'
-import { _logError }                   from '../../utils/log'
 import constants                       from '../../utils/constants'
 import settings                        from '../../utils/settings'
 import connections                     from '../../utils/connections'
-import AppRow                          from '../widgets/app-row'
+import AppRow, { AppRowHandler }       from '../widgets/app-row'
 import RoundedCornersItem              from '../widgets/rounded-corners-item'
 
 // types
 import { Align, Switch }               from '@gi/Gtk'
-import { Button, Widget, Box }         from '@gi/Gtk'
-import { AppRowHandler }               from '../widgets/app-row'
+import { Button, Widget }              from '@gi/Gtk'
+
+// import { AppRowHandler }               from '../../../widgets/app-row'
 import { CustomRoundedCornersCfg }     from '../../utils/types'
 import { RoundedCornersCfg }           from '../../utils/types'
-import { imports }                     from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
-export const Custom = GObject.registerClass (
+export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './custom.ui'),
         GTypeName: 'CustomPage',
         InternalChildren: ['custom_group', 'add_row_btn'],
     },
-    class extends Hdy.PreferencesPage {
-        private _custom_group !: Hdy.PreferencesGroup
+    class extends Gtk.Box {
+        private _custom_group !: Gtk.ListBox
         private _add_row_btn  !: Button
 
         private _settings_cfg !: CustomRoundedCornersCfg
@@ -62,29 +59,33 @@ export const Custom = GObject.registerClass (
         private add_row (
             title: string,
             cfg: RoundedCornersCfg
-        ): Hdy.ExpanderRow {
-            const rounded_corners_item = new RoundedCornersItem ()
+        ): InstanceType<typeof AppRow> {
+            let rounded_corners_item: RoundedCornersItemType | null =
+                new RoundedCornersItem ()
 
             const enabled_switch = new Switch ({
                 valign: Align.CENTER,
                 active: true,
                 visible: true,
             })
-
-            rounded_corners_item.cfg = cfg
+            ;(rounded_corners_item as RoundedCornersItemType).cfg = cfg
             enabled_switch.active = cfg.enabled
 
             const handler = {
-                on_delete: (row) => {
-                    const title = row.title
+                on_delete: (row, title) => {
+                    if (rounded_corners_item != null) {
+                        connections
+                            .get ()
+                            .disconnect_all (rounded_corners_item._paddings_row)
+                        rounded_corners_item.unwatch ()
+                        connections.get ().disconnect_all (enabled_switch)
+                        this._custom_group.remove (row)
 
-                    rounded_corners_item.unwatch ()
-                    connections.get ().disconnect_all (enabled_switch)
-                    this._custom_group.remove (row)
-
-                    delete this._settings_cfg[title]
-                    settings ().custom_rounded_corner_settings =
-                        this._settings_cfg
+                        delete this._settings_cfg[title]
+                        settings ().custom_rounded_corner_settings =
+                            this._settings_cfg
+                    }
+                    rounded_corners_item = null
                 },
                 on_title_changed: (old_title, new_title) => {
                     if (this._settings_cfg[new_title] !== undefined) {
@@ -102,60 +103,70 @@ export const Custom = GObject.registerClass (
                     return true
                 },
                 on_open: (row) => {
+                    if (!rounded_corners_item) {
+                        return
+                    }
+                    const app_row = row as InstanceType<typeof AppRow>
                     rounded_corners_item.watch ((cfg) => {
                         cfg.enabled = enabled_switch.active
-                        this._on_cfg_changed (row.title, cfg)
+                        this._on_cfg_changed (app_row.title, cfg)
                     })
                     connections
                         .get ()
                         .connect (enabled_switch, 'state-set', () => {
+                            if (!rounded_corners_item) {
+                                return
+                            }
                             const cfg = rounded_corners_item.cfg
                             cfg.enabled = enabled_switch.active
-                            this._on_cfg_changed (row.title, cfg)
+                            this._on_cfg_changed (app_row.title, cfg)
                             return false
                         })
+                    connections
+                        .get ()
+                        .connect (
+                            app_row._expanded_list_box,
+                            'row-activated',
+                            (me: Gtk.ListBox, row: Gtk.ListBoxRow) => {
+                                if (!rounded_corners_item) {
+                                    return
+                                }
+                                if (row == rounded_corners_item._paddings_row) {
+                                    rounded_corners_item.update_revealer ()
+                                }
+                            }
+                        )
                 },
                 on_close: () => {
+                    if (!rounded_corners_item) {
+                        return
+                    }
+                    connections
+                        .get ()
+                        .disconnect_all (rounded_corners_item._paddings_row)
                     rounded_corners_item.unwatch ()
                     connections.get ().disconnect_all (enabled_switch)
                 },
             } as AppRowHandler
 
-            const expanded_row = new AppRow ({ title }, handler)
+            const expanded_row = new AppRow (handler)
+            expanded_row.title = title
+            expanded_row.activatable = false
 
             if (title == '') {
-                expanded_row.subtitle = constants.TIPS_EMPTY
+                expanded_row.description = constants.TIPS_EMPTY
             }
 
-            this._custom_group.add (expanded_row)
+            this._custom_group.append (expanded_row)
 
-            const enabled_row = new Hdy.ActionRow ({
-                title: 'Enabled',
-                subtitle: 'Enable custom settings for this window',
-                activatable_widget: enabled_switch,
-                visible: true,
-            })
-
-            // Add switch into suffix of ActionRow
-            // HdyActionRow not have a method like `hdy_action_row_add_suffix`
-            // So we have to find the child then add it manually
-            try {
-                enabled_row.set_activatable_widget (enabled_switch)
-                const suffix = (
-                    enabled_row.get_child () as Box
-                ).get_children ()[3] as Box
-                suffix.visible = true
-                suffix.pack_end (enabled_switch, false, false, 0)
-            } catch (e) {
-                _logError (e as Error)
-            }
+            const enabled_row = this.create_enabled_row (enabled_switch)
 
             add_row (expanded_row, enabled_row)
 
             list_children (rounded_corners_item)
                 .filter ((child) => child.name != constants.DON_T_CONFIG)
                 .forEach ((child) => {
-                    rounded_corners_item.remove (child)
+                    rounded_corners_item?.remove (child)
                     add_row (expanded_row, child)
                     enabled_switch.bind_property (
                         'active',
@@ -179,9 +190,39 @@ export const Custom = GObject.registerClass (
             this._settings_cfg[k] = v
             settings ().custom_rounded_corner_settings = this._settings_cfg
         }
+
+        private create_enabled_row (active_widget: Widget): Gtk.ListBoxRow {
+            const row = new Gtk.ListBoxRow ()
+            const title = new Gtk.Label ({
+                label: 'Enable',
+                halign: Gtk.Align.START,
+            })
+            const description = new Gtk.Label ({
+                label: 'Enable custom settings for this window',
+                halign: Gtk.Align.START,
+                css_classes: ['caption'],
+            })
+            const hbox = new Gtk.Box ({
+                valign: Gtk.Align.CENTER,
+            })
+            const vbox = new Gtk.Box ({
+                orientation: Gtk.Orientation.VERTICAL,
+                hexpand: true,
+            })
+
+            vbox.append (title)
+            vbox.append (description)
+            hbox.append (vbox)
+            hbox.append (active_widget)
+            row.set_child (hbox)
+
+            return row
+        }
     }
 )
 
-function add_row (parent: Hdy.ExpanderRow, child: Widget) {
-    parent.add (child)
+function add_row (parent: InstanceType<typeof AppRow>, child: Widget) {
+    parent.add_row (child)
 }
+
+type RoundedCornersItemType = InstanceType<typeof RoundedCornersItem>

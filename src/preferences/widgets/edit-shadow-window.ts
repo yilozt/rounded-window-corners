@@ -1,7 +1,4 @@
-imports.gi.versions.Gtk = '3.0'
-
 // imports.gi
-import * as Hdy           from '@gi/Handy'
 import * as Gtk           from '@gi/Gtk'
 import { registerClass }  from '@gi/GObject'
 
@@ -12,15 +9,15 @@ import settings           from '../../utils/settings'
 
 // just used to mark type of value, will be remove in output javascript
 import { BoxShadow }      from '../../utils/types'
-import { imports }        from '@global'
 
 // ----------------------------------------------------------------- end imports
 
-/// Shadow edit window
-///
-/// This widget used to edit shadow of windows which use rounded corners
-/// effects.
-
+/**
+ * Shadow edit window
+ *
+ * This widget used to edit shadow of windows which use rounded corners
+ * effects.
+ */
 export default registerClass (
     {
         Template: template_url (import.meta.url, './edit-shadow-window.ui'),
@@ -37,7 +34,7 @@ export default registerClass (
             'unfocus_toggle_button',
         ],
     },
-    class extends Hdy.Window {
+    class extends Gtk.Window {
         private _opacity_scale           !: Gtk.Scale
         private _spread_radius_scale     !: Gtk.Scale
         private _blur_offset_scale       !: Gtk.Scale
@@ -57,7 +54,10 @@ export default registerClass (
         private unfocused_shadow         !: BoxShadow
 
         _init () {
-            super._init ()
+            super._init ({
+                title: 'Edit Shadow for Rounded Corners Windows',
+                modal: true,
+            })
 
             this.unfocus_provider = new Gtk.CssProvider ()
             this.focus_provider = new Gtk.CssProvider ()

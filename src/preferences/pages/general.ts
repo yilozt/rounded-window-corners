@@ -1,25 +1,22 @@
 // imports.gi
-import * as GObject       from '@gi/GObject'
-import * as Hdy           from '@gi/Handy'
-import * as Gdk           from '@gi/Gdk'
-import * as Gio           from '@gi/Gio'
+import * as GObject        from '@gi/GObject'
+import * as Gdk            from '@gi/Gdk'
+import * as Gio            from '@gi/Gio'
 
 // local modules
-import settings           from '../../utils/settings'
-import RoundedCornersItem from '../widgets/rounded-corners-item'
-import EditShadowWindow   from '../widgets/edit-shadow-window'
-import { list_children }  from '../../utils/prefs'
-import { template_url }   from '../../utils/io'
+import settings            from '../../utils/settings'
+import connections         from '../../utils/connections'
+import { list_children }   from '../../utils/prefs'
+import { template_url }    from '../../utils/io'
+import RoundedCornersItems from '../widgets/rounded-corners-item'
+import EditShadowWindow    from '../widgets/edit-shadow-window'
 
 // types
-import * as Gtk           from '@gi/Gtk'
+import * as Gtk            from '@gi/Gtk'
 
 // --------------------------------------------------------------- [end imports]
 
-type _Item = InstanceType<typeof RoundedCornersItem>
-type _Win = InstanceType<typeof EditShadowWindow>
-
-export const General = GObject.registerClass (
+export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './general.ui'),
         GTypeName: 'General',
@@ -32,25 +29,29 @@ export const General = GObject.registerClass (
             'skip_libhandy_app_switch',
             'border_width_ajustment',
             'border_color_button',
+            'edit_shadow_row',
+            'applications_group',
         ],
     },
-    class extends Hdy.PreferencesPage {
+    class extends Gtk.Box {
         // Those properties come from 'InternalChildren'
-        private _global_settings_preferences_group !: Hdy.PreferencesGroup
+        private _global_settings_preferences_group !: Gtk.ListBox
         private _enable_log_switch                 !: Gtk.Switch
         private _skip_libhandy_app_switch          !: Gtk.Switch
         private _skip_libadwaita_app_switch        !: Gtk.Switch
         private _border_width_ajustment            !: Gtk.Adjustment
         private _border_color_button               !: Gtk.ColorButton
+        private _edit_shadow_row                   !: Gtk.ListBoxRow
+        private _applications_group                !: Gtk.ListBox
 
-        private edit_shadow_window: _Win | null = null
-        private config_items                       !: _Item
+        private config_items                       !: _Items
+        private edit_shadow_window                 !: _Win
 
         _init () {
             super._init ()
 
-            this.edit_shadow_window = null
-            this.config_items = new RoundedCornersItem ()
+            this.edit_shadow_window = new EditShadowWindow ()
+            this.config_items = new RoundedCornersItems ()
 
             this.build_ui ()
 
@@ -87,21 +88,48 @@ export const General = GObject.registerClass (
                 alpha: color[3],
             })
 
-            this._border_color_button.connect ('color-set', (source) => {
-                const color = source.get_rgba ()
-                settings ().border_color = [
-                    color.red,
-                    color.green,
-                    color.blue,
-                    color.alpha,
-                ]
-            })
+            connections
+                .get ()
+                .connect (this._border_color_button, 'color-set', (source) => {
+                    const color = source.get_rgba ()
+                    settings ().border_color = [
+                        color.red,
+                        color.green,
+                        color.blue,
+                        color.alpha,
+                    ]
+                })
+
+            // Handler active event for BoxList
+            connections
+                .get ()
+                .connect (
+                    this._global_settings_preferences_group,
+                    'row-activated',
+                    (box: Gtk.ListBox, row: Gtk.ListBoxRow) => {
+                        if (row == this.config_items._paddings_row) {
+                            this.config_items.update_revealer ()
+                        }
+                    }
+                )
+
+            connections
+                .get ()
+                .connect (
+                    this._applications_group,
+                    'row-activated',
+                    (box: Gtk.ListBox, row: Gtk.ListBoxRow) => {
+                        if (row === this._edit_shadow_row) {
+                            this._show_edit_shadow_window_cb ()
+                        }
+                    }
+                )
         }
 
         private build_ui () {
             list_children (this.config_items).forEach ((i) => {
                 this.config_items.remove (i)
-                this._global_settings_preferences_group.add (i)
+                this._global_settings_preferences_group.append (i)
             })
             // Bind Variants
             this.config_items.cfg = settings ().global_rounded_corner_settings
@@ -114,19 +142,17 @@ export const General = GObject.registerClass (
 
         /** Called when click 'Window Shadow' action row */
         _show_edit_shadow_window_cb () {
-            if (this.edit_shadow_window) {
-                return
-            }
-
-            const win = this.get_toplevel () as Gtk.Window
-            this.edit_shadow_window = new EditShadowWindow ()
-            win.hide ()
+            const win = this.root as Gtk.Window
             this.edit_shadow_window.application = win.application
-            this.edit_shadow_window.show_all ()
-            this.edit_shadow_window.connect ('destroy', () => {
-                win.show_all ()
-                this.edit_shadow_window = null
+            this.edit_shadow_window.present ()
+            win.hide ()
+            this.edit_shadow_window.connect ('close-request', () => {
+                win.show ()
+                this.edit_shadow_window.hide ()
             })
         }
     }
 )
+
+type _Items = InstanceType<typeof RoundedCornersItems>
+type _Win = InstanceType<typeof EditShadowWindow>

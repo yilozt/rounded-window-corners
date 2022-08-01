@@ -1,197 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0" />
-  <template class="EditShadowWindow" parent="HdyWindow">
-    <!-- <property name="resizable">false</property> -->
+  <template class="EditShadowWindow" parent="GtkWindow">
     <child>
-      <object class="GtkOverlay">
-        <child type="overlay">
-          <object class="HdyHeaderBar">
-            <property name="show-close-button">true</property>
-            <property name="valign">start</property>
-            <property name="hexpand">true</property>
-            <property name="show-close-button">true</property>
-            <style>
-              <class name="flat" />
-            </style>
-          </object>
-        </child>
+      <object class="GtkBox">
         <child>
           <object class="GtkBox">
+            <style>
+              <class name="frame" />
+            </style>
             <child>
               <object class="GtkBox">
-                <style>
-                  <class name="frame" />
-                </style>
+                <property name="width-request">260</property>
+                <property name="margin-top">60</property>
+                <property name="margin-start">32</property>
+                <property name="margin-end">32</property>
+                <property name="margin-bottom">32</property>
+                <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkBox">
-                    <property name="width-request">260</property>
-                    <property name="margin-top">60</property>
-                    <property name="margin-start">32</property>
-                    <property name="margin-end">32</property>
-                    <property name="margin-bottom">32</property>
-                    <property name="orientation">vertical</property>
+                    <property name="margin-bottom">24</property>
                     <child>
-                      <object class="GtkBox">
-                        <property name="margin-bottom">24</property>
-                        <child>
-                          <object class="GtkToggleButton" id="focus_toggle_button">
-                            <property name="active">true</property>
-                            <property name="label" translatable="yes">Focus</property>
-                            <property name="hexpand">true</property>
-                            <style>
-                              <class name="linked" />
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkToggleButton" id="unfocus_toggle_button">
-                            <property name="label" translatable="yes">Unfocus</property>
-                            <property name="hexpand">true</property>
-                            <style>
-                              <class name="linked" />
-                            </style>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Horizontal Offset</property>
-                        <property name="halign">start</property>
+                      <object class="GtkToggleButton" id="focus_toggle_button">
+                        <property name="active">true</property>
+                        <property name="label" translatable="yes">Focus</property>
+                        <property name="hexpand">true</property>
                         <style>
-                          <class name="heading" />
+                          <class name="linked" />
                         </style>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkScale" id="horizontal_offset_scale">
-                        <property name="valign">center</property>
+                      <object class="GtkToggleButton" id="unfocus_toggle_button">
+                        <property name="label" translatable="yes">Unfocus</property>
                         <property name="hexpand">true</property>
-                        <property name="draw-value">true</property>
-                        <property name="round-digits">0</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="adjustment">horizontal_offset_ajustment</property>
-                        <property name="value-pos">left</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Vertical Offset</property>
-                        <property name="halign">start</property>
                         <style>
-                          <class name="heading" />
+                          <class name="linked" />
                         </style>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkScale" id="vertical_offset_scale">
-                        <property name="valign">center</property>
-                        <property name="hexpand">true</property>
-                        <property name="draw-value">true</property>
-                        <property name="round-digits">0</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="adjustment">vertical_offset_ajustment</property>
-                        <property name="value-pos">left</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Blur Offset</property>
-                        <style>
-                          <class name="heading" />
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScale" id="blur_offset_scale">
-                        <property name="valign">center</property>
-                        <property name="hexpand">true</property>
-                        <property name="draw-value">true</property>
-                        <property name="round-digits">0</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="adjustment">blur_offset_ajustment</property>
-                        <property name="value-pos">left</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="halign">start</property>
-                        <property name="label" translatable="yes">Spread Radius</property>
-                        <style>
-                          <class name="heading" />
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScale" id="spread_radius_scale">
-                        <property name="valign">center</property>
-                        <property name="hexpand">true</property>
-                        <property name="draw-value">true</property>
-                        <property name="round-digits">0</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="adjustment">spread_radius_ajustment</property>
-                        <property name="value-pos">left</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Opacity</property>
-                        <property name="halign">start</property>
-                        <style>
-                          <class name="heading" />
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkScale" id="opacity_scale">
-                        <property name="valign">center</property>
-                        <property name="hexpand">true</property>
-                        <property name="draw-value">true</property>
-                        <property name="round-digits">0</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="adjustment">opacity_ajustment</property>
-                        <property name="value-pos">left</property>
-                      </object>
-                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Horizontal Offset</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="heading" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="horizontal_offset_scale">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">horizontal_offset_ajustment</property>
+                    <property name="value-pos">left</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Vertical Offset</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="heading" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="vertical_offset_scale">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">vertical_offset_ajustment</property>
+                    <property name="value-pos">left</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Blur Offset</property>
+                    <style>
+                      <class name="heading" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="blur_offset_scale">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">blur_offset_ajustment</property>
+                    <property name="value-pos">left</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Spread Radius</property>
+                    <style>
+                      <class name="heading" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="spread_radius_scale">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">spread_radius_ajustment</property>
+                    <property name="value-pos">left</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Opacity</property>
+                    <property name="halign">start</property>
+                    <style>
+                      <class name="heading" />
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="opacity_scale">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">opacity_ajustment</property>
+                    <property name="value-pos">left</property>
                   </object>
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <style>
+              <class name="edit-win" />
+            </style>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
+              <object class="GtkLabel" id="unfocus_shadow_widget">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="width-request">180</property>
+                <property name="height-request">180</property>
+                <property name="margin-top">50</property>
+                <property name="margin-bottom">50</property>
+                <property name="label">Unfocused Style</property>
                 <style>
-                  <class name="edit-win"/>
+                  <class name="view" />
                 </style>
-                <child>
-                  <object class="GtkLabel" id="unfocus_shadow_widget">
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="width-request">180</property>
-                    <property name="height-request">180</property>
-                    <property name="margin-top">50</property>
-                    <property name="margin-bottom">50</property>
-                    <property name="label">Unfocused Style</property>
-                    <style>
-                      <class name="view" />
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="focus_shadow_widget">
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="width-request">180</property>
-                    <property name="height-request">180</property>
-                    <property name="margin-bottom">50</property>
-                    <property name="label">Focused Style</property>
-                    <style>
-                      <class name="view" />
-                    </style>
-                  </object>
-                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="focus_shadow_widget">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="width-request">180</property>
+                <property name="height-request">180</property>
+                <property name="margin-bottom">50</property>
+                <property name="label">Focused Style</property>
+                <style>
+                  <class name="view" />
+                </style>
               </object>
             </child>
           </object>

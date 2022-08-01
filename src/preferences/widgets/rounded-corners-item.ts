@@ -1,5 +1,3 @@
-imports.gi.versions.Gtk = '3.0'
-
 // imports.gi
 import * as GObject          from '@gi/GObject'
 import * as Gtk              from '@gi/Gtk'
@@ -8,7 +6,6 @@ import * as Gtk              from '@gi/Gtk'
 import { template_url }      from '../../utils/io'
 import { RoundedCornersCfg } from '../../utils/types'
 import connections           from '../../utils/connections'
-import { imports }           from '@global'
 
 // ------------------------------------------------------------------ end import
 
@@ -23,6 +20,9 @@ export default GObject.registerClass (
             'padding_right_scale',
             'padding_top_scale',
             'padding_bottom_scale',
+            'revealer',
+            'paddings_row',
+            'expander_img',
         ],
     },
     class extends Gtk.ListBox {
@@ -32,6 +32,10 @@ export default GObject.registerClass (
         private _padding_right_scale         !: Gtk.Scale
         private _padding_top_scale           !: Gtk.Scale
         private _padding_bottom_scale        !: Gtk.Scale
+        private _revealer                    !: Gtk.Revealer
+        private _expander_img                !: Gtk.Image
+
+        _paddings_row                        !: Gtk.ListBoxRow
 
         private _scales                      !: Gtk.Scale[]
 
@@ -44,6 +48,15 @@ export default GObject.registerClass (
                 this._padding_right_scale,
                 this._padding_top_scale,
             ]
+        }
+
+        update_revealer () {
+            this._revealer.reveal_child = !this._revealer.reveal_child
+            if (this._revealer.reveal_child) {
+                this._expander_img.add_css_class ('rotated')
+            } else {
+                this._expander_img.remove_css_class ('rotated')
+            }
         }
 
         watch (on_cfg_changed: (cfg: RoundedCornersCfg) => void) {

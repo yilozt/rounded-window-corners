@@ -1,6 +1,5 @@
 // imports.gi
 import * as GObject      from '@gi/GObject'
-import * as Hdy          from '@gi/Handy'
 
 // Local Modules
 import { template_url }  from '../../utils/io'
@@ -8,7 +7,7 @@ import { show_err_msg }  from '../../utils/prefs'
 import settings          from '../../utils/settings'
 import constants         from '../../utils/constants'
 import connections       from '../../utils/connections'
-import BlackListRow      from '../widgets/app-row'
+import AppRow            from '../widgets/app-row'
 
 // types
 import { AppRowHandler } from '../widgets/app-row'
@@ -17,14 +16,14 @@ import * as Gtk          from '@gi/Gtk'
 // --------------------------------------------------------------- [end imports]
 
 /** Black list Preferences Page */
-export const Blacklist = GObject.registerClass (
+export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './blacklist.ui'),
         GTypeName: 'Blacklist',
         InternalChildren: ['black_list_group', 'add_row_btn'],
     },
-    class extends Hdy.PreferencesPage {
-        private _black_list_group !: Hdy.PreferencesGroup
+    class extends Gtk.Box {
+        private _black_list_group !: Gtk.ListBox
         private _add_row_btn      !: Gtk.Button
 
         /** Store value of settings */
@@ -41,6 +40,18 @@ export const Blacklist = GObject.registerClass (
                 this.on_add_row ()
                 settings ().black_list = this.black_list
             })
+
+            connections
+                .get ()
+                .connect (
+                    this._black_list_group,
+                    'row-activated',
+                    (me: Gtk.ListBox, row: Gtk.ListBoxRow) => {
+                        if (row instanceof AppRow) {
+                            row.on_expanded_changed ()
+                        }
+                    }
+                )
         }
 
         private show_err_msg (item: string) {
@@ -50,8 +61,7 @@ export const Blacklist = GObject.registerClass (
 
         // --------------------------------------------------- [signal handlers]
 
-        private on_delete_row (row: Hdy.ExpanderRow) {
-            const title = row.title
+        private on_delete_row (row: Gtk.ListBoxRow, title: string) {
             this.black_list.splice (this.black_list.indexOf (title), 1)
             settings ().black_list = this.black_list
             this._black_list_group.remove (row)
@@ -65,18 +75,19 @@ export const Blacklist = GObject.registerClass (
             }
 
             const handlers: AppRowHandler = {
-                on_delete: (row) => this.on_delete_row (row),
+                on_delete: (row, title) => this.on_delete_row (row, title),
                 on_title_changed: (old_title, new_title) =>
                     this.on_title_changed (old_title, new_title),
             }
 
-            const row = new BlackListRow ({ title }, handlers)
+            const row = new AppRow (handlers)
+            row.title = title
 
             if (!title) {
-                row.subtitle = constants.TIPS_EMPTY
+                row.description = constants.TIPS_EMPTY
             }
 
-            this._black_list_group.add (row)
+            this._black_list_group.append (row)
             this.black_list.push (title)
         }
 

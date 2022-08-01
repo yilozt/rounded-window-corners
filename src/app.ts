@@ -1,34 +1,34 @@
 // imports.gi
-import { Point }                   from '@gi/Graphene'
-import { BindConstraint, Clone }   from '@gi/Clutter'
-import { timeout_add_seconds }     from '@gi/GLib'
-import { MonitorManager }          from '@gi/Meta'
+import { Point }                       from '@gi/Graphene'
+import { BindConstraint, Clone }       from '@gi/Clutter'
+import { Source, timeout_add_seconds } from '@gi/GLib'
+import { MonitorManager }              from '@gi/Meta'
 
 // gnome-shell modules
-import { Workspace }               from '@imports/ui/workspace'
-import { WorkspaceGroup }          from '@imports/ui/workspaceAnimation'
-import { WindowManager }           from '@imports/ui/windowManager'
-import BackgroundMenu              from '@imports/ui/backgroundMenu'
-import { sessionMode }             from '@imports/ui/main'
+import { Workspace }                   from '@imports/ui/workspace'
+import { WorkspaceGroup }              from '@imports/ui/workspaceAnimation'
+import { WindowManager }               from '@imports/ui/windowManager'
+import BackgroundMenu                  from '@imports/ui/backgroundMenu'
+import { sessionMode }                 from '@imports/ui/main'
 
 // local modules
-import constants                   from './utils/constants'
-import { RoundedCornersManager }   from './manager/rounded-corners-manager'
-import { _log as log }             from './utils/log'
-import { AddBackgroundMenuItem }   from './utils/ui'
-import { RestoreBackgroundMenu }   from './utils/ui'
-import { SetupBackgroundMenu }     from './utils/ui'
-import { WindowScaleFactor }       from './utils/ui'
-import { ChoiceRoundedCornersCfg } from './utils/ui'
-import Connections                 from './utils/connections'
-import settings                    from './utils/settings'
-import Services                    from './dbus/services'
+import constants                       from './utils/constants'
+import { RoundedCornersManager }       from './manager/rounded-corners-manager'
+import { _log as log }                 from './utils/log'
+import { AddBackgroundMenuItem }       from './utils/ui'
+import { RestoreBackgroundMenu }       from './utils/ui'
+import { SetupBackgroundMenu }         from './utils/ui'
+import { WindowScaleFactor }           from './utils/ui'
+import { ChoiceRoundedCornersCfg }     from './utils/ui'
+import Connections                     from './utils/connections'
+import settings                        from './utils/settings'
+import Services                        from './dbus/services'
 
 // types, which will be removed in output
-import { WM }                      from '@gi/Shell'
-import { WindowPreview }           from '@imports/ui/windowPreview'
-import { RoundedCornersCfg }       from './utils/types'
-import { Window, WindowActor }     from '@gi/Meta'
+import { WM }                          from '@gi/Shell'
+import { WindowPreview }               from '@imports/ui/windowPreview'
+import { RoundedCornersCfg }           from './utils/types'
+import { Window, WindowActor }         from '@gi/Meta'
 
 // --------------------------------------------------------------- [end imports]
 export class Extension {
@@ -40,6 +40,8 @@ export class Extension {
 
     private _services: Services | null = null
     private _rounded_corners_manager: RoundedCornersManager | null = null
+
+    private _timeout_handler = 0
 
     constructor () {
         // Show loaded message in debug mode
@@ -78,7 +80,7 @@ export class Extension {
             }
 
             // waiting 3 seconds then restore marked windows.
-            timeout_add_seconds (0, 3, () => {
+            this._timeout_handler = timeout_add_seconds (0, 3, () => {
                 for (const _win of this._rounded_corners_manager?.windows () ??
                     []) {
                     const win = _win as Window & { __fs?: 1 }
@@ -232,6 +234,12 @@ export class Extension {
         WorkspaceGroup.prototype._createWindows = this._switch_ws_patch
         WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
+
+        // Remove main loop sources
+        if (this._timeout_handler != 0) {
+            Source.remove (this._timeout_handler)
+            this._timeout_handler = 0
+        }
 
         // Remove the item to open preferences page in background menu
         RestoreBackgroundMenu ()

@@ -1,50 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="3.0" />
-  <template class="General" parent="HdyPreferencesPage">
-    <property name="title" translatable="yes">General</property>
-    <property name="icon-name">emblem-system-symbolic</property>
+  <requires lib="gtk" version="4.0" />
+  <template class="General" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="title" translatable="yes">Applications</property>
-        <property name="description" translatable="yes">Some applications written by Libhandy / LibHdyaita already have native rounded corners, so we can skip them by those items.</property>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Applications</property>
+        <style>
+          <class name="heading" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="wrap">true</property>
+        <property name="xalign">0</property>
+        <property name="wrap-mode">word-char</property>
+        <property name="max-width-chars">25</property>
+        <property name="halign">fill</property>
+        <property name="label" translatable="yes">Some applications written by Libhandy / LibHdyaita already have native rounded corners, so we can skip them by those items</property>
+        <style>
+          <class name="caption" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox" id="applications_group">
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame"></class>
+        </style>
         <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title" translatable="yes">Skip LibHdyaita Applications</property>
-            <property name="activatable-widget">skip_libadwaita_app_switch</property>
+          <object class="GtkListBoxRow">
             <child>
-              <object class="GtkSwitch" id="skip_libadwaita_app_switch">
-                <property name="visible">true</property>
-                <property name="valign">center</property>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Skip LibAdwaita Applications</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="skip_libadwaita_app_switch">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title" translatable="yes">Skip LibHandy Applications</property>
-            <property name="activatable-widget">skip_libhandy_app_switch</property>
+          <object class="GtkListBoxRow">
             <child>
-              <object class="GtkSwitch" id="skip_libhandy_app_switch">
-                <property name="visible">true</property>
-                <property name="valign">center</property>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Skip LibHandy Applications</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="skip_libhandy_app_switch">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
         <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title" translatable="yes">Window Shadow</property>
-            <property name="subtitle">Customize the shadow of the rounded corner window</property>
-            <property name="activatable">True</property>
-            <signal name="activated" handler="_show_edit_shadow_window_cb" />
+          <object class="GtkListBoxRow" id="edit_shadow_row">
             <child>
-              <object class="GtkImage">
-                <property name="visible">true</property>
-                <property name="icon_name">go-next-symbolic</property>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Window Shadow</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Customize the shadow of the rounded corner window</property>
+                        <style>
+                          <class name="caption"/>
+                        </style>  
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon_name">go-next-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <style>
+          <class name="rich-list" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Global Settings</property>
+        <style>
+          <class name="heading" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="wrap">true</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">This settings will try to effects all windows</property>
+        <style>
+          <class name="caption" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkListBox" id="global_settings_preferences_group">
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame"></class>
+          <class name="rich-list" />
+        </style>
+        <child>
+          <object class="GtkListBoxRow">
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Border Width</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScale" id="border_width_scale">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                    <property name="width-request">280</property>
+                    <property name="draw-value">true</property>
+                    <property name="round-digits">0</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="adjustment">border_width_ajustment</property>
+                    <property name="value-pos">right</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Border Color</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColorButton" id="border_color_button">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                    <property name="use-alpha">true</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -52,57 +217,54 @@
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup" id="global_settings_preferences_group">
-        <property name="visible">true</property>
-        <property name="title" translatable="yes">Global Settings</property>
-        <property name="description" translatable="yes">This settings will try to effects all windows</property>
-        <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title" translatable="yes">Border Width</property>
-            <child>
-              <object class="GtkScale" id="border_width_scale">
-                <property name="visible">true</property>
-                <property name="valign">center</property>
-                <property name="width-request">280</property>
-                <property name="draw-value">true</property>
-                <property name="round-digits">0</property>
-                <property name="orientation">horizontal</property>
-                <property name="adjustment">border_width_ajustment</property>
-                <property name="value-pos">right</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title" translatable="yes">Border Color</property>
-            <child>
-              <object class="GtkColorButton" id="border_color_button">
-                <property name="visible">true</property>
-                <property name="valign">center</property>
-                <property name="use-alpha">true</property>
-              </object>
-            </child>
-          </object>
-        </child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Debug</property>
+        <style>
+          <class name="heading" />
+        </style>
       </object>
     </child>
     <child>
-      <object class="HdyPreferencesGroup">
-        <property name="visible">true</property>
-        <property name="title" translatable="yes">Debug</property>
+      <object class="GtkListBox">
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="frame"></class>
+          <class name="rich-list" />
+        </style>
         <child>
-          <object class="HdyActionRow">
-            <property name="visible">true</property>
-            <property name="title">Enable Log</property>
-            <property name="subtitle">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; in terminal to see the log</property>
-            <property name="activatable-widget">enable_log_switch</property>
+          <object class="GtkListBoxRow">
             <child>
-              <object class="GtkSwitch" id="enable_log_switch">
-                <property name="visible">true</property>
-                <property name="valign">center</property>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Enable Log</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="use-markup">true</property>
+                        <property name="label" translatable="yes">Run &lt;i&gt;journalctl -o cat -f /usr/bin/gnome-shell&lt;/i&gt; in terminal to see the log</property>
+                        <style>
+                          <class name="caption"/>
+                        </style>  
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="enable_log_switch">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
