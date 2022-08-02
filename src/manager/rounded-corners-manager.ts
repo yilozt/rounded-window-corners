@@ -42,10 +42,6 @@ export class RoundedCornersManager {
         {
             shadow: Bin
             app_type: UI.AppType
-            last_size: {
-                width: number
-                height: number
-            }
         }
     > | null = null
 
@@ -317,11 +313,7 @@ export class RoundedCornersManager {
             // The shadow of window
             const shadow = this._create_shadow (actor)
 
-            this.rounded_windows.set (win, {
-                shadow,
-                app_type,
-                last_size: { width: 0, height: 0 },
-            })
+            this.rounded_windows.set (win, { shadow, app_type })
 
             // turn off original shadow for x11 window
             if (actor.shadow_mode !== undefined) {
@@ -336,28 +328,18 @@ export class RoundedCornersManager {
 
             // Update uniform variables when changed window size
             const source = actor.meta_window
-            this.connections.connect (source, 'size-changed', () => {
+
+            this.connections.connect (actor, 'notify::size', () => {
                 this.on_size_changed (actor)
             })
 
-            // Need to listen 'damaged' signal, overwise XWayland client
-            // will don't show contents, util you resize it manually
-            this.connections.connect (actor, 'damaged', () => {
-                const info = this.rounded_windows?.get (source)
-                if (info) {
-                    const { width, height } = source.get_frame_rect ()
-                    const { width: last_w, height: last_h } =
-                        info.last_size ?? {
-                            width: 0,
-                            height: 0,
-                        }
-                    if (width != last_w || height != last_h) {
-                        _log (`[${win.title}] Size changed when damage`)
-                        this.on_size_changed (actor)
-                        info.last_size = { width, height }
-                    }
+            this.connections.connect (
+                actor.get_texture (),
+                'size-changed',
+                () => {
+                    this.on_size_changed (actor)
                 }
-            })
+            )
 
             // Update shadow actor when focus of window has changed.
             this.connections.connect (source, 'notify::appears-focused', () => {
