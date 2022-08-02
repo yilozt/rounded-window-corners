@@ -34,6 +34,10 @@ export function buildPrefsWidget () {
         win.width_request = 550
         const titlebar = win.get_titlebar () as Gtk.HeaderBar | null
         titlebar?.set_title_widget (swither)
+
+        win.connect ('close-request', () => {
+            Notify.uninit ()
+        })
     })
 
     // Load pages
@@ -73,6 +77,10 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
             }
         })
         .catch ((err) => logError (err))
+
+    window.connect ('close-request', () => {
+        Notify.uninit ()
+    })
 
     load_css ()
 }

@@ -8,6 +8,7 @@ import settings            from '../../utils/settings'
 import connections         from '../../utils/connections'
 import { list_children }   from '../../utils/prefs'
 import { template_url }    from '../../utils/io'
+import { _log }            from '../../utils/log'
 import RoundedCornersItems from '../widgets/rounded-corners-item'
 import EditShadowWindow    from '../widgets/edit-shadow-window'
 
@@ -124,6 +125,18 @@ export default GObject.registerClass (
                         }
                     }
                 )
+        }
+
+        vfunc_root (): void {
+            super.vfunc_root ()
+            const win = this.root as Gtk.Window
+
+            // Disconnect all signal when close prefs
+            win.connect ('close-request', () => {
+                _log ('Disconnect Signals')
+                connections.get ().disconnect_all ()
+                connections.del ()
+            })
         }
 
         private build_ui () {
