@@ -1,11 +1,14 @@
 <div align="center">
-    <h1>Rounded Window Corners</h1>
-    <!-- <img src="https://img.shields.io/badge/GET%20From-extensions.gnome.org-4A86CF?style=for-the-badge&logo=Gnome&logoColor=white" style="zoom:90%;"/> -->
-    <p><i>A gnome-shell extensions that try to add rounded corners for all windows</i></p>
+  <h1>Rounded Window Corners</h1>
+  <p><i>A gnome-shell extensions that try to add rounded corners for all windows</i></p>
+  <a href="https://extensions.gnome.org/extension/5237/rounded-window-corners/">
+    <img src="https://img.shields.io/badge/Install%20from-extensions.gnome.org-4A86CF?style=for-the-badge&logo=Gnome&logoColor=white"/>
+  </a>  
 </div>
 
 ## Features
 
+- Works with Gnome 40/41/42
 - Custom border radius and clip paddings for windows
 - Black list for applications which draw window decoration itself
 - Custom shadow for rounded corners windows
@@ -23,6 +26,10 @@
 
 ## Installation
 
+### From Ego
+
+Install extensions from [here](https://extensions.gnome.org/extension/5237/rounded-window-corners/).
+
 ### From source code
 
 It will install extensions to `~/.local/share/gnome-shell/extensions`
@@ -36,9 +43,10 @@ yarn ext:install
 
 ### From Releases / Github Actions
 
-Download extensions pack from [Releases](https://github.com/yilozt/rounded-window-corners/releases) Page, or download git version from [Github Actions](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml). Then use `gnome-extensions` to install it. Need to restart gnome-shell to enable this extensions.
+Download extensions pack from [Releases](https://github.com/yilozt/rounded-window-corners/releases) Page, or download git version from [Github Actions](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml). After download extensions pack, you need use `gnome-extensions` to install it, then restart gnome-shell to enable this extensions.
 
-[![](https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square)](https://github.com/yilozt/rounded-window-corners/releases) [![](https://img.shields.io/github/workflow/status/yilozt/rounded-window-corners/Pack%20extensions?style=flat-square)](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml)
+[![](https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square)](https://github.com/yilozt/rounded-window-corners/releases)
+[![](https://img.shields.io/github/workflow/status/yilozt/rounded-window-corners/Pack%20extensions?label=Pack%20extensions&style=flat-square)](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml)
 
 ```
 gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
@@ -48,14 +56,16 @@ gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
 
 ### Build
 
-```
-yarn build
+```bash
+yarn build 
 ```
 
 ### Watch files
 
+Build and install extensions when files in `src` folder changed.
+
 ```
-yarn watch
+yarn dev
 ```
 
 ### Test in Virtual Box by Vagrant
