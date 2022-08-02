@@ -29,6 +29,7 @@ import { WM }                          from '@gi/Shell'
 import { WindowPreview }               from '@imports/ui/windowPreview'
 import { RoundedCornersCfg }           from './utils/types'
 import { Window, WindowActor }         from '@gi/Meta'
+import { global }                      from '@global'
 
 // --------------------------------------------------------------- [end imports]
 export class Extension {
@@ -70,12 +71,14 @@ export class Extension {
         // solve this problem.
 
         const monitor_manager = MonitorManager.get ()
+        type _Window = Window & { __extensions_rounded_window_fs?: 1 }
+
         Connections.get ().connect (monitor_manager, 'monitors-changed', () => {
             if (sessionMode.isLocked || sessionMode.isGreeter) {
                 return
             }
             for (const win of this._rounded_corners_manager?.windows () ?? []) {
-                (win as Window & { __fs?: 1 }).__fs = 1
+                (win as _Window).__extensions_rounded_window_fs = 1
                 win.make_fullscreen ()
             }
 
@@ -83,15 +86,25 @@ export class Extension {
             this._timeout_handler = timeout_add_seconds (0, 3, () => {
                 for (const _win of this._rounded_corners_manager?.windows () ??
                     []) {
-                    const win = _win as Window & { __fs?: 1 }
-                    if (win && win.__fs == 1) {
+                    const win = _win as _Window
+                    if (win && win.__extensions_rounded_window_fs == 1) {
                         win.unmake_fullscreen ()
-                        delete win.__fs
+                        delete win.__extensions_rounded_window_fs
                     }
                 }
                 return false
             })
         })
+
+        // Restore window that have __extensions_rounded_window_fs props when
+        // unlocked
+        for (const win_actor of global.get_window_actors ()) {
+            const win = win_actor.meta_window as _Window
+            if (win.__extensions_rounded_window_fs === 1) {
+                win.unmake_fullscreen ()
+                delete win.__extensions_rounded_window_fs
+            }
+        }
 
         const self = this
 
