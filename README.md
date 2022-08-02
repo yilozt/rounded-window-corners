@@ -28,8 +28,8 @@
 It will install extensions to `~/.local/share/gnome-shell/extensions`
 
 ```
-git clone https://github.com/yilozt/rounded-corners-effect
-cd rounded-corners-effect
+git clone https://github.com/yilozt/rounded-window-corners
+cd rounded-window-corners
 yarn install
 yarn ext:install
 ```
