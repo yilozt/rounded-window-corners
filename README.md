@@ -14,6 +14,13 @@
 - Custom shadow for rounded corners windows
 - Skip libadwaita / libhandy application
 
+## Compatibility
+
+- [_Compiz alike magic lamp effect_](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)
+  
+  Hide shadow when magic lamp effect running.
+  Need to restart (disable then enable) this extension when _Compiz alike magic lamp effect_ enabled. 
+
 ## Notes
 
 - The rounded corners effect for window is base on this [shader](https://gitlab.gnome.org/GNOME/mutter/-/blob/main/src/compositor/meta-background-content.c#L138) from mutter project
