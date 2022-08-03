@@ -162,7 +162,7 @@ export class Extension {
                     })
                 })
 
-                clone.insert_child_above (shadow_clone, window_container)
+                clone.insert_child_below (shadow_clone, window_container)
             }
 
             return clone
