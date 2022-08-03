@@ -7,7 +7,7 @@ set -ex
 
 [[ -e /etc/done ]] && exit 0
 
-dnf install -y gnome-shell gnome-tweaks gnome-extensions-app virtualbox-guest-additions @development-tools xrdp gnome-terminal vim nautilus
+dnf install -y gnome-shell gnome-tweaks gnome-extensions-app virtualbox-guest-additions @development-tools xrdp gnome-terminal vim nautilus chrome-gnome-shell firefox
 systemctl set-default graphical.target
 echo "[daemon]" > /etc/gdm/custom.conf
 echo "AutomaticLoginEnable = true" >> /etc/gdm/custom.conf
