@@ -270,19 +270,22 @@ export class RoundedCornersManager {
         /*background: yellow*/;`
 
         const child = actor.first_child as Bin
-        child.style = `background: white;
-                       border-radius: ${border_radius * scale_of_style}px;
-                       margin: ${top * scale_of_style}px
-                               ${right * scale_of_style}px
-                               ${bottom * scale_of_style}px
-                               ${left * scale_of_style}px;`
+
         if (
-            !win.maximized_horizontally &&
-            !win.maximized_vertically &&
-            !win.fullscreen
+            win.maximized_horizontally ||
+            win.maximized_vertically ||
+            win.fullscreen
         ) {
-            child.style += `
-                ${types.box_shadow_css (shadow, scale_of_style)};`
+            child.style = 'opacity: 0;'
+        } else {
+            child.style = `
+                background: white;
+                border-radius: ${border_radius * scale_of_style}px;
+                ${types.box_shadow_css (shadow, scale_of_style)};
+                margin: ${top * scale_of_style}px
+                        ${right * scale_of_style}px
+                        ${bottom * scale_of_style}px
+                        ${left * scale_of_style}px;`
         }
 
         child.queue_redraw ()
