@@ -3,7 +3,7 @@ import * as Clutter               from '@gi/Clutter'
 import { ShadowMode, WindowType } from '@gi/Meta'
 import { WindowClientType }       from '@gi/Meta'
 import { Bin }                    from '@gi/St'
-import { BindingFlags }           from '@gi/GObject'
+import { Binding, BindingFlags }  from '@gi/GObject'
 import { ThemeContext }           from '@gi/St'
 
 // local modules
@@ -36,12 +36,17 @@ export class RoundedCornersManager {
      * include:
      * - Shadow Actor
      * - AppType: Libhandy | LibAdwaita | Other
+     * - Bindings: Store the property Bindings between Window Actor and shadow
+     *            Actor
      */
     private rounded_windows: Map<
         Window,
         {
             shadow: Bin
             app_type: UI.AppType
+            bindings: {
+                [prop: string]: Binding | undefined
+            }
         }
     > | null = null
 
@@ -77,6 +82,78 @@ export class RoundedCornersManager {
         this.connections.connect (wm, 'map', (_: WM, actor: WindowActor) => {
             this._add_effect (actor)
         })
+
+        // Connect 'minimized' signal, hide shadow actor when window minimized
+        this.connections.connect (
+            wm,
+            'minimize',
+            (_: WM, actor: WindowActor) => {
+                const win = actor.get_meta_window ()
+                const info = this.rounded_windows?.get (win)
+                const shadow = info?.shadow
+                const bindings = info?.bindings
+                if (shadow && bindings) {
+                    // Disconnect bindings temporary, it will be restored
+                    // when un-minimized
+                    const visible_binding = bindings['visible']
+                    if (visible_binding) {
+                        visible_binding.unbind ()
+                        delete bindings['visible']
+                    }
+                    shadow.visible = false
+                }
+            }
+        )
+
+        // Restore visible of shadow when un-minimized
+        this.connections.connect (
+            wm,
+            'unminimize',
+            (_: WM, actor: WindowActor) => {
+                const win = actor.get_meta_window ()
+                const info = this.rounded_windows?.get (win)
+                const shadow = info?.shadow
+                const bindings = info?.bindings
+                if (!shadow || !bindings) {
+                    return
+                }
+
+                const restore_binding = () => {
+                    if (!bindings['visible']) {
+                        bindings['visible'] = actor.bind_property (
+                            'visible',
+                            shadow,
+                            'visible',
+                            BindingFlags.SYNC_CREATE
+                        )
+                    }
+                }
+
+                // Handle visible of shader with Compiz alike magic lamp effect
+                // After MagicLampUnminimizeEffect completed, then show shadow
+                //
+                // https://github.com/hermes83/compiz-alike-magic-lamp-effect
+                const effect = actor.get_effect ('unminimize-magic-lamp-effect')
+                if (effect) {
+                    type Effect = Clutter.Effect & { timerId: Clutter.Timeline }
+                    const timer_id = (effect as Effect).timerId
+
+                    const id = timer_id.connect ('new-frame', (source) => {
+                        // Effect completed when get_process() touch 1.0
+                        // Need show shadow here
+                        if (source.get_progress () > 0.98) {
+                            _log ('Handle Unminimize with Magic Lamp Effect')
+
+                            restore_binding ()
+                            source.disconnect (id)
+                        }
+                    })
+                    return
+                }
+
+                restore_binding ()
+            }
+        )
 
         // Disconnect all signals of window when closed
         this.connections.connect (wm, 'destroy', (_: WM, actor: WindowActor) =>
@@ -143,6 +220,29 @@ export class RoundedCornersManager {
         }
     }
 
+    /** Bind property between shadow actor and window actor */
+    private _bind_shadow_actor_props (
+        actor: WindowActor,
+        shadow: Bin
+    ): { [prop: string]: Binding | undefined } {
+        const flag = BindingFlags.SYNC_CREATE
+        const bindings: { [prop: string]: Binding | undefined } = {}
+
+        for (const prop of [
+            'pivot-point',
+            'visible',
+            'translation-x',
+            'translation-y',
+            'scale-x',
+            'scale-y',
+        ]) {
+            bindings[prop] = actor.bind_property (prop, shadow, prop, flag)
+        }
+
+        // restore bindings map, key: property, value: GLib.Binding
+        return bindings
+    }
+
     /**
      * Create Shadow for rounded corners window
      * @param actor -  window actor which has been setup rounded corners effect
@@ -165,19 +265,6 @@ export class RoundedCornersManager {
             constants.CLIP_SHADOW_EFFECT,
             new ClipShadowEffect ()
         )
-
-        const flag = BindingFlags.SYNC_CREATE
-
-        for (const prop of [
-            'pivot-point',
-            'visible',
-            'translation-x',
-            'translation-y',
-            'scale-x',
-            'scale-y',
-        ]) {
-            actor.bind_property (prop, shadow, prop, flag)
-        }
 
         // Insert shadow actor below window actor, now shadow actor
         // will show below window actor
@@ -324,7 +411,9 @@ export class RoundedCornersManager {
             // The shadow of window
             const shadow = this._create_shadow (actor)
 
-            this.rounded_windows.set (win, { shadow, app_type })
+            const bindings = this._bind_shadow_actor_props (actor, shadow)
+
+            this.rounded_windows.set (win, { shadow, app_type, bindings })
 
             // turn off original shadow for x11 window
             if (actor.shadow_mode !== undefined) {
