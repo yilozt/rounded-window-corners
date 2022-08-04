@@ -22,6 +22,7 @@ const { declarations, code } = loadShader (
 class Uniforms {
     bounds = 0
     clip_radius = 0
+    smoothing = 0
     inner_bounds = 0
     inner_clip_radius = 0
     pixel_step = 0
@@ -54,6 +55,7 @@ export default registerClass (
             Effect.uniforms = {
                 bounds: 0,
                 clip_radius: 0,
+                smoothing: 0,
                 inner_bounds: 0,
                 inner_clip_radius: 0,
                 pixel_step: 0,
@@ -123,7 +125,7 @@ export default registerClass (
             const border_color = border.color
 
             const radius = corners_cfg.border_radius * scale_factor
-            const { padding } = corners_cfg
+            const { padding, smoothing } = corners_cfg
 
             const bounds = [
                 outer_bounds.x1 + padding.left * scale_factor,
@@ -152,6 +154,7 @@ export default registerClass (
             this.set_uniform_float (location.inner_bounds, 4, inner_bounds)
             this.set_uniform_float (location.pixel_step, 2, pixel_step)
             this.set_uniform_float (location.border_width, 1, [border_width])
+            this.set_uniform_float (location.smoothing, 1, [smoothing])
             this.set_uniform_float (location.clip_radius, 1, [radius])
             this.set_uniform_float (location.border_color, 4, border_color)
             this.set_uniform_float (location.inner_clip_radius, 1, [

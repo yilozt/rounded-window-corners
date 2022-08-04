@@ -16,6 +16,7 @@ export default GObject.registerClass (
         InternalChildren: [
             'rounded_in_maximized_switch',
             'border_radius_scale',
+            'smoothing_scale',
             'padding_left_scale',
             'padding_right_scale',
             'padding_top_scale',
@@ -28,6 +29,7 @@ export default GObject.registerClass (
     class extends Gtk.ListBox {
         private _rounded_in_maximized_switch !: Gtk.Switch
         private _border_radius_scale         !: Gtk.Scale
+        private _smoothing_scale             !: Gtk.Scale
         private _padding_left_scale          !: Gtk.Scale
         private _padding_right_scale         !: Gtk.Scale
         private _padding_top_scale           !: Gtk.Scale
@@ -43,6 +45,7 @@ export default GObject.registerClass (
             super._init ()
             this._scales = [
                 this._border_radius_scale,
+                this._smoothing_scale,
                 this._padding_bottom_scale,
                 this._padding_left_scale,
                 this._padding_right_scale,
@@ -90,6 +93,7 @@ export default GObject.registerClass (
                 },
                 keep_rounded_corners: this._rounded_in_maximized_switch.active,
                 border_radius: this._border_radius_scale.get_value (),
+                smoothing: this._smoothing_scale.get_value (),
                 enabled: true,
             }
         }
@@ -97,6 +101,7 @@ export default GObject.registerClass (
         set cfg (cfg: RoundedCornersCfg) {
             this._rounded_in_maximized_switch.active = cfg.keep_rounded_corners
             this._border_radius_scale.set_value (cfg.border_radius)
+            this._smoothing_scale.set_value (cfg.smoothing)
             this._padding_left_scale.set_value (cfg.padding.left)
             this._padding_right_scale.set_value (cfg.padding.right)
             this._padding_top_scale.set_value (cfg.padding.top)
