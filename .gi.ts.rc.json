@@ -40,5 +40,36 @@
     "St":       [ "1.0" ],
     "Graphene": [ "1.0"],
     "GIRepository": ["2.0"]
+  },
+
+  "[4]": [
+    "Gi.ts need $XDG_DATA_DIRS to generate .d.ts files for GIR, but not all system ",
+    "have this environment variant. Path in this item will be read in gulp/build.js",
+    "then been add into $XDG_DATA_DIRS.                                            ",
+    "Feel free to add path to this item when you touch error when generate .d.ts   ",
+    "files, the error message may like this:                                       ",
+    "------------------------------------------------------------------------------",
+    "[11:10:33] 'generate_gi_prefs' errored after 472 ms                           ",
+    "[11:10:33] Error: Command failed: cd .tmp/prefs && gi-ts generate             ",
+    "    Error: Missing Libraries!                                                 ",
+    "    The following libraries were not found: Gtk, Gdk, Notify, Adw.            ",
+    "------------------------------------------------------------------------------"
+  ],
+  "xdg_data_dirs": {
+    "ext": [
+      "/usr/lib64/mutter-10",
+      "/usr/lib64/mutter-9",
+      "/usr/lib64/mutter-8",
+      "/usr/lib/x86_64-linux-gnu/mutter-10",
+      "/usr/lib/x86_64-linux-gnu/mutter-9",
+      "/usr/lib/x86_64-linux-gnu/mutter-8",
+      "/usr/local/share",
+      "/usr/share",
+      "/usr/share/gnome-shell"
+    ],
+    "prefs": [
+      "/usr/share",
+      "/usr/local/share"
+    ]
   }
 }

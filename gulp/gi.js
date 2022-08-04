@@ -1,14 +1,6 @@
 // This gulp scripts used to generate @gi folder by ts-for-gir:
 //   https://github.com/sammydre/ts-for-gir
 
-// The path to search libraries of mutter and gnome-shell
-const extra_lib = [
-  '/usr/lib64/mutter-10',
-  '/usr/lib64/mutter-9',
-  '/usr/lib64/mutter-8',
-  '/usr/share/gnome-shell'
-].join(':')
-
 const { existsSync, statSync, writeFileSync, readFileSync, rmSync, rm, mkdirSync } = require('fs')
 const { exec, execSync } = require('child_process')
 const { parallel, series, src, dest } = require('gulp')
@@ -20,6 +12,10 @@ const conf = require('../.gi.ts.rc.json')
 const LOCK_FILE = 'docs.lock',
   CONFIG_FILE = '.gi.ts.rc.json',
   GI_DIR = conf.options.out
+
+// The path to search libraries of mutter and gnome-shell
+const extra_lib_ext = conf.xdg_data_dirs['ext'].join(':')
+const extra_lib_prefs = conf.xdg_data_dirs['prefs'].join(':')
 
 // Update @gi folder when we have edited the `.gi.ts.rc.json`.
 // Use docs.lock to record the last modify time.
@@ -124,7 +120,7 @@ const generate_gi_prefs = (cb) => {
     'libraries': conf.libraries_prefs,
     ...conf
   }))
-  exec("cd .tmp/prefs && gi-ts generate", cb)
+  exec(`cd .tmp/prefs && XDG_DATA_DIRS=${extra_lib_prefs}:$XDG_DATA_DIRS gi-ts generate`, cb)
 }
 
 const generate_gi_ext = (cb) => {
@@ -138,7 +134,7 @@ const generate_gi_ext = (cb) => {
     'libraries': conf.libraries_ext,
     ...conf
   }))
-  exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib}:$XDG_DATA_DIRS gi-ts generate`, cb)
+  exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib_ext}:$XDG_DATA_DIRS gi-ts generate`, cb)
 }
 
 const generate_gi = series(

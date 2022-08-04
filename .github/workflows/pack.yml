@@ -15,8 +15,6 @@ jobs:
       matrix:
         node-version: [16.x]
     container: archlinux:base-devel
-    env:
-      XDG_DATA_DIRS: /usr/local/share/:/usr/share/
 
     steps:
       - uses: actions/checkout@v3
