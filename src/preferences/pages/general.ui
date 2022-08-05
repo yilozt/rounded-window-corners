@@ -20,7 +20,7 @@
         <property name="wrap-mode">word-char</property>
         <property name="max-width-chars">25</property>
         <property name="halign">fill</property>
-        <property name="label" translatable="yes">Some applications written by Libhandy / LibHdyaita already have native rounded corners, so we can skip them by those items</property>
+        <property name="label" translatable="yes">Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings</property>
         <style>
           <class name="caption" />
         </style>
