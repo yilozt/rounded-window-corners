@@ -24,7 +24,7 @@ import { RoundedCornersCfg }           from '../../utils/types'
 export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './custom.ui'),
-        GTypeName: 'CustomPage',
+        GTypeName: 'RoundedWindowCornersPrefsCustomPage',
         InternalChildren: ['custom_group', 'add_row_btn'],
     },
     class extends Gtk.Box {

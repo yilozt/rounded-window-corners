@@ -19,7 +19,7 @@ import * as Gtk          from '@gi/Gtk'
 export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './blacklist.ui'),
-        GTypeName: 'Blacklist',
+        GTypeName: 'RoundedWindowCornersPrefsBlacklist',
         InternalChildren: ['black_list_group', 'add_row_btn'],
     },
     class extends Gtk.Box {

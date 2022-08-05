@@ -20,7 +20,7 @@ import * as Gtk            from '@gi/Gtk'
 export default GObject.registerClass (
     {
         Template: template_url (import.meta.url, './general.ui'),
-        GTypeName: 'General',
+        GTypeName: 'RoundedWindowCornersPrefsGeneral',
 
         // Widgets export from template ui
         InternalChildren: [

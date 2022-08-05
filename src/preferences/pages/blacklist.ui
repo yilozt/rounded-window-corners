@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0" />
-  <template class="Blacklist" parent="GtkBox">
+  <template class="RoundedWindowCornersPrefsBlacklist" parent="GtkBox">
     <property name="spacing">12</property>
     <property name="orientation">vertical</property>
     <child>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0" />
-  <template class="General" parent="GtkBox">
+  <template class="RoundedWindowCornersPrefsGeneral" parent="GtkBox">
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
