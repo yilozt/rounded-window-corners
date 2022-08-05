@@ -518,6 +518,14 @@ export class RoundedCornersManager {
      * @return {[boolean, UI.AppType]}
      */
     should_enable_effect (win: Window): [boolean, UI.AppType] {
+        // DING (Desktop Icons NG) is a extensions that create a gtk
+        // application to show desktop grid on background, we need to
+        // skip it coercively.
+        // https://extensions.gnome.org/extension/2087/desktop-icons-ng-ding/
+        if (win.gtk_application_id === 'com.rastersoft.ding') {
+            return [false, UI.AppType.Other]
+        }
+
         // Skip when application in black list.
 
         const wm_class_instance = win.get_wm_class_instance ()
