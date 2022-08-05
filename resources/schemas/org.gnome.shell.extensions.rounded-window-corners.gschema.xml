@@ -50,7 +50,8 @@
             'bottom': &lt;uint32 1&gt;
           }&gt;,
           'keep_rounded_corners': &lt;false&gt;,
-          'border_radius': &lt;uint32 12&gt;
+          'border_radius': &lt;uint32 12&gt;,
+          'smoothing': &lt;1.0&gt;
         }
       </default>
     </key>
