@@ -507,6 +507,7 @@ export class RoundedCornersManager {
 
         // Remove handle for window, those handle has been added
         // in `_add_effect()`
+        this.connections.disconnect_all (actor.get_texture ())
         this.connections.disconnect_all (win)
         this.connections.disconnect_all (actor)
     }
