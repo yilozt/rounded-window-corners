@@ -336,6 +336,11 @@ export class RoundedCornersManager {
         }
         const { left, right, top, bottom } = padding
 
+        // Increasing border_radius when smoothing is on
+        if (this.global_rounded_corners !== null) {
+            border_radius *= 1.0 + this.global_rounded_corners.smoothing
+        }
+
         // Sadly, the scale of style of St.Widget may be different between scale
         // of window if there are two monitor with different scale factor.
         // - Scale of Style always as same as primary monitor

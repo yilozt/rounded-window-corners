@@ -17,6 +17,7 @@ export class Padding {
 export interface RoundedCornersCfg {
     keep_rounded_corners: boolean
     border_radius: number
+    smoothing: number
     padding: Padding
     enabled: boolean
 }
