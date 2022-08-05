@@ -76,8 +76,7 @@ export default registerClass (
             this._init_uniforms ()
         }
 
-        vfunc_pre_paint (node: PaintNode, ctx: PaintContext): boolean {
-            const res = super.vfunc_pre_paint (node, ctx)
+        vfunc_paint_target (node: PaintNode, ctx: PaintContext) {
             this.get_pipeline ()?.set_layer_filters (
                 0,
                 PipelineFilter.LINEAR_MIPMAP_LINEAR,
@@ -102,7 +101,7 @@ export default registerClass (
             this.get_pipeline ()?.set_blend (
                 'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
             )
-            return res
+            super.vfunc_paint_target (node, ctx)
         }
 
         /**

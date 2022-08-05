@@ -18,14 +18,12 @@ class ClipShadowEffect extends GLSLEffect {
         this.add_glsl_snippet (SnippetHook.FRAGMENT, declarations, code, false)
     }
 
-    vfunc_pre_paint (node: PaintNode, ctx: PaintContext): boolean {
-        const res = super.vfunc_pre_paint (node, ctx)
-
+    vfunc_paint_target (node: PaintNode, ctx: PaintContext) {
         // Reset to default blend string.
         this.get_pipeline ()?.set_blend (
             'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
         )
-        return res
+        super.vfunc_paint_target (node, ctx)
     }
 }
 
