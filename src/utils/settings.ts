@@ -71,7 +71,23 @@ class Settings {
 
             // Define getter and setter for keys
             Object.defineProperty (this, key.replace (/-/g, '_'), {
-                get: () => this.g_settings.get_value (key).recursiveUnpack (),
+                get: () => {
+                    const v = this.g_settings.get_value (key).recursiveUnpack ()
+                    if (type_of_keys[key] === 'a{sv}') {
+                        // Mix default value for type a{sv}, to avoid missing
+                        // props
+                        type Obj = { [prop: string]: unknown }
+                        const default_val = (this.g_settings
+                            .get_default_value (key)
+                            ?.recursiveUnpack () ?? {}) as Obj
+                        return {
+                            ...default_val,
+                            ...(v as Obj),
+                        }
+                    } else {
+                        return v
+                    }
+                },
                 set: (val) => {
                     const variant =
                         type_of_keys[key] == 'a{sv}'
