@@ -15,6 +15,7 @@ export default GObject.registerClass (
         GTypeName: 'RoundedCornersItem',
         InternalChildren: [
             'rounded_in_maximized_switch',
+            'rounded_in_fullscreen_switch',
             'border_radius_scale',
             'smoothing_scale',
             'padding_left_scale',
@@ -27,19 +28,21 @@ export default GObject.registerClass (
         ],
     },
     class extends Gtk.ListBox {
-        private _rounded_in_maximized_switch !: Gtk.Switch
-        private _border_radius_scale         !: Gtk.Scale
-        private _smoothing_scale             !: Gtk.Scale
-        private _padding_left_scale          !: Gtk.Scale
-        private _padding_right_scale         !: Gtk.Scale
-        private _padding_top_scale           !: Gtk.Scale
-        private _padding_bottom_scale        !: Gtk.Scale
-        private _revealer                    !: Gtk.Revealer
-        private _expander_img                !: Gtk.Image
+        private _rounded_in_maximized_switch  !: Gtk.Switch
+        private _rounded_in_fullscreen_switch !: Gtk.Switch
+        private _border_radius_scale          !: Gtk.Scale
+        private _smoothing_scale              !: Gtk.Scale
+        private _padding_left_scale           !: Gtk.Scale
+        private _padding_right_scale          !: Gtk.Scale
+        private _padding_top_scale            !: Gtk.Scale
+        private _padding_bottom_scale         !: Gtk.Scale
+        private _revealer                     !: Gtk.Revealer
+        private _expander_img                 !: Gtk.Image
 
-        _paddings_row                        !: Gtk.ListBoxRow
+        _paddings_row                         !: Gtk.ListBoxRow
 
-        private _scales                      !: Gtk.Scale[]
+        private _scales                       !: Gtk.Scale[]
+        private _switches                     !: Gtk.Switch[]
 
         _init () {
             super._init ()
@@ -50,6 +53,10 @@ export default GObject.registerClass (
                 this._padding_left_scale,
                 this._padding_right_scale,
                 this._padding_top_scale,
+            ]
+            this._switches = [
+                this._rounded_in_maximized_switch,
+                this._rounded_in_fullscreen_switch,
             ]
         }
 
@@ -63,11 +70,11 @@ export default GObject.registerClass (
         }
 
         watch (on_cfg_changed: (cfg: RoundedCornersCfg) => void) {
-            connections
-                .get ()
-                .connect (this._rounded_in_maximized_switch, 'state-set', () =>
+            for (const _switch of this._switches) {
+                connections.get ().connect (_switch, 'state-set', () => {
                     on_cfg_changed (this.cfg)
-                )
+                })
+            }
             for (const scale of this._scales) {
                 connections.get ().connect (scale, 'value-changed', () => {
                     on_cfg_changed (this.cfg)
@@ -91,7 +98,10 @@ export default GObject.registerClass (
                     top: this._padding_top_scale.get_value (),
                     bottom: this._padding_bottom_scale.get_value (),
                 },
-                keep_rounded_corners: this._rounded_in_maximized_switch.active,
+                keep_rounded_corners: {
+                    maximized: this._rounded_in_maximized_switch.active,
+                    fullscreen: this._rounded_in_fullscreen_switch.active,
+                },
                 border_radius: this._border_radius_scale.get_value (),
                 smoothing: this._smoothing_scale.get_value (),
                 enabled: true,
@@ -99,7 +109,9 @@ export default GObject.registerClass (
         }
 
         set cfg (cfg: RoundedCornersCfg) {
-            this._rounded_in_maximized_switch.active = cfg.keep_rounded_corners
+            const { maximized, fullscreen } = cfg.keep_rounded_corners
+            this._rounded_in_maximized_switch.active = maximized
+            this._rounded_in_fullscreen_switch.active = fullscreen
             this._border_radius_scale.set_value (cfg.border_radius)
             this._smoothing_scale.set_value (cfg.smoothing)
             this._padding_left_scale.set_value (cfg.padding.left)

@@ -15,7 +15,10 @@ export class Padding {
 
 /** Store into settings, rounded corners configuration  */
 export interface RoundedCornersCfg {
-    keep_rounded_corners: boolean
+    keep_rounded_corners: {
+        maximized: boolean
+        fullscreen: boolean
+    }
     border_radius: number
     smoothing: number
     padding: Padding

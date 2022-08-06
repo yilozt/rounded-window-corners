@@ -169,3 +169,24 @@ export const ChoiceRoundedCornersCfg = (
     custom_cfg.border_radius = global_cfg.border_radius
     return custom_cfg
 }
+
+/**
+ * Decide whether windows should have rounded corners when it has been
+ * maximized & fullscreen according to RoundedCornersCfg
+ */
+export function ShouldHasRoundedCorners (
+    win: Meta.Window,
+    cfg: types.RoundedCornersCfg
+): boolean {
+    let should_has_rounded_corners = false
+
+    const maximized = win.maximized_horizontally || win.maximized_vertically
+    const fullscreen = win.fullscreen
+
+    should_has_rounded_corners =
+        (!maximized && !fullscreen) ||
+        (maximized && cfg.keep_rounded_corners.maximized) ||
+        (fullscreen && cfg.keep_rounded_corners.fullscreen)
+
+    return should_has_rounded_corners
+}

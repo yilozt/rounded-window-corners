@@ -20,6 +20,7 @@ import { RestoreBackgroundMenu }       from './utils/ui'
 import { SetupBackgroundMenu }         from './utils/ui'
 import { WindowScaleFactor }           from './utils/ui'
 import { ChoiceRoundedCornersCfg }     from './utils/ui'
+import { ShouldHasRoundedCorners }     from './utils/ui'
 import Connections                     from './utils/connections'
 import settings                        from './utils/settings'
 import Services                        from './dbus/services'
@@ -126,11 +127,7 @@ export class Extension {
                     settings ().custom_rounded_corner_settings,
                     window
                 )
-                const maximized =
-                    window.maximized_horizontally ||
-                    window.maximized_vertically ||
-                    window.fullscreen
-                has_rounded_corners = cfg.keep_rounded_corners || !maximized
+                has_rounded_corners = ShouldHasRoundedCorners (window, cfg)
             }
             if (shadow && has_rounded_corners) {
                 const source = shadow

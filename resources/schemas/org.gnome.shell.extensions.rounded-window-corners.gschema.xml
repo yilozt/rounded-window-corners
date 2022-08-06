@@ -4,6 +4,10 @@
     id="org.gnome.shell.extensions.rounded-window-corners"
     path="/org/gnome/shell/extensions/rounded-window-corners/"
   >
+
+    <key name="settings-version" type="u">
+      <default>4</default>
+    </key>
     
     <key name="black-list" type="as">
       <default>["qq.exe", "tim.exe"]</default>
@@ -49,9 +53,12 @@
             'top': &lt;uint32 1&gt;,
             'bottom': &lt;uint32 1&gt;
           }&gt;,
-          'keep_rounded_corners': &lt;false&gt;,
+          'keep_rounded_corners': &lt;{
+            'maximized': &lt;false&gt;,
+            'fullscreen': &lt;false&gt;
+          }&gt;,
           'border_radius': &lt;uint32 12&gt;,
-          'smoothing': &lt;1.0&gt;
+          'smoothing': &lt;0.5&gt;
         }
       </default>
     </key>

@@ -653,21 +653,6 @@ export class RoundedCornersManager {
         this._update_all_shadow_actor_style ()
     }
 
-    /** Skip effect window is maximized */
-    private _setup_effect_skip_property (
-        keep_rounded_corners: boolean,
-        win: Window,
-        effect: RoundedCornersEffectType
-    ): boolean {
-        const maximized =
-            win.maximized_horizontally ||
-            win.maximized_vertically ||
-            win.fullscreen
-        const skip = !keep_rounded_corners && maximized
-        effect.skip = skip
-        return skip
-    }
-
     // ------------------------------------------------------- [signal handlers]
 
     /**
@@ -719,13 +704,12 @@ export class RoundedCornersManager {
 
             const cfg = this._get_rounded_corners_cfg (win)
 
-            // Skip rounded corners when
-            // window is maximized & 'Keep Rounded Corners' matched to disabled
-            this._setup_effect_skip_property (
-                cfg.keep_rounded_corners,
-                win,
-                effect
-            )
+            // Skip rounded corners when window is fullscreen & maximize
+            const skip = !UI.ShouldHasRoundedCorners (win, cfg)
+            effect.skip = skip
+            if (skip) {
+                return
+            }
             effect.update_uniforms (
                 UI.WindowScaleFactor (win),
                 cfg,
