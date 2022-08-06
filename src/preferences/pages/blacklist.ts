@@ -27,17 +27,22 @@ export default GObject.registerClass (
         private _add_row_btn      !: Gtk.Button
 
         /** Store value of settings */
-        private black_list: Array<string> = []
+        private black_list        !: string[]
 
         _init () {
             super._init ()
-            this.black_list = []
+            this.black_list = settings ().black_list
 
             // Read blacklist from settings, and add it to this._black_list
-            settings ().black_list.forEach ((name) => this.on_add_row (name))
+            this.black_list.forEach ((name) => this.on_add_row (name))
 
             connections.get ().connect (this._add_row_btn, 'clicked', () => {
+                if (this.black_list.includes ('')) {
+                    return
+                }
+
                 this.on_add_row ()
+                this.black_list.push ('')
                 settings ().black_list = this.black_list
             })
 
@@ -69,11 +74,6 @@ export default GObject.registerClass (
 
         /** Add a row to black list */
         private on_add_row (title = '') {
-            if (this.black_list.includes (title)) {
-                this.show_err_msg (title)
-                return
-            }
-
             const handlers: AppRowHandler = {
                 on_delete: (row, title) => this.on_delete_row (row, title),
                 on_title_changed: (old_title, new_title) =>
@@ -88,7 +88,6 @@ export default GObject.registerClass (
             }
 
             this._black_list_group.append (row)
-            this.black_list.push (title)
         }
 
         /** Called when title of item need to changed  */
