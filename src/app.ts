@@ -5,7 +5,7 @@ import { Source, timeout_add_seconds } from '@gi/GLib'
 import { MonitorManager }              from '@gi/Meta'
 
 // gnome-shell modules
-import { Workspace }                   from '@imports/ui/workspace'
+import { WindowPreview }               from '@imports/ui/windowPreview'
 import { WorkspaceGroup }              from '@imports/ui/workspaceAnimation'
 import { WindowManager }               from '@imports/ui/windowManager'
 import BackgroundMenu                  from '@imports/ui/backgroundMenu'
@@ -14,7 +14,7 @@ import { sessionMode }                 from '@imports/ui/main'
 // local modules
 import constants                       from './utils/constants'
 import { RoundedCornersManager }       from './manager/rounded-corners-manager'
-import { _log as log }                 from './utils/log'
+import { stackMsg, _log as log }       from './utils/log'
 import { AddBackgroundMenuItem }       from './utils/ui'
 import { RestoreBackgroundMenu }       from './utils/ui'
 import { SetupBackgroundMenu }         from './utils/ui'
@@ -26,7 +26,6 @@ import Services                        from './dbus/services'
 
 // types, which will be removed in output
 import { WM }                          from '@gi/Shell'
-import { WindowPreview }               from '@imports/ui/windowPreview'
 import { RoundedCornersCfg }           from './utils/types'
 import { Window, WindowActor }         from '@gi/Meta'
 import { global }                      from '@global'
@@ -34,10 +33,10 @@ import { global }                      from '@global'
 // --------------------------------------------------------------- [end imports]
 export class Extension {
     // The methods of gnome-shell to monkey patch
-    private _orig_add_window_clone !: (_: Window) => WindowPreview
-    private _switch_ws_patch       !: () => void
-    private _size_changed_patch    !: (wm: WM, actor: WindowActor) => void
-    private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
+    private _orig_add_window     !: (_: Window) => void
+    private _orig_create_windows !: () => void
+    private _orig_size_changed   !: (wm: WM, actor: WindowActor) => void
+    private _add_background_menu !: typeof BackgroundMenu.addBackgroundMenu
 
     private _services: Services | null = null
     private _rounded_corners_manager: RoundedCornersManager | null = null
@@ -52,9 +51,9 @@ export class Extension {
     enable () {
         // Restore original methods, those methods will be restore when
         // extensions is disabled
-        this._orig_add_window_clone = Workspace.prototype._addWindowClone
-        this._switch_ws_patch = WorkspaceGroup.prototype._createWindows
-        this._size_changed_patch = WindowManager.prototype._sizeChangeWindowDone
+        this._orig_add_window = WindowPreview.prototype._addWindow
+        this._orig_create_windows = WorkspaceGroup.prototype._createWindows
+        this._orig_size_changed = WindowManager.prototype._sizeChangeWindowDone
         this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._services = new Services ()
@@ -111,9 +110,27 @@ export class Extension {
         // When there is new window added into overview, this function will be
         // called. We need add our shadow actor and blur actor of rounded
         // corners window into overview.
-        Workspace.prototype._addWindowClone = function (window) {
-            const clone = self._orig_add_window_clone.apply (this, [window])
-            const window_container = clone.window_container
+        //
+        WindowPreview.prototype._addWindow = function (window) {
+            self._orig_add_window.apply (this, [window])
+
+            // Make sure patched method only be called in _init() of
+            // WindowPreview
+            // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js
+            // /ui/windowPreview.js#L42
+
+            const stack = stackMsg ()
+            if (
+                stack === undefined ||
+                stack.indexOf ('_updateAttachedDialogs') !== -1 ||
+                stack.indexOf ('addDialog') !== -1
+            ) {
+                return
+            }
+
+            log (`Add shadow for ${window.title} in overview`)
+
+            const window_container = this.window_container
 
             let cfg: RoundedCornersCfg | null = null
             let has_rounded_corners = false
@@ -162,17 +179,15 @@ export class Extension {
                     })
                 })
 
-                clone.insert_child_below (shadow_clone, window_container)
+                this.insert_child_below (shadow_clone, window_container)
             }
-
-            return clone
         }
 
         // Just Like the monkey patch when enter overview, need to add shadow
         // actor and blur actor into WorkspaceGroup to see them when switching
         // workspace
         WorkspaceGroup.prototype._createWindows = function () {
-            self._switch_ws_patch.apply (this)
+            self._orig_create_windows.apply (this)
 
             this._windowRecords.forEach (({ windowActor: actor, clone }) => {
                 const win = actor.meta_window
@@ -223,7 +238,7 @@ export class Extension {
             shell_wm,
             actor
         ) {
-            self._size_changed_patch.apply (this, [shell_wm, actor])
+            self._orig_size_changed.apply (this, [shell_wm, actor])
             // Update shadow actor
             if (!self._rounded_corners_manager) {
                 return
@@ -243,9 +258,9 @@ export class Extension {
 
     disable () {
         // Restore patched methods
-        Workspace.prototype._addWindowClone = this._orig_add_window_clone
-        WorkspaceGroup.prototype._createWindows = this._switch_ws_patch
-        WindowManager.prototype._sizeChangeWindowDone = this._size_changed_patch
+        WindowPreview.prototype._addWindow = this._orig_add_window
+        WorkspaceGroup.prototype._createWindows = this._orig_create_windows
+        WindowManager.prototype._sizeChangeWindowDone = this._orig_size_changed
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
         // Remove main loop sources
