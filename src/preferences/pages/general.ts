@@ -11,6 +11,7 @@ import { template_url }    from '../../utils/io'
 import { _log }            from '../../utils/log'
 import RoundedCornersItems from '../widgets/rounded-corners-item'
 import EditShadowWindow    from '../widgets/edit-shadow-window'
+import ResetDialog         from '../widgets/reset-dialog'
 
 // types
 import * as Gtk            from '@gi/Gtk'
@@ -32,6 +33,7 @@ export default GObject.registerClass (
             'border_color_button',
             'edit_shadow_row',
             'applications_group',
+            'reset_preferences_btn',
         ],
     },
     class extends Gtk.Box {
@@ -44,6 +46,7 @@ export default GObject.registerClass (
         private _border_color_button               !: Gtk.ColorButton
         private _edit_shadow_row                   !: Gtk.ListBoxRow
         private _applications_group                !: Gtk.ListBox
+        private _reset_preferences_btn             !: Gtk.Button
 
         private config_items                       !: _Items
         private edit_shadow_window                 !: _Win
@@ -125,6 +128,12 @@ export default GObject.registerClass (
                         }
                     }
                 )
+
+            connections
+                .get ()
+                .connect (this._reset_preferences_btn, 'clicked', () => {
+                    new ResetDialog ().show ()
+                })
         }
 
         vfunc_root (): void {
