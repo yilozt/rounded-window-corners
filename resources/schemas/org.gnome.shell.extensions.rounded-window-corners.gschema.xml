@@ -67,10 +67,10 @@
       <default>
         {
           'horizontal_offset': 0,
-          'vertical_offset': 41,
-          'blur_offset': 38,
-          'spread_radius': -15,
-          'opacity': 53
+          'vertical_offset': 4,
+          'blur_offset': 28,
+          'spread_radius': 4,
+          'opacity': 60
         }
       </default>
     </key>
@@ -80,10 +80,10 @@
       <default>
         {
           'horizontal_offset': 0,
-          'vertical_offset': 10,
-          'blur_offset': 9,
-          'spread_radius': -5,
-          'opacity': 62
+          'vertical_offset': 2,
+          'blur_offset': 12,
+          'spread_radius': -1,
+          'opacity': 65
         }
       </default>
     </key>
