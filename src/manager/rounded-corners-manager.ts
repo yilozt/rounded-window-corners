@@ -74,7 +74,9 @@ export class RoundedCornersManager {
         const wm = global.window_manager
 
         // Try to add rounded corners effect to all windows
-        for (const actor of global.get_window_actors ()) {
+        const window_actors = global.get_window_actors ()
+        _log (`Windows count when enable: ${window_actors.length}`)
+        for (const actor of window_actors) {
             this._add_effect (actor)
         }
 

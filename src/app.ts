@@ -238,6 +238,16 @@ export class Extension {
             AddBackgroundMenuItem (actor._backgroundMenu)
         }
 
+        // Gnome-shell will not disable extensions when logout/shutdown/restart
+        // system, it means that the signal handlers will not be cleaned when
+        // gnome-shell is closing.
+        //
+        // Now clear all resources manually before gnome-shell closes
+        Connections.get ().connect (global.display, 'closing', () => {
+            log ('Clear all resources because gnome-shell is shutdown')
+            this.disable ()
+        })
+
         log ('Enabled')
     }
 
