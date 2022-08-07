@@ -34,6 +34,7 @@ export type SchemasKeys =
     | 'debug-mode'
     | 'border-width'
     | 'border-color'
+    | 'settings-version'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -50,6 +51,7 @@ class Settings {
     unfocused_shadow               !: BoxShadow
     debug_mode                     !: boolean
     border_width                   !: number
+    settings_version               !: number
     border_color                   !: [number, number, number, number]
 
     /** GSettings, which used to store and load settings */
@@ -71,23 +73,7 @@ class Settings {
 
             // Define getter and setter for keys
             Object.defineProperty (this, key.replace (/-/g, '_'), {
-                get: () => {
-                    const v = this.g_settings.get_value (key).recursiveUnpack ()
-                    if (type_of_keys[key] === 'a{sv}') {
-                        // Mix default value for type a{sv}, to avoid missing
-                        // props
-                        type Obj = { [prop: string]: unknown }
-                        const default_val = (this.g_settings
-                            .get_default_value (key)
-                            ?.recursiveUnpack () ?? {}) as Obj
-                        return {
-                            ...default_val,
-                            ...(v as Obj),
-                        }
-                    } else {
-                        return v
-                    }
-                },
+                get: () => this.g_settings.get_value (key).recursiveUnpack (),
                 set: (val) => {
                     const variant =
                         type_of_keys[key] == 'a{sv}'
@@ -97,6 +83,9 @@ class Settings {
                 },
             })
         })
+
+        /** Port rounded corners settings to new version  */
+        this._fix ()
     }
 
     /**
@@ -121,7 +110,7 @@ class Settings {
      * @param val Javascript object to convert
      * @returns A GLib.Variant with type `a{sv}`
      */
-    _pack_val (val: number | boolean | string | unknown): GLib.Variant {
+    private _pack_val (val: number | boolean | string | unknown): GLib.Variant {
         if (val instanceof Object) {
             const packed: { [prop: string]: GLib.Variant } = {}
             Object.keys (val).forEach ((k) => {
@@ -160,6 +149,58 @@ class Settings {
         }
 
         throw Error ('Unknown val to packed' + val)
+    }
+
+    /**  Fix RoundedCornersCfg when this type has been updated */
+    private _fix_rounded_corners_cfg (
+        default_val: RoundedCornersCfg & { [prop: string]: undefined },
+        val: RoundedCornersCfg & { [prop: string]: undefined }
+    ) {
+        // Added missing props
+        Object.keys (default_val).forEach ((k) => {
+            if (val[k] === undefined) {
+                val[k] = default_val[k]
+            }
+        })
+
+        // keep_rounded_corners has been update to object type in v5
+        if (typeof val['keep_rounded_corners'] === 'boolean') {
+            const keep_rounded_corners = {
+                ...default_val['keep_rounded_corners'],
+                maximized: val['keep_rounded_corners'],
+            }
+            val['keep_rounded_corners'] = keep_rounded_corners
+        }
+    }
+
+    /** Port Settings to newer version in here when changed 'a{sv}' types */
+    private _fix () {
+        const VERSION = 5
+        if (this.settings_version == VERSION) {
+            return
+        }
+        this.settings_version = VERSION
+
+        type _Cfg = RoundedCornersCfg & { [p: string]: undefined }
+
+        const key: SchemasKeys = 'global-rounded-corner-settings'
+        const default_val = this.g_settings
+            .get_default_value (key)
+            ?.recursiveUnpack () as _Cfg
+
+        // Fix global-rounded-corners-settings
+        const global_cfg = this.global_rounded_corner_settings as _Cfg
+        this._fix_rounded_corners_cfg (default_val, global_cfg)
+        this.global_rounded_corner_settings = global_cfg
+
+        // Fix custom-rounded-corner-settings
+        const custom_cfg = this.custom_rounded_corner_settings
+        Object.keys (custom_cfg).forEach ((k) => {
+            this._fix_rounded_corners_cfg (default_val, custom_cfg[k] as _Cfg)
+        })
+        this.custom_rounded_corner_settings = custom_cfg
+
+        log (`[RoundedWindowCorners] Update Settings to v${VERSION}`)
     }
 }
 
