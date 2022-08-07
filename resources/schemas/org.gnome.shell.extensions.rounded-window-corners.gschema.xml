@@ -6,7 +6,7 @@
   >
     
     <key name="black-list" type="as">
-      <default>["qq.exe", "tim.exe"]</default>
+      <default>[]</default>
       <summary>window here will not be rounded</summary>
       <description>
         The contents of the list represent the instance part of the window's
