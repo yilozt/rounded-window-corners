@@ -257,7 +257,14 @@ export class RoundedCornersManager {
         })
         ;(shadow.first_child as Bin).add_style_class_name ('shadow')
 
-        this._update_shadow_actor_style (actor.meta_window, shadow)
+        this._update_shadow_actor_style (
+            actor.meta_window,
+            shadow,
+            this.global_rounded_corners?.border_radius,
+            actor.meta_window.appears_focused
+                ? settings ().focused_shadow
+                : settings ().unfocused_shadow
+        )
 
         // We have to clip the shadow because of this issues:
         // https://gitlab.gnome.org/GNOME/gnome-shell/-/issues/4474
@@ -427,6 +434,7 @@ export class RoundedCornersManager {
 
             // Update shadows and rounded corners bounds
             this.on_size_changed (actor)
+            this._on_focus_changed (actor.meta_window)
 
             // Connect signals of window, those signals will be disconnected
             // when window is destroyed
