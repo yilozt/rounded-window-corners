@@ -147,10 +147,6 @@ export default registerClass (
 
         // signal handles
 
-        _hide_window_cb () {
-            this.hide ()
-        }
-
         on_value_changed () {
             this.update_cfg ()
             this.update_style ()

@@ -5,12 +5,14 @@ import * as Gio            from '@gi/Gio'
 
 // local modules
 import settings            from '../../utils/settings'
+import { SchemasKeys }     from '../../utils/settings'
 import connections         from '../../utils/connections'
 import { list_children }   from '../../utils/prefs'
 import { template_url }    from '../../utils/io'
 import { _log }            from '../../utils/log'
 import RoundedCornersItems from '../widgets/rounded-corners-item'
 import EditShadowWindow    from '../widgets/edit-shadow-window'
+import ResetDialog         from '../widgets/reset-dialog'
 
 // types
 import * as Gtk            from '@gi/Gtk'
@@ -32,6 +34,7 @@ export default GObject.registerClass (
             'border_color_button',
             'edit_shadow_row',
             'applications_group',
+            'reset_preferences_btn',
         ],
     },
     class extends Gtk.Box {
@@ -44,17 +47,25 @@ export default GObject.registerClass (
         private _border_color_button               !: Gtk.ColorButton
         private _edit_shadow_row                   !: Gtk.ListBoxRow
         private _applications_group                !: Gtk.ListBox
+        private _reset_preferences_btn             !: Gtk.Button
 
         private config_items                       !: _Items
-        private edit_shadow_window                 !: _Win
 
         _init () {
             super._init ()
 
-            this.edit_shadow_window = new EditShadowWindow ()
             this.config_items = new RoundedCornersItems ()
 
             this.build_ui ()
+
+            connections
+                .get ()
+                .connect (
+                    settings ().g_settings,
+                    'changed',
+                    (settings: Gio.Settings, key: string) =>
+                        this._on_settings_changed (key)
+                )
 
             settings ().bind (
                 'debug-mode',
@@ -125,6 +136,12 @@ export default GObject.registerClass (
                         }
                     }
                 )
+
+            connections
+                .get ()
+                .connect (this._reset_preferences_btn, 'clicked', () => {
+                    new ResetDialog ().show ()
+                })
         }
 
         vfunc_root (): void {
@@ -155,17 +172,42 @@ export default GObject.registerClass (
 
         /** Called when click 'Window Shadow' action row */
         _show_edit_shadow_window_cb () {
-            const win = this.root as Gtk.Window
-            this.edit_shadow_window.application = win.application
-            this.edit_shadow_window.present ()
-            win.hide ()
-            this.edit_shadow_window.connect ('close-request', () => {
-                win.show ()
-                this.edit_shadow_window.hide ()
+            const root = this.root as Gtk.Window
+            const win = new EditShadowWindow ()
+            win.application = root.application
+            win.present ()
+            root.hide ()
+            win.connect ('close-request', () => {
+                root.show ()
+                win.destroy ()
             })
+        }
+
+        /** Update UI when settings changed  */
+        private _on_settings_changed (key: string) {
+            switch (key as SchemasKeys) {
+            case 'border-color':
+                {
+                    const color = settings ().border_color
+                    this._border_color_button.rgba = new Gdk.RGBA ({
+                        red: color[0],
+                        green: color[1],
+                        blue: color[2],
+                        alpha: color[3],
+                    })
+                }
+                break
+            case 'border-width':
+                this._border_width_ajustment.value = settings ().border_width
+                break
+            case 'global-rounded-corner-settings':
+                this.config_items.cfg =
+                        settings ().global_rounded_corner_settings
+                break
+            default:
+            }
         }
     }
 )
 
 type _Items = InstanceType<typeof RoundedCornersItems>
-type _Win = InstanceType<typeof EditShadowWindow>

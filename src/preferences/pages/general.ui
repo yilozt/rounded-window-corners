@@ -271,6 +271,24 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="halign">start</property>
+        <property name="label" translatable="yes">Reset Preferences</property>
+        <style>
+          <class name="heading" />
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="reset_preferences_btn">
+        <property name="label">Reset Preferences</property>
+        <property name="halign">start</property>
+        <style>
+          <class name="destructive-action"/>
+        </style>
+      </object>
+    </child>
   </template>
 
   <object class="GtkAdjustment" id="border_width_ajustment">

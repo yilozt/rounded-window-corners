@@ -10,3 +10,15 @@
 .rotated {
     transform: rotate(90deg);
 }
+
+.dialog-vbox {
+    padding: 48px;
+}
+
+.dialog-vbox .heading {
+    padding-bottom: 24px;
+}
+
+.dialog-vbox checkbutton {
+    padding-right: 12px;
+}
