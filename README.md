@@ -13,6 +13,8 @@
 - Black list for applications which draw window decoration itself
 - Custom shadow for rounded corners windows
 - Skip libadwaita / libhandy application
+- [Superelliptical](https://en.wikipedia.org/wiki/Superellipse) shape for rounded corners, thanks to [@YuraIz](https://github.com/YuraIz) 
+- A simple reset preferences dialog
 
 ## Compatibility
 
