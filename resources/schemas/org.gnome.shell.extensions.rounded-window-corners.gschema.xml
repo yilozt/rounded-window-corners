@@ -57,8 +57,8 @@
             'maximized': &lt;false&gt;,
             'fullscreen': &lt;false&gt;
           }&gt;,
-          'border_radius': &lt;uint32 12&gt;,
-          'smoothing': &lt;0.5&gt;
+          'border_radius': &lt;uint32 8&gt;,
+          'smoothing': &lt;0&gt;
         }
       </default>
     </key>
