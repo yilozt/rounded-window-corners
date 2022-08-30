@@ -392,6 +392,37 @@ export class RoundedCornersManager {
         child.queue_redraw ()
     }
 
+    private _setup_rounded_corners_effect (actor: WindowActor) {
+        const _setup_effect = (actor_to_add_effect: Clutter.Actor) => {
+            const effect = new RoundedCornersEffect ()
+            const name = constants.ROUNDED_CORNERS_EFFECT
+
+            actor_to_add_effect.add_effect_with_name (name, effect)
+
+            // Update shadows and rounded corners bounds
+            this.on_size_changed (actor)
+            this._on_focus_changed (actor.meta_window)
+        }
+
+        const win = actor.meta_window
+        if (win.get_client_type () === WindowClientType.X11) {
+            // Add rounded corners to surface actor for X11 client
+            if (actor.first_child) {
+                _setup_effect (actor.first_child)
+            } else {
+                // Surface Actor may not ready in some time
+                const id = actor.connect ('notify::first-child', () => {
+                    // now it's ready
+                    _setup_effect (actor.first_child)
+                    actor.disconnect (id)
+                })
+            }
+        } else {
+            // Add rounded corners to WindowActor for Wayland client
+            _setup_effect (actor)
+        }
+    }
+
     /**
      * Add rounded corners effect and setup shadow actor for a window actor
      * @param actor - window to add effect
@@ -409,79 +440,53 @@ export class RoundedCornersManager {
         const win = actor.meta_window
 
         // Add rounded corners to window actor when actor_to_setup is ready
-        const ready = (actor_to_add_effect: Clutter.Actor) => {
-            if (!this.connections || !this.rounded_windows) {
-                return
-            }
-
-            // Add rounded corers to window
-            {
-                const effect = new RoundedCornersEffect ()
-                const name = constants.ROUNDED_CORNERS_EFFECT
-
-                actor_to_add_effect.add_effect_with_name (name, effect)
-            }
-
-            // The shadow of window
-            const shadow = this._create_shadow (actor)
-
-            const bindings = this._bind_shadow_actor_props (actor, shadow)
-
-            this.rounded_windows.set (win, { shadow, app_type, bindings })
-
-            // turn off original shadow for x11 window
-            if (actor.shadow_mode !== undefined) {
-                actor.shadow_mode = ShadowMode.FORCED_OFF
-            }
-
-            // Update shadows and rounded corners bounds
-            this.on_size_changed (actor)
-            this._on_focus_changed (actor.meta_window)
-
-            // Connect signals of window, those signals will be disconnected
-            // when window is destroyed
-
-            // Update uniform variables when changed window size
-            const source = actor.meta_window
-
-            this.connections.connect (actor, 'notify::size', () => {
-                this.on_size_changed (actor)
-            })
-
-            this.connections.connect (
-                actor.get_texture (),
-                'size-changed',
-                () => {
-                    this.on_size_changed (actor)
-                }
-            )
-
-            // Update shadow actor when focus of window has changed.
-            this.connections.connect (source, 'notify::appears-focused', () => {
-                this._on_focus_changed (source)
-            })
-
-            // When window is switch between different monitor,
-            // 'workspace-changed' signal emit.
-            this.connections.connect (source, 'workspace-changed', () => {
-                const shadow = this.rounded_windows?.get (source)?.shadow
-                if (shadow) {
-                    _log ('Recompute style of shadow...')
-                    this._update_shadow_actor_style (actor.meta_window, shadow)
-                }
-            })
-        }
-
-        if (!this.connections) {
+        if (!this.connections || !this.rounded_windows) {
             return
         }
-        UI.WhenSurfaceActorIsReady (this.connections, actor, () => {
-            if (win.get_client_type () == WindowClientType.X11) {
-                ready (actor.first_child)
-            } else {
-                ready (actor)
+
+        // The shadow of window
+        const shadow = this._create_shadow (actor)
+
+        const bindings = this._bind_shadow_actor_props (actor, shadow)
+
+        this.rounded_windows.set (win, { shadow, app_type, bindings })
+
+        // turn off original shadow for x11 window
+        if (actor.shadow_mode !== undefined) {
+            actor.shadow_mode = ShadowMode.FORCED_OFF
+        }
+
+        // Connect signals of window, those signals will be disconnected
+        // when window is destroyed
+
+        // Update uniform variables when changed window size
+        const source = actor.meta_window
+
+        this.connections.connect (actor, 'notify::size', () => {
+            this.on_size_changed (actor)
+        })
+
+        this.connections.connect (actor.get_texture (), 'size-changed', () => {
+            this.on_size_changed (actor)
+        })
+
+        // Update shadow actor when focus of window has changed.
+        this.connections.connect (source, 'notify::appears-focused', () => {
+            this._on_focus_changed (source)
+        })
+
+        // When window is switch between different monitor,
+        // 'workspace-changed' signal emit.
+        this.connections.connect (source, 'workspace-changed', () => {
+            const shadow = this.rounded_windows?.get (source)?.shadow
+            if (shadow) {
+                _log ('Recompute style of shadow...')
+                this._update_shadow_actor_style (actor.meta_window, shadow)
             }
         })
+
+        // Add rounded corers to window
+        this._setup_rounded_corners_effect (actor)
     }
 
     /**`

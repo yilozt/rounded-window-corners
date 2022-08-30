@@ -76,34 +76,6 @@ export default registerClass (
             this._init_uniforms ()
         }
 
-        vfunc_paint_target (node: PaintNode, ctx: PaintContext) {
-            this.get_pipeline ()?.set_layer_filters (
-                0,
-                PipelineFilter.LINEAR_MIPMAP_LINEAR,
-                PipelineFilter.NEAREST
-            )
-
-            // Reset to default blend mode, so that we can handle opacity
-            // of window.
-            //
-            // GLSLEffect has change this settings, when change opacity of
-            // clutter actor which apply GLSLEffect, it will make it looks like
-            // more dimmed:
-            //
-            // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/src/
-            // shell-glsl-effect.c#L122
-            //
-            // Now changed it to default settings:
-            //
-            // https://developer-old.gnome.org/cogl-2.0-experimental/1.22/
-            // cogl-2.0-experimental-Pipeline.html#cogl-pipeline-set-blend
-
-            this.get_pipeline ()?.set_blend (
-                'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
-            )
-            super.vfunc_paint_target (node, ctx)
-        }
-
         /**
          * Used to update uniform variants of shader
          * @param corners_cfg   - Rounded corners settings of window

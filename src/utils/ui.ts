@@ -126,31 +126,6 @@ export const RestoreBackgroundMenu = () => {
     }
 }
 
-/** When surface actor of Meta.WindowActor is ready, call the ready callback  */
-export const WhenSurfaceActorIsReady = (
-    connections: Connections,
-    actor: Meta.WindowActor,
-    ready: () => void
-) => {
-    const win = actor.meta_window
-    if (win.get_client_type () === Meta.WindowClientType.X11) {
-        // Add rounded corners to surface actor for X11 client
-        if (actor.first_child) {
-            ready ()
-        } else {
-            // Surface Actor may not ready in some time
-            connections.connect (actor, 'notify::first-child', () => {
-                connections.disconnect (actor, 'notify::first-child')
-                // now it's ready
-                ready ()
-            })
-        }
-    } else {
-        // Add rounded corners to WindowActor for Wayland client
-        ready ()
-    }
-}
-
 /** Choice Rounded Corners Settings for window  */
 export const ChoiceRoundedCornersCfg = (
     global_cfg: types.RoundedCornersCfg,
