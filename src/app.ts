@@ -1,35 +1,36 @@
 // imports.gi
-import { Point }                       from '@gi/Graphene'
-import { BindConstraint, Clone }       from '@gi/Clutter'
-import { Source, timeout_add_seconds } from '@gi/GLib'
-import { MonitorManager }              from '@gi/Meta'
+import { Point }                        from '@gi/Graphene'
+import { Actor, BindConstraint, Clone } from '@gi/Clutter'
+import { Source, timeout_add_seconds }  from '@gi/GLib'
+import { MonitorManager }               from '@gi/Meta'
 
 // gnome-shell modules
-import { WindowPreview }               from '@imports/ui/windowPreview'
-import { WorkspaceGroup }              from '@imports/ui/workspaceAnimation'
-import { WindowManager }               from '@imports/ui/windowManager'
-import BackgroundMenu                  from '@imports/ui/backgroundMenu'
-import { sessionMode }                 from '@imports/ui/main'
+import { WindowPreview }                from '@imports/ui/windowPreview'
+import { WorkspaceGroup }               from '@imports/ui/workspaceAnimation'
+import { WindowManager }                from '@imports/ui/windowManager'
+import BackgroundMenu                   from '@imports/ui/backgroundMenu'
+import { sessionMode }                  from '@imports/ui/main'
 
 // local modules
-import constants                       from './utils/constants'
-import { RoundedCornersManager }       from './manager/rounded-corners-manager'
-import { stackMsg, _log as log }       from './utils/log'
-import { AddBackgroundMenuItem }       from './utils/ui'
-import { RestoreBackgroundMenu }       from './utils/ui'
-import { SetupBackgroundMenu }         from './utils/ui'
-import { WindowScaleFactor }           from './utils/ui'
-import { ChoiceRoundedCornersCfg }     from './utils/ui'
-import { ShouldHasRoundedCorners }     from './utils/ui'
-import Connections                     from './utils/connections'
-import settings                        from './utils/settings'
-import Services                        from './dbus/services'
+import constants                        from './utils/constants'
+import { RoundedCornersManager }        from './manager/rounded-corners-manager'
+import { stackMsg, _log as log }        from './utils/log'
+import { AddBackgroundMenuItem }        from './utils/ui'
+import { RestoreBackgroundMenu }        from './utils/ui'
+import { SetupBackgroundMenu }          from './utils/ui'
+import { WindowScaleFactor }            from './utils/ui'
+import { ChoiceRoundedCornersCfg }      from './utils/ui'
+import { ShouldHasRoundedCorners }      from './utils/ui'
+import Connections                      from './utils/connections'
+import settings                         from './utils/settings'
+import Services                         from './dbus/services'
+import linearFilterEffect               from './effect/linear-filter-effect'
 
 // types, which will be removed in output
-import { WM }                          from '@gi/Shell'
-import { RoundedCornersCfg }           from './utils/types'
-import { Window, WindowActor }         from '@gi/Meta'
-import { global }                      from '@global'
+import { WM }                           from '@gi/Shell'
+import { RoundedCornersCfg }            from './utils/types'
+import { Window, WindowActor }          from '@gi/Meta'
+import { global }                       from '@global'
 
 // --------------------------------------------------------------- [end imports]
 export class Extension {
@@ -132,6 +133,16 @@ export class Extension {
             log (`Add shadow for ${window.title} in overview`)
 
             const window_container = this.window_container
+
+            // Set linear filter to window preview in overview
+
+            window_container.first_child.add_effect (new linearFilterEffect ())
+            ;(window_container.first_child as any).connectObject (
+                'destroy',
+                (actor: Actor) => {
+                    actor.clear_effects ()
+                }
+            )
 
             let cfg: RoundedCornersCfg | null = null
             let has_rounded_corners = false
