@@ -1,5 +1,4 @@
 // imports.gi
-import { PaintContext, PaintNode } from '@gi/Clutter'
 import * as GObject                from '@gi/GObject'
 import { SnippetHook, GLSLEffect } from '@gi/Shell'
 

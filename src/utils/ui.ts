@@ -12,7 +12,6 @@ import constants           from './constants'
 // types
 import { global }          from '@global'
 import * as types          from './types'
-import { Connections }     from '../utils/connections'
 import { Actor }           from '@gi/Clutter'
 
 // --------------------------------------------------------------- [end imports]

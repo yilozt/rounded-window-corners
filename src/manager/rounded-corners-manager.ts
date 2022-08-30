@@ -399,6 +399,14 @@ export class RoundedCornersManager {
 
             actor_to_add_effect.add_effect_with_name (name, effect)
 
+            this.connections?.connect (
+                actor.get_texture (),
+                'size-changed',
+                () => {
+                    this.on_size_changed (actor)
+                }
+            )
+
             // Update shadows and rounded corners bounds
             this.on_size_changed (actor)
             this._on_focus_changed (actor.meta_window)
@@ -463,10 +471,6 @@ export class RoundedCornersManager {
         const source = actor.meta_window
 
         this.connections.connect (actor, 'notify::size', () => {
-            this.on_size_changed (actor)
-        })
-
-        this.connections.connect (actor.get_texture (), 'size-changed', () => {
             this.on_size_changed (actor)
         })
 

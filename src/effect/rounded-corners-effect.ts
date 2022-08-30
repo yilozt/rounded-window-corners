@@ -1,14 +1,10 @@
 // imports.gi
-import { PipelineFilter }          from '@gi/Cogl'
 import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
 
 // local modules
 import { loadShader }              from '../utils/io'
 import * as types                  from '../utils/types'
-
-// types
-import { PaintNode, PaintContext } from '@gi/Clutter'
 
 // -------------------------------------------------------------- [end imports]
 
