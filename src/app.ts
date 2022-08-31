@@ -9,7 +9,7 @@ import { WindowPreview }                from '@imports/ui/windowPreview'
 import { WorkspaceGroup }               from '@imports/ui/workspaceAnimation'
 import { WindowManager }                from '@imports/ui/windowManager'
 import BackgroundMenu                   from '@imports/ui/backgroundMenu'
-import { sessionMode }                  from '@imports/ui/main'
+import { sessionMode, layoutManager }   from '@imports/ui/main'
 
 // local modules
 import constants                        from './utils/constants'
@@ -62,7 +62,20 @@ export class Extension {
         this._rounded_corners_manager = new RoundedCornersManager ()
 
         this._services.export ()
-        this._enable_effect_managers ()
+
+        // Enable rounded corners effects when gnome-shell is ready
+        //
+        // https://github.com/aunetx/blur-my-shell/blob/
+        //  21d4bbde15acf7c3bf348f7375a12f7b14c3ab6f/src/extension.js#L87
+
+        if (layoutManager._startingUp) {
+            const id = layoutManager.connect ('startup-complete', () => {
+                this._enable_effect_managers ()
+                layoutManager.disconnect (id)
+            })
+        } else {
+            this._enable_effect_managers ()
+        }
 
         // Have to toggle fullscreen for all windows when changed scale factor
         // of windows because rounded-corners-manager may got incorrect frame
