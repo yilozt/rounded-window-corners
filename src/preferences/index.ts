@@ -1,8 +1,8 @@
-import * as Gtk  from '@gi/Gtk'
+import * as Gtk      from '@gi/Gtk'
 
-import General   from './pages/general'
-import Blacklist from './pages/blacklist'
-import Custom    from './pages/custom'
+import { General }   from '@me/preferences/pages/general'
+import { BlackList } from '@me/preferences/pages/blacklist'
+import { Custom }    from '@me/preferences/pages/custom'
 
 type Page = { title: string; icon_name: string; widget: Gtk.Widget }
 
@@ -15,7 +15,7 @@ export const pages = (): Page[] => [
     {
         title: 'Blacklist',
         icon_name: 'action-unavailable-symbolic',
-        widget: new Blacklist (),
+        widget: new BlackList (),
     },
     {
         title: 'Custom',

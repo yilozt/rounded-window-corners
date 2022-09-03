@@ -7,17 +7,17 @@ import { Inspector }   from '@imports/ui/lookingGlass'
 import * as Main       from '@imports/ui/main'
 
 // local modules
-import { _log }        from '../utils/log'
-import { loadFile }    from '../utils/io'
+import { _log }        from '@me/utils/log'
+import { load }        from '@me/utils/io'
 
 // types
 import { WindowActor } from '@gi/Meta'
-
+import { Me }          from '@global'
 // --------------------------------------------------------------- [end imports]
 
-const iface = loadFile (import.meta.url, './iface.xml')
+const iface = load (`${Me.path}/dbus/iface.xml`)
 
-export default class {
+export class Services {
     DBusImpl = Gio.DBusExportedObject.wrapJSObject (iface, this)
 
     /** Pick Window for Preferences Page, export to DBus client */

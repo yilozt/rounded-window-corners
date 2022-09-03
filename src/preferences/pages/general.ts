@@ -1,27 +1,27 @@
 // imports.gi
-import * as GObject        from '@gi/GObject'
-import * as Gdk            from '@gi/Gdk'
-import * as Gio            from '@gi/Gio'
+import * as GObject           from '@gi/GObject'
+import * as Gdk               from '@gi/Gdk'
+import * as Gio               from '@gi/Gio'
 
 // local modules
-import settings            from '../../utils/settings'
-import { SchemasKeys }     from '../../utils/settings'
-import connections         from '../../utils/connections'
-import { list_children }   from '../../utils/prefs'
-import { template_url }    from '../../utils/io'
-import { _log }            from '../../utils/log'
-import RoundedCornersItems from '../widgets/rounded-corners-item'
-import EditShadowWindow    from '../widgets/edit-shadow-window'
-import ResetDialog         from '../widgets/reset-dialog'
+import { settings }           from '@me/utils/settings'
+import { SchemasKeys }        from '@me/utils/settings'
+import { connections }        from '@me/utils/connections'
+import { list_children }      from '@me/utils/prefs'
+import { _log }               from '@me/utils/log'
+import { RoundedCornersItem } from '@me/preferences/widgets/rounded_corners_item'
+import { EditShadowWindow }   from '@me/preferences/widgets/edit_shadow_window'
+import { ResetDialog }        from '@me/preferences/widgets/reset_dialog'
 
 // types
-import * as Gtk            from '@gi/Gtk'
+import * as Gtk               from '@gi/Gtk'
+import { Me }                 from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
-export default GObject.registerClass (
+export const General = GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './general.ui'),
+        Template: `file://${Me.path}/preferences/pages/general.ui`,
         GTypeName: 'RoundedWindowCornersPrefsGeneral',
 
         // Widgets export from template ui
@@ -54,7 +54,7 @@ export default GObject.registerClass (
         _init () {
             super._init ()
 
-            this.config_items = new RoundedCornersItems ()
+            this.config_items = new RoundedCornersItem ()
 
             this.build_ui ()
 
@@ -210,4 +210,4 @@ export default GObject.registerClass (
     }
 )
 
-type _Items = InstanceType<typeof RoundedCornersItems>
+type _Items = InstanceType<typeof RoundedCornersItem>

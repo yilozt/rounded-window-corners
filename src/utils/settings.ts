@@ -208,12 +208,10 @@ class Settings {
 let _settings: Settings | null = null
 
 /** Access _settings by this method */
-const settings = () => {
+export const settings = () => {
     if (_settings != null) {
         return _settings
     }
     _settings = new Settings ()
     return _settings
 }
-
-export default settings

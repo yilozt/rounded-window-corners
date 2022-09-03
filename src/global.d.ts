@@ -12,6 +12,13 @@ declare const imports = {
     gi: {
         Adw: Adw,
     },
+    __modulePath__: string,
+    __moduleName__: string,
+    __parentModule__: string,
+}
+
+declare const Me: {
+    path: string
 }
 
 type PreferencesWindow = Adw.PreferencesWindow

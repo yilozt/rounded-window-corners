@@ -3,17 +3,19 @@ import * as GObject        from '@gi/GObject'
 import * as Gtk            from '@gi/Gtk'
 
 // local Modules
-import { template_url }    from '../../utils/io'
-import { show_err_msg }    from '../../utils/prefs'
-import connections         from '../../utils/connections'
-import constants           from '../../utils/constants'
-import { on_picked, pick } from '../../dbus/client'
+import { show_err_msg }    from '@me/utils/prefs'
+import { connections }     from '@me/utils/connections'
+import { constants }       from '@me/utils/constants'
+import { on_picked, pick } from '@me/dbus/client'
+
+// types
+import { Me }              from '@global'
 
 // ----------------------------------------------------------------- end imports
 
-export default GObject.registerClass (
+export const AppRow = GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './app-row.ui'),
+        Template: `file://${Me.path}/preferences/widgets/app-row.ui`,
         GTypeName: 'AppRow',
         InternalChildren: [
             'wm_class_instance_entry',

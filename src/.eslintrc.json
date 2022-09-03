@@ -44,8 +44,9 @@
     "space-before-function-paren": ["error", "always"],
     "func-call-spacing": ["error", "always"],
     "no-var": ["error"],
-    "max-len": ["error", {
-      "code": 80
+    "max-len": ["warn", {
+      "code": 80,
+      "ignorePattern": "^import"
     }]
   },
   "ignorePatterns": ["global.d.ts"]

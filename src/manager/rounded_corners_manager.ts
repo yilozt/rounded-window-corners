@@ -7,14 +7,14 @@ import { Binding, BindingFlags }  from '@gi/GObject'
 import { ThemeContext }           from '@gi/St'
 
 // local modules
-import * as UI                    from '../utils/ui'
-import { _log }                   from '../utils/log'
-import constants                  from '../utils/constants'
-import ClipShadowEffect           from '../effect/clip_shadow_effect'
-import * as types                 from '../utils/types'
-import settings                   from '../utils/settings'
-import { Connections }            from '../utils/connections'
-import RoundedCornersEffect       from '../effect/rounded-corners-effect'
+import * as UI                    from '@me/utils/ui'
+import { _log }                   from '@me/utils/log'
+import { constants }              from '@me/utils/constants'
+import { ClipShadowEffect }       from '@me/effect/clip_shadow_effect'
+import * as types                 from '@me/utils/types'
+import { settings }               from '@me/utils/settings'
+import { Connections }            from '@me/utils/connections'
+import { RoundedCornersEffect }   from '@me/effect/rounded_corners_effect'
 
 // types, those import statements will be removed in output javascript files.
 import { SchemasKeys }            from '../utils/settings'

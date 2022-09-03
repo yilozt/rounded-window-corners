@@ -11,9 +11,6 @@ export const load = (path: string): string => {
     return contents
 }
 
-export const template_url = (mod_url: string, relative_path: string) =>
-    'file://' + path (mod_url, relative_path)
-
 export const path = (mod_url: string, relative_path: string) => {
     const parent = Gio.File.new_for_uri (mod_url).get_parent ()
 
@@ -24,10 +21,8 @@ export const path = (mod_url: string, relative_path: string) => {
 export const loadFile = (mod_url: string, relative_path: string) =>
     load (path (mod_url, relative_path) ?? '')
 
-export const loadShader = (mod_url: string, relative_path: string) => {
-    let [declarations, main] = loadFile (mod_url, relative_path).split (
-        /^.*?main\(\s?\)\s?/m
-    )
+export const loadShader = (path: string) => {
+    let [declarations, main] = load (path).split (/^.*?main\(\s?\)\s?/m)
 
     declarations = declarations.trim ()
     main = main.trim ().replace (/^[{}]/gm, '').trim ()
