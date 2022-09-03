@@ -8,6 +8,7 @@ import { MonitorManager }             from '@gi/Meta'
 import { WindowPreview }              from '@imports/ui/windowPreview'
 import { WorkspaceGroup }             from '@imports/ui/workspaceAnimation'
 import { WindowManager }              from '@imports/ui/windowManager'
+import { WorkspacesView }             from '@imports/ui/workspacesView'
 import BackgroundMenu                 from '@imports/ui/backgroundMenu'
 import { sessionMode, layoutManager } from '@imports/ui/main'
 
@@ -30,15 +31,17 @@ import { global }                     from '@global'
 // --------------------------------------------------------------- [end imports]
 export class Extension {
     // The methods of gnome-shell to monkey patch
-    private _orig_add_window     !: (_: Window) => void
-    private _orig_create_windows !: () => void
-    private _orig_size_changed   !: (wm: WM, actor: WindowActor) => void
-    private _add_background_menu !: typeof BackgroundMenu.addBackgroundMenu
+    private _orig_add_window       !: (_: Window) => void
+    private _orig_create_windows   !: () => void
+    private _orig_size_changed     !: (wm: WM, actor: WindowActor) => void
+    private _orig_scroll_to_active !: () => void
+    private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
 
     private _services: Services | null = null
     private _rounded_corners_manager: RoundedCornersManager | null = null
 
-    private _timeout_handler = 0
+    private _fs_timeout_id = 0
+    private _shadow_timeout_id = 0
 
     constructor () {
         // Show loaded message in debug mode
@@ -51,6 +54,7 @@ export class Extension {
         this._orig_add_window = WindowPreview.prototype._addWindow
         this._orig_create_windows = WorkspaceGroup.prototype._createWindows
         this._orig_size_changed = WindowManager.prototype._sizeChangeWindowDone
+        this._orig_scroll_to_active = WorkspacesView.prototype._scrollToActive
         this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._services = new Services ()
@@ -92,7 +96,7 @@ export class Extension {
             }
 
             // waiting 3 seconds then restore marked windows.
-            this._timeout_handler = GLib.timeout_add_seconds (0, 3, () => {
+            this._fs_timeout_id = GLib.timeout_add_seconds (0, 3, () => {
                 for (const _win of this._rounded_corners_manager?.windows () ??
                     []) {
                     const win = _win as _Window
@@ -124,6 +128,9 @@ export class Extension {
         WindowPreview.prototype._addWindow = function (window) {
             self._orig_add_window.apply (this, [window])
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            type A = any
+
             // Make sure patched method only be called in _init() of
             // WindowPreview
             // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js
@@ -132,31 +139,17 @@ export class Extension {
             const stack = stackMsg ()
             if (
                 stack === undefined ||
-                stack.indexOf ('_updateAttachedDia_logs') !== -1 ||
-                stack.indexOf ('addDia_log') !== -1
+                stack.indexOf ('_updateAttachedDialogs') !== -1 ||
+                stack.indexOf ('addDialog') !== -1
             ) {
                 return
             }
 
-            _log (`Add shadow for ${window.title} in overview`)
-
-            const window_container = this.window_container
-
-            // Set linear filter to window preview in overview
-
-            window_container.first_child.add_effect (new LinearFilterEffect ())
-            ;(window_container.first_child as any).connectObject (
-                'destroy',
-                (actor: Clutter.Actor) => {
-                    actor.clear_effects ()
-                }
-            )
-
+            // If the window don't have rounded corners and shadows,
+            // just return
             let cfg: RoundedCornersCfg | null = null
             let has_rounded_corners = false
-
             const shadow = self._rounded_corners_manager?.query_shadow (window)
-
             if (shadow) {
                 cfg = UI.ChoiceRoundedCornersCfg (
                     settings ().global_rounded_corner_settings,
@@ -165,39 +158,61 @@ export class Extension {
                 )
                 has_rounded_corners = UI.ShouldHasRoundedCorners (window, cfg)
             }
-            if (shadow && has_rounded_corners) {
-                const source = shadow
-                const pivot_point = new Point ({ x: 0.5, y: 0.5 })
-                const shadow_clone = new Clutter.Clone ({ source, pivot_point })
-
-                for (const prop of ['scale-x', 'scale-y']) {
-                    window_container.bind_property (prop, shadow_clone, prop, 0)
-                }
-
-                for (let i = 0; i < 4; i++) {
-                    shadow_clone.add_constraint (
-                        new Clutter.BindConstraint ({
-                            coordinate: i,
-                            source: window_container,
-                        })
-                    )
-                }
-
-                window_container.connect ('notify::width', () => {
-                    const paddings =
-                        (window_container.width /
-                            window.get_frame_rect ().width) *
-                        (constants.SHADOW_PADDING *
-                            UI.WindowScaleFactor (window))
-
-                    shadow_clone.get_constraints ().forEach ((_c, i) => {
-                        const c = _c as Clutter.BindConstraint
-                        c.offset = i < 2 ? -paddings : paddings * 2
-                    })
-                })
-
-                this.insert_child_below (shadow_clone, window_container)
+            if (!has_rounded_corners || !shadow) {
+                return
             }
+
+            _log (`Add shadow for ${window.title} in overview`)
+
+            const window_container = this.window_container
+            const first_child = window_container.first_child as A
+
+            // Set linear filter to window preview in overview
+            first_child.add_effect (new LinearFilterEffect ())
+
+            const shadow_clone = new Clutter.Clone ({
+                source: shadow,
+                pivot_point: new Point ({ x: 0.5, y: 0.5 }),
+                name: constants.OVERVIEW_SHADOW_ACTOR,
+            })
+            for (const prop of ['scale-x', 'scale-y']) {
+                window_container.bind_property (prop, shadow_clone, prop, 2)
+            }
+
+            this.insert_child_below (shadow_clone, window_container)
+
+            UI.UpdateShadowOfWindowPreview (this)
+            ;(this as A).connectObject ('notify::width', () => {
+                UI.UpdateShadowOfWindowPreview (this)
+            })
+            ;(this as A).connectObject ('drag-end', () => {
+                UI.UpdateShadowOfWindowPreview (this)
+            })
+            first_child.connectObject ('destroy', (actor: Clutter.Actor) => {
+                actor.clear_effects ()
+            })
+        }
+
+        // When we change workspace in overview, this method will be called.
+        // Need to recompute the Clutter.BindConstraint for shadow actor
+        // in overview.
+        //
+        // Relative to #39
+        WorkspacesView.prototype._scrollToActive = function () {
+            self._orig_scroll_to_active.apply (this, [])
+
+            if (self._shadow_timeout_id != 0) {
+                GLib.Source.remove (self._shadow_timeout_id)
+                self._shadow_timeout_id = 0
+            }
+            self._shadow_timeout_id = GLib.timeout_add (0, 100, () => {
+                for (const ws of this._workspaces) {
+                    for (const win of ws._windows) {
+                        UI.UpdateShadowOfWindowPreview (win)
+                    }
+                }
+                return false
+            })
         }
 
         // Just Like the monkey patch when enter overview, need to add shadow
@@ -288,12 +303,17 @@ export class Extension {
         WindowPreview.prototype._addWindow = this._orig_add_window
         WorkspaceGroup.prototype._createWindows = this._orig_create_windows
         WindowManager.prototype._sizeChangeWindowDone = this._orig_size_changed
+        WorkspacesView.prototype._scrollToActive = this._orig_scroll_to_active
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
         // Remove main loop sources
-        if (this._timeout_handler != 0) {
-            GLib.Source.remove (this._timeout_handler)
-            this._timeout_handler = 0
+        if (this._fs_timeout_id != 0) {
+            GLib.Source.remove (this._fs_timeout_id)
+            this._fs_timeout_id = 0
+        }
+        if (this._shadow_timeout_id != 0) {
+            GLib.Source.remove (this._shadow_timeout_id)
+            this._shadow_timeout_id = 0
         }
 
         // Remove the item to open preferences page in background menu

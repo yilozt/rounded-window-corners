@@ -30,4 +30,6 @@ export const constants = {
     DON_T_CONFIG: 'Don\'t Configuration in Custom Page',
     /** Item label for background menu  */
     ITEM_LABEL: 'Rounded Corners Settings...',
+    /** Name of shadow actor to be added in overview */
+    OVERVIEW_SHADOW_ACTOR: 'Shadow Actor (Overview)',
 }

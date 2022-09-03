@@ -1,5 +1,6 @@
 // imports.gi
 import * as Meta           from '@gi/Meta'
+import * as Clutter        from '@gi/Clutter'
 
 // gnome modules
 import { openPrefs }       from '@imports/misc/extensionUtils'
@@ -13,6 +14,7 @@ import { constants }       from '@me/utils/constants'
 import { global }          from '@global'
 import * as types          from '@me/utils/types'
 import { Actor }           from '@gi/Clutter'
+import { WindowPreview }   from '@imports/ui/windowPreview'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -163,4 +165,33 @@ export function ShouldHasRoundedCorners (
         (fullscreen && cfg.keep_rounded_corners.fullscreen)
 
     return should_has_rounded_corners
+}
+
+/** Compute size & position of shadow actor for window in overview */
+export function UpdateShadowOfWindowPreview (win_preview: WindowPreview) {
+    const win = win_preview._windowActor.meta_window
+    const shadow_clone = win_preview.get_child_at_index (0)
+
+    if (shadow_clone?.get_name () != constants.OVERVIEW_SHADOW_ACTOR) {
+        return
+    }
+
+    shadow_clone.get_constraints ().forEach ((c) => {
+        shadow_clone.remove_constraint (c)
+    })
+
+    const paddings =
+        constants.SHADOW_PADDING *
+        (win_preview.window_container.width / win.get_frame_rect ().width) *
+        WindowScaleFactor (win)
+
+    for (let i = 0; i < 4; i++) {
+        shadow_clone.add_constraint (
+            new Clutter.BindConstraint ({
+                coordinate: i,
+                source: win_preview.window_container,
+                offset: i < 2 ? -paddings : paddings * 2,
+            })
+        )
+    }
 }

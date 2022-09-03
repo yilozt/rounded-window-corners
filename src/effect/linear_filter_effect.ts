@@ -7,12 +7,7 @@ export const LinearFilterEffect = registerClass (
     {},
     class extends GLSLEffect {
         vfunc_build_pipeline (): void {
-            this.add_glsl_snippet (
-                SnippetHook.FRAGMENT,
-                '',
-                'cogl_color_out = cogl_color_out;',
-                false
-            )
+            this.add_glsl_snippet (SnippetHook.FRAGMENT, '', '', false)
         }
 
         vfunc_paint_target (node: PaintNode, ctx: PaintContext): void {

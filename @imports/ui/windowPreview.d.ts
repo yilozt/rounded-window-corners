@@ -3,4 +3,5 @@ import * as Meta from '../../@gi/Meta'
 
 export class WindowPreview extends Shell.WindowPreview {
     _addWindow (_: Meta.Window): void;
+    _windowActor: Meta.WindowActor
 }
