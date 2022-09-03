@@ -3,15 +3,17 @@ import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
 
 // local modules
-import { loadShader }              from '../utils/io'
-import * as types                  from '../utils/types'
+import { loadShader }              from '@me/utils/io'
+import * as types                  from '@me/utils/types'
+
+// types
+import { Me }                      from '@global'
 
 // -------------------------------------------------------------- [end imports]
 
 // Load fragment shader of rounded corners effect.
 const { declarations, code } = loadShader (
-    import.meta.url,
-    './shader/rounded_corners.frag'
+    `${Me.path}/effect/shader/rounded_corners.frag`
 )
 
 /** Location of uniform variants of rounded corners effect */
@@ -27,7 +29,7 @@ class Uniforms {
     border_color = 0
 }
 
-export default registerClass (
+export const RoundedCornersEffect = registerClass (
     {},
     class Effect extends GLSLEffect {
         /**

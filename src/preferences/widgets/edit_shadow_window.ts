@@ -3,13 +3,12 @@ import * as Gtk           from '@gi/Gtk'
 import { registerClass }  from '@gi/GObject'
 
 // local modules
-import { box_shadow_css } from '../../utils/types'
-import { template_url }   from '../../utils/io'
-import settings           from '../../utils/settings'
+import { box_shadow_css } from '@me/utils/types'
+import { settings }       from '@me/utils/settings'
 
 // just used to mark type of value, will be remove in output javascript
-import { BoxShadow }      from '../../utils/types'
-
+import { BoxShadow }      from '@me/utils/types'
+import { Me }             from '@global'
 // ----------------------------------------------------------------- end imports
 
 /**
@@ -18,9 +17,9 @@ import { BoxShadow }      from '../../utils/types'
  * This widget used to edit shadow of windows which use rounded corners
  * effects.
  */
-export default registerClass (
+export const EditShadowWindow = registerClass (
     {
-        Template: template_url (import.meta.url, './edit-shadow-window.ui'),
+        Template: `file://${Me.path}/preferences/widgets/edit-shadow-window.ui`,
         GTypeName: 'EditShadowWindow',
         InternalChildren: [
             'opacity_scale',

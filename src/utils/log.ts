@@ -1,4 +1,4 @@
-import settings          from './settings'
+import { settings }      from '@me/utils/settings'
 import { log, logError } from '@global'
 
 // --------------------------------------------------------------- [end imports]

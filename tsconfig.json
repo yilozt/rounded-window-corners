@@ -12,7 +12,8 @@
     "paths": {
       "@imports/*": ["../@imports/*"],
       "@gi/*":      ["../@gi/*"],
-      "@global":    ["./global.d.ts"]
+      "@global":    ["./global.d.ts"],
+      "@me/*":      ["./*"]
     },
     "outDir": "./_build/"
   },

@@ -5,13 +5,13 @@ import * as Meta           from '@gi/Meta'
 import { openPrefs }       from '@imports/misc/extensionUtils'
 
 // local modules
-import { load }            from './io'
-import { _log, _logError } from './log'
-import constants           from './constants'
+import { load }            from '@me/utils/io'
+import { _log, _logError } from '@me/utils/log'
+import { constants }       from '@me/utils/constants'
 
 // types
 import { global }          from '@global'
-import * as types          from './types'
+import * as types          from '@me/utils/types'
 import { Actor }           from '@gi/Clutter'
 
 // --------------------------------------------------------------- [end imports]

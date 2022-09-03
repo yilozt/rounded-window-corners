@@ -3,7 +3,8 @@ import * as Gdk                       from '@gi/Gdk'
 import * as Notify                    from '@gi/Notify'
 import { getCurrentExtension }        from '@imports/misc/extensionUtils'
 
-import { logError }                   from '@global'
+import { pages }                      from '@me/preferences/index'
+
 import { PreferencesWindow, imports } from '@global'
 
 function load_css () {
@@ -41,13 +42,9 @@ export function buildPrefsWidget () {
     })
 
     // Load pages
-    import ('./preferences/index.js')
-        .then ((index) => {
-            for (const page of index.pages ()) {
-                stack.add_titled (page.widget, page.title, page.title)
-            }
-        })
-        .catch ((e) => logError (e))
+    for (const page of pages ()) {
+        stack.add_titled (page.widget, page.title, page.title)
+    }
 
     // Load css
     load_css ()
@@ -59,24 +56,16 @@ export function buildPrefsWidget () {
 export function fillPreferencesWindow (window: PreferencesWindow) {
     const Adw = imports.gi.Adw
 
-    const tmp = new Adw.PreferencesPage ()
-    window.add (tmp)
-
-    import ('./preferences/index.js')
-        .then ((index) => {
-            window.remove (tmp)
-            for (const page of index.pages ()) {
-                const pref_page = new Adw.PreferencesPage ({
-                    title: page.title,
-                    icon_name: page.icon_name,
-                })
-                const group = new Adw.PreferencesGroup ()
-                pref_page.add (group)
-                group.add (page.widget)
-                window.add (pref_page)
-            }
+    for (const page of pages ()) {
+        const pref_page = new Adw.PreferencesPage ({
+            title: page.title,
+            icon_name: page.icon_name,
         })
-        .catch ((err) => logError (err))
+        const group = new Adw.PreferencesGroup ()
+        pref_page.add (group)
+        group.add (page.widget)
+        window.add (pref_page)
+    }
 
     window.connect ('close-request', () => {
         Notify.uninit ()

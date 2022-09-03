@@ -2,23 +2,24 @@
 import * as GObject      from '@gi/GObject'
 
 // Local Modules
-import { template_url }  from '../../utils/io'
-import { show_err_msg }  from '../../utils/prefs'
-import settings          from '../../utils/settings'
-import constants         from '../../utils/constants'
-import connections       from '../../utils/connections'
-import AppRow            from '../widgets/app-row'
+import { show_err_msg }  from '@me/utils/prefs'
+import { settings }      from '@me/utils/settings'
+import { constants }     from '@me/utils/constants'
+import { connections }   from '@me/utils/connections'
+import { AppRow }        from '@me/preferences/widgets/app_row'
 
 // types
-import { AppRowHandler } from '../widgets/app-row'
+import { AppRowHandler } from '../widgets/app_row'
+import { Me }            from '@global'
+
 import * as Gtk          from '@gi/Gtk'
 
 // --------------------------------------------------------------- [end imports]
 
 /** Black list Preferences Page */
-export default GObject.registerClass (
+export const BlackList = GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './blacklist.ui'),
+        Template: `file://${Me.path}/preferences/pages/blacklist.ui`,
         GTypeName: 'RoundedWindowCornersPrefsBlacklist',
         InternalChildren: ['black_list_group', 'add_row_btn'],
     },

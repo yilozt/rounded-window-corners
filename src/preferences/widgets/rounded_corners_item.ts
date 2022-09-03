@@ -3,15 +3,18 @@ import * as GObject          from '@gi/GObject'
 import * as Gtk              from '@gi/Gtk'
 
 // local modules
-import { template_url }      from '../../utils/io'
-import { RoundedCornersCfg } from '../../utils/types'
-import connections           from '../../utils/connections'
+import { RoundedCornersCfg } from '@me/utils/types'
+import { connections }       from '@me/utils/connections'
 
+// types
+import { Me }                from '@global'
 // ------------------------------------------------------------------ end import
 
-export default GObject.registerClass (
+const Template = `file://${Me.path}/preferences/widgets/rounded-corners-item.ui`
+
+export const RoundedCornersItem = GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './rounded-corners-item.ui'),
+        Template,
         GTypeName: 'RoundedCornersItem',
         InternalChildren: [
             'rounded_in_maximized_switch',

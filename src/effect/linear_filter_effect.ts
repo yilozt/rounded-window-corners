@@ -3,7 +3,7 @@ import { PipelineFilter }          from '@gi/Cogl'
 import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
 
-export default registerClass (
+export const LinearFilterEffect = registerClass (
     {},
     class extends GLSLEffect {
         vfunc_build_pipeline (): void {

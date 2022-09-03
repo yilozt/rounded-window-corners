@@ -1,8 +1,8 @@
 import * as GObject              from '@gi/GObject'
 import * as Gtk                  from '@gi/Gtk'
-import { _log }                  from '../../utils/log'
-import settings, { SchemasKeys } from '../../utils/settings'
-import { RoundedCornersCfg }     from '../../utils/types'
+import { _log }                  from '@me/utils/log'
+import { SchemasKeys, settings } from '@me/utils/settings'
+import { RoundedCornersCfg }     from '@me/utils/types'
 
 class Cfg {
     description: string
@@ -13,7 +13,7 @@ class Cfg {
     }
 }
 
-export default GObject.registerClass (
+export const ResetDialog = GObject.registerClass (
     {},
     class extends Gtk.Dialog {
         /** Keys to reset  */

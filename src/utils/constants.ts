@@ -4,14 +4,14 @@
  * Loaded Message will be shown when debug.
  * see: https://patorjk.com/software/taag
  */
-export const LOADED_MSG = `
+const LOADED_MSG = `
 ╦═╗┌─┐┬ ┬┌┐┌┌┬┐┌─┐┌┬┐╔═╗┌─┐┬─┐┌┬┐┌─┐┬─┐┌─┐╔═╗┌─┐┌─┐┌─┐┌─┐┌┬┐┌─┐
 ╠╦╝│ ││ ││││ ││├┤  ││║  │ │├┬┘ ││├┤ ├┬┘└─┐║╣ ├┤ ├┤ ├┤ │   │ └─┐
 ╩╚═└─┘└─┘┘└┘─┴┘└─┘─┴┘╚═╝└─┘┴└──┴┘└─┘┴└─└─┘╚═╝└  └  └─┘└─┘ ┴ └─┘
 
 [RoundedCordersEffect] Loaded.`
 
-export default {
+export const constants = {
     /** Message to shown when extensions loaded successfully  */
     LOADED_MSG,
     /** Name of shadow actors */

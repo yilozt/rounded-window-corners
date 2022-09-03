@@ -110,7 +110,7 @@ export class Connections {
 /** A singleton of connections */
 let _connections: Connections | null = null
 
-export default {
+export const connections = {
     get: () => {
         if (_connections === null) {
             _connections = new Connections ()

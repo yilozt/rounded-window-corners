@@ -135,10 +135,11 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
 
     const imports_gi = p2.includes('@gi/') || p2.includes('gi://')
     const imports_shell = p2.includes('@imports')
+    const imports_me = p2.includes('@me')
 
     let res = null
 
-    if (imports_gi || imports_shell) {
+    if (imports_gi || imports_shell || imports_me) {
       // We will convert `import * as Abc from 'Xyz'`
       // to `const Abc = imports.XXXX`, so ' * as ' is unnecessary
       if (p1.includes('* as')) {
@@ -153,24 +154,18 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
         // When we import something from gnome shell
         // generate const XXX = imports.XXX.XXX
         p2 = 'imports' + p2.replace(/.*@imports/, '').replace(/\//g, '.')
+      } else if (imports_me) {
+        // When we import local modules
+        // generate const XXX = Me.imports.XXX.XXX
+        p2 = 'Me.imports' + p2.replace(/.*@me/, '').replace(/\//g, '.')
       }
       res = `const ${p1}  = ${p2}`
     } else {
-      // When we import local modules from our extensions, it must be
-      // relative path, see:
-      // https://gitlab.gnome.org/GNOME/gjs/-/blob/master/doc/ESModules.md#terminology
-      if (!(p2.match(/^\.\.\//) || p2.match(/^\.\//))) {
-        ERR_IMPORTS.push(match)
-        return '\n// ------------------------------------------------------------------\n'
-            +    '// error: Modules from extension should be import with relative path.\n'
-            +    `// error: ${match}\n`
-            +    '// ------------------------------------------------------------------\n\n'
-      }
-
-      if (!p2.match(/js$/)) {
-        p2 += '.js'
-      }
-      res = `import ${p1} from '${p2}'`
+      ERR_IMPORTS.push(match)
+      return '\n// ------------------------------------------------------------------\n'
+          +    '// error: Can replace this import statement.\n'
+          +    `// error: ${match}\n`
+          +    '// ------------------------------------------------------------------\n\n'
     }
 
     return res
@@ -178,16 +173,18 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
 
   let replaced = file.contents.toString()
 
-  // extension.js / prefs.js is entry point of gnome shell extensions,
-  // we will process them specially
-  const isEntryJs = file.relative == 'extension.js'
-    || file.relative == 'prefs.js'
+  const header = 'const ExtensionUtils = imports.misc.extensionUtils;\n'
+               + 'const Me = ExtensionUtils.getCurrentExtension();\n\n';
 
-  // Remove 'export ' in extension.js / prefs.js, because it is not ES modules in our
-  // extensions.
-  if (isEntryJs) {
-    replaced = replaced.replace(/^export /gm, '')
+  // Add header to every js file
+  if (!replaced.includes(header)) {
+    replaced = header + replaced
   }
+
+  // replace export in output js files
+  replaced = replaced.replace(/^export const/gm, 'var')
+    .replace(/^export class (.*?) {/gm, 'var $1 = class $1 {')
+    .replace(/^export /gm, '')
 
   // We will handles all import statements with this simple regex express
   replaced = replaced.replace(/import (.*?) from\s+?['"](.*?)['"]/gm, replace_func)
@@ -197,7 +194,7 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
   if (ERR_IMPORTS.length > 0) {
     console.error(
       colors.red('error '),
-      colors.underline('Modules from extension should be import with relative path')
+      colors.underline('Failed to resolve import statements')
     )
     console.error('')
     ERR_IMPORTS.forEach(match => console.error(colors.grey(`   ${match}`)))

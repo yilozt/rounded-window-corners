@@ -3,13 +3,12 @@ import * as GObject                    from '@gi/GObject'
 import * as Gtk                        from '@gi/Gtk'
 
 // local modules
-import { list_children, show_err_msg } from '../../utils/prefs'
-import { template_url }                from '../../utils/io'
-import constants                       from '../../utils/constants'
-import settings                        from '../../utils/settings'
-import connections                     from '../../utils/connections'
-import AppRow, { AppRowHandler }       from '../widgets/app-row'
-import RoundedCornersItem              from '../widgets/rounded-corners-item'
+import { list_children, show_err_msg } from '@me/utils/prefs'
+import { constants }                   from '@me/utils/constants'
+import { settings }                    from '@me/utils/settings'
+import { connections }                 from '@me/utils/connections'
+import { AppRowHandler, AppRow }       from '@me/preferences/widgets/app_row'
+import { RoundedCornersItem }          from '@me/preferences/widgets/rounded_corners_item'
 
 // types
 import { Align, Switch }               from '@gi/Gtk'
@@ -18,12 +17,13 @@ import { Button, Widget }              from '@gi/Gtk'
 // import { AppRowHandler }               from '../../../widgets/app-row'
 import { CustomRoundedCornersCfg }     from '../../utils/types'
 import { RoundedCornersCfg }           from '../../utils/types'
+import { Me }                          from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
-export default GObject.registerClass (
+export const Custom = GObject.registerClass (
     {
-        Template: template_url (import.meta.url, './custom.ui'),
+        Template: `file://${Me.path}/preferences/pages/custom.ui`,
         GTypeName: 'RoundedWindowCornersPrefsCustomPage',
         InternalChildren: ['custom_group', 'add_row_btn'],
     },
