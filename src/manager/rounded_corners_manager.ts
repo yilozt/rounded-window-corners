@@ -392,6 +392,7 @@ export class RoundedCornersManager {
         child.queue_redraw ()
     }
 
+    /** Add Rounded corners when window actor is ready */
     private _setup_rounded_corners_effect (actor: WindowActor) {
         const _setup_effect = (actor_to_add_effect: Clutter.Actor) => {
             const effect = new RoundedCornersEffect ()
@@ -418,7 +419,8 @@ export class RoundedCornersManager {
             if (actor.first_child) {
                 _setup_effect (actor.first_child)
             } else {
-                // Surface Actor may not ready in some time
+                // Surface Actor may not ready in some time, waiting it by
+                // connect 'notify::first-child'
                 const id = actor.connect ('notify::first-child', () => {
                     // now it's ready
                     _setup_effect (actor.first_child)
@@ -493,10 +495,17 @@ export class RoundedCornersManager {
         this._setup_rounded_corners_effect (actor)
     }
 
+    /** Remove rounded corners effect for window actor */
+    private _remove_rounded_corners_effect (actor: WindowActor) {
+        const name = constants.ROUNDED_CORNERS_EFFECT
+        this._get_actor_to_rounded (actor)?.remove_effect_by_name (name)
+    }
+
     /**`
      * Remove rounded corners effect and shadow actor for a window actor
      * This method will be called when window is open, or change of settings
      * need remove rounded corners.
+     * It will remove all connected signals, and clear all resources.
      */
     private _remove_effect (actor: WindowActor & { shadow_mode?: ShadowMode }) {
         if (!this.rounded_windows || !this.connections) {
@@ -504,12 +513,7 @@ export class RoundedCornersManager {
         }
 
         const win = actor.meta_window
-        const name = constants.ROUNDED_CORNERS_EFFECT
-        if (win.get_client_type () == WindowClientType.X11) {
-            actor.get_first_child ()?.remove_effect_by_name (name)
-        } else {
-            actor.remove_effect_by_name (name)
-        }
+        this._remove_rounded_corners_effect (actor)
 
         // Restore shadow for x11 windows
         if (actor.shadow_mode) {
@@ -591,20 +595,25 @@ export class RoundedCornersManager {
         return [true, app_type]
     }
 
+    /**
+     * In Wayland, we will add rounded corners effect to WindowActor
+     * In XOrg, we will add rounded corners effect to WindowActor.first_child
+     */
+    private _get_actor_to_rounded (actor: WindowActor): Clutter.Actor | null {
+        const client_type = actor.meta_window.get_client_type ()
+
+        return client_type == WindowClientType.X11
+            ? actor.get_first_child ()
+            : actor
+    }
+
     /** Query rounded corners effect of window actor  */
     private _get_rounded_corners (
         actor: WindowActor
     ): RoundedCornersEffectType | null | undefined {
-        const client_type = actor.meta_window.get_client_type ()
         const name = constants.ROUNDED_CORNERS_EFFECT
-
         type Res = RoundedCornersEffectType | null | undefined
-
-        if (client_type == WindowClientType.X11) {
-            return actor.get_first_child ()?.get_effect (name) as Res
-        } else {
-            return actor.get_effect (name) as Res
-        }
+        return this._get_actor_to_rounded (actor)?.get_effect (name) as Res
     }
 
     /** Traversal all windows, add or remove rounded corners for them */
@@ -716,29 +725,38 @@ export class RoundedCornersManager {
         // Cache the offset, so that we can calculate this value once
         const content_offset_of_win = UI.computeWindowContentsOffset (win)
 
-        // When size changed. update uniforms for window
-        const effect = this._get_rounded_corners (actor)
-        if (effect) {
-            // Cache the value
+        const cfg = this._get_rounded_corners_cfg (win)
 
-            const cfg = this._get_rounded_corners_cfg (win)
+        // Skip rounded corners when window is fullscreen & maximize
+        let effect = this._get_rounded_corners (actor)
+        const should_rounded = UI.ShouldHasRoundedCorners (win, cfg)
 
-            // Skip rounded corners when window is fullscreen & maximize
-            const skip = !UI.ShouldHasRoundedCorners (win, cfg)
-            effect.skip = skip
-            if (skip) {
-                return
-            }
-            effect.update_uniforms (
-                UI.WindowScaleFactor (win),
-                cfg,
-                this._compute_bounds (actor, content_offset_of_win),
-                {
-                    width: settings ().border_width,
-                    color: settings ().border_color,
-                }
-            )
+        if (!should_rounded && effect) {
+            _log ('Remove rounded effect for maximized window', win.title)
+            this._remove_rounded_corners_effect (actor)
+            return
         }
+        // Restore Rounded effect when un-maximized
+        if (should_rounded && !effect) {
+            const actor_to_add = this._get_actor_to_rounded (actor)
+            const name = constants.ROUNDED_CORNERS_EFFECT
+            if (actor_to_add) {
+                effect = new RoundedCornersEffect ()
+                actor_to_add.add_effect_with_name (name, effect)
+                _log ('Restore rounded effect for maximized window', win.title)
+            }
+        }
+
+        // When size changed. update uniforms for window
+        effect?.update_uniforms (
+            UI.WindowScaleFactor (win),
+            cfg,
+            this._compute_bounds (actor, content_offset_of_win),
+            {
+                width: settings ().border_width,
+                color: settings ().border_color,
+            }
+        )
 
         // Update BindConstraint for shadow
         const shadow = window_info.shadow
