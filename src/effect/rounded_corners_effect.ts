@@ -24,7 +24,6 @@ class Uniforms {
     inner_bounds = 0
     inner_clip_radius = 0
     pixel_step = 0
-    skip = 0
     border_width = 0
     border_color = 0
 }
@@ -40,12 +39,6 @@ export const RoundedCornersEffect = registerClass (
         static uniforms: Uniforms = new Uniforms ()
 
         /**
-         * Wether skip rounded corners effect, its useful to disable rounded
-         * corners when window is maximized
-         */
-        private _skip = false
-
-        /**
          * Collect location of uniform variants, only used when added shader
          * snippet to effect.
          */
@@ -57,7 +50,6 @@ export const RoundedCornersEffect = registerClass (
                 inner_bounds: 0,
                 inner_clip_radius: 0,
                 pixel_step: 0,
-                skip: 0,
                 border_width: 0,
                 border_color: 0,
             }
@@ -116,7 +108,6 @@ export const RoundedCornersEffect = registerClass (
             }
 
             const pixel_step = [1 / actor.get_width (), 1 / actor.get_height ()]
-            const _skip = this._skip ? 1 : 0
 
             const location = Effect.uniforms
             this.set_uniform_float (location.bounds, 4, bounds)
@@ -129,14 +120,6 @@ export const RoundedCornersEffect = registerClass (
             this.set_uniform_float (location.inner_clip_radius, 1, [
                 inner_radius,
             ])
-            this.set_uniform_float (location.skip, 1, [_skip])
-            this.queue_repaint ()
-        }
-
-        set skip (skip: boolean) {
-            this._skip = skip
-            const location = Effect.uniforms.skip
-            this.set_uniform_float (location, 1, [this._skip ? 1.0 : 0.0])
             this.queue_repaint ()
         }
     }
