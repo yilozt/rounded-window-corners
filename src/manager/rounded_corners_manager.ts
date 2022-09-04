@@ -82,7 +82,18 @@ export class RoundedCornersManager {
 
         // Add effects when window opened
         this.connections.connect (wm, 'map', (_: WM, actor: WindowActor) => {
-            this._add_effect (actor)
+            const win = actor.get_meta_window ()
+
+            // If wm_class_instance of Meta.Window is null, try to add rounded
+            // corners when wm_class_instance is set
+            if (win?.get_wm_class_instance () == null) {
+                const notify_id = win.connect ('notify::wm-class', () => {
+                    this._add_effect (actor)
+                    win.disconnect (notify_id)
+                })
+            } else {
+                this._add_effect (actor)
+            }
         })
 
         // Connect 'minimized' signal, hide shadow actor when window minimized
