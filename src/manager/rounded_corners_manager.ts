@@ -225,12 +225,27 @@ export class RoundedCornersManager {
         actor: WindowActor,
         [x, y, width, height]: [number, number, number, number]
     ): types.Bounds {
-        return {
+        const bounds = {
             x1: x + 1,
             y1: y + 1,
             x2: x + actor.width + width,
             y2: y + actor.height + height,
         }
+
+        // Kitty draw it's window decoration by itself, we need recompute the
+        // outer bounds for kitty.
+        const kitty_adjustment =
+            actor.meta_window.get_client_type () === WindowClientType.WAYLAND &&
+            actor.meta_window.get_wm_class_instance () === 'kitty'
+        if (kitty_adjustment) {
+            const scale = UI.WindowScaleFactor (actor.meta_window)
+            bounds.x1 += 11 * scale /* shadow in left   of kitty */
+            bounds.y1 += 35 * scale /* shadow in top    of kitty */
+            bounds.x2 -= 11 * scale /* shadow in right  of kitty */
+            bounds.y2 -= 11 * scale /* shadow in bottom of kitty */
+        }
+
+        return bounds
     }
 
     /** Bind property between shadow actor and window actor */
@@ -354,6 +369,8 @@ export class RoundedCornersManager {
         if (!border_radius || !padding) {
             return
         }
+
+        // Padding for Kitty terminal should always be zero
         const { left, right, top, bottom } = padding
 
         // Increasing border_radius when smoothing is on
