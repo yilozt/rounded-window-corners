@@ -1,6 +1,7 @@
 // imports.gi
 import * as Meta           from '@gi/Meta'
 import * as Clutter        from '@gi/Clutter'
+import { Settings }        from '@gi/Gio'
 
 // gnome modules
 import { openPrefs }       from '@imports/misc/extensionUtils'
@@ -64,6 +65,18 @@ export const getAppType = (meta_window: Meta.Window) => {
  * scale factor of current monitor
  */
 export const WindowScaleFactor = (win?: Meta.Window) => {
+    const features = Settings.new ('org.gnome.mutter').get_strv (
+        'experimental-features'
+    )
+
+    // When enable fractional scale in Wayland, return 1
+    if (
+        Meta.is_wayland_compositor () &&
+        features.includes ('scale-monitor-framebuffer')
+    ) {
+        return 1
+    }
+
     const monitor = win
         ? win.get_monitor ()
         : global.display.get_current_monitor ()
