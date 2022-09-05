@@ -128,9 +128,6 @@ export class Extension {
         WindowPreview.prototype._addWindow = function (window) {
             self._orig_add_window.apply (this, [window])
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            type A = any
-
             // Make sure patched method only be called in _init() of
             // WindowPreview
             // https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js
@@ -165,7 +162,7 @@ export class Extension {
             _log (`Add shadow for ${window.title} in overview`)
 
             const window_container = this.window_container
-            const first_child = window_container.first_child as A
+            let first_child: Clutter.Actor | null = window_container.first_child
 
             // Set linear filter to window preview in overview
             first_child.add_effect (new LinearFilterEffect ())
@@ -182,14 +179,20 @@ export class Extension {
             this.insert_child_below (shadow_clone, window_container)
 
             UI.UpdateShadowOfWindowPreview (this)
-            ;(this as A).connectObject ('notify::width', () => {
+
+            const c = connections.get ()
+            c.connect (this, 'notify::width', () =>
                 UI.UpdateShadowOfWindowPreview (this)
-            })
-            ;(this as A).connectObject ('drag-end', () => {
+            )
+            c.connect (this, 'drag-end', () =>
                 UI.UpdateShadowOfWindowPreview (this)
-            })
-            first_child.connectObject ('destroy', (actor: Clutter.Actor) => {
-                actor.clear_effects ()
+            )
+
+            // Disconnect all signals when Window preview in overview is destroy
+            c.connect (this, 'destroy', () => {
+                first_child?.clear_effects ()
+                first_child = null
+                c.disconnect_all (this)
             })
         }
 
