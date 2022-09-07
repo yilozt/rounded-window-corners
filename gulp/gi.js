@@ -120,7 +120,12 @@ const generate_gi_prefs = (cb) => {
     'libraries': conf.libraries_prefs,
     ...conf
   }))
-  exec(`cd .tmp/prefs && XDG_DATA_DIRS=${extra_lib_prefs}:$XDG_DATA_DIRS gi-ts generate`, cb)
+  exec(`cd .tmp/prefs && XDG_DATA_DIRS=$GIR_PREFS_PATH:${extra_lib_prefs}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
+    console.log ('Generate .d.ts files for preferences pages: ')
+    if (stdout) console.log(stdout)
+    if (stderr) console.log(stderr)
+    cb(err)
+  })
 }
 
 const generate_gi_ext = (cb) => {
@@ -134,7 +139,12 @@ const generate_gi_ext = (cb) => {
     'libraries': conf.libraries_ext,
     ...conf
   }))
-  exec(`cd .tmp/ext && XDG_DATA_DIRS=${extra_lib_ext}:$XDG_DATA_DIRS gi-ts generate`, cb)
+  exec(`cd .tmp/ext && XDG_DATA_DIRS=$GIR_EXT_PATH:${extra_lib_ext}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
+    console.log ('Generate .d.ts files for extensions: ')
+    if (stdout) console.log(stdout)
+    if (stderr) console.log(stderr)
+    cb(err)
+  })
 }
 
 const generate_gi = series(

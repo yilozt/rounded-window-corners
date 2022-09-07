@@ -46,8 +46,17 @@ It will install extensions to `~/.local/share/gnome-shell/extensions`
 ```
 git clone https://github.com/yilozt/rounded-window-corners
 cd rounded-window-corners
-yarn install
-yarn ext:install
+yarn install && yarn ext:install
+```
+
+In NixOS, you can use `nix-shell` to setup development shell then install
+extensions to `~/.local/share/gnome-shell/extensions`.
+
+```
+git clone https://github.com/yilozt/rounded-window-corners
+cd rounded-window-corners
+nix-shell
+yarn install && yarn ext:install
 ```
 
 ### From Releases / Github Actions
