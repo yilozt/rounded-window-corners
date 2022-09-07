@@ -8,9 +8,9 @@ import { MonitorManager }             from '@gi/Meta'
 import { WindowPreview }              from '@imports/ui/windowPreview'
 import { WorkspaceGroup }             from '@imports/ui/workspaceAnimation'
 import { WindowManager }              from '@imports/ui/windowManager'
-import { WorkspacesView }             from '@imports/ui/workspacesView'
 import BackgroundMenu                 from '@imports/ui/backgroundMenu'
 import { sessionMode, layoutManager } from '@imports/ui/main'
+import { overview }                   from '@imports/ui/main'
 
 // local modules
 import { constants }                  from '@me/utils/constants'
@@ -27,21 +27,21 @@ import { WM }                         from '@gi/Shell'
 import { RoundedCornersCfg }          from '@me/utils/types'
 import { Window, WindowActor }        from '@gi/Meta'
 import { global }                     from '@global'
+import { registerClass }              from '@gi/GObject'
 
 // --------------------------------------------------------------- [end imports]
+
 export class Extension {
     // The methods of gnome-shell to monkey patch
-    private _orig_add_window       !: (_: Window) => void
-    private _orig_create_windows   !: () => void
-    private _orig_size_changed     !: (wm: WM, actor: WindowActor) => void
-    private _orig_scroll_to_active !: () => void
-    private _add_background_menu   !: typeof BackgroundMenu.addBackgroundMenu
+    private _orig_add_window     !: (_: Window) => void
+    private _orig_create_windows !: () => void
+    private _orig_size_changed   !: (wm: WM, actor: WindowActor) => void
+    private _add_background_menu !: typeof BackgroundMenu.addBackgroundMenu
 
     private _services: Services | null = null
     private _rounded_corners_manager: RoundedCornersManager | null = null
 
     private _fs_timeout_id = 0
-    private _shadow_timeout_id = 0
 
     constructor () {
         // Show loaded message in debug mode
@@ -54,7 +54,6 @@ export class Extension {
         this._orig_add_window = WindowPreview.prototype._addWindow
         this._orig_create_windows = WorkspaceGroup.prototype._createWindows
         this._orig_size_changed = WindowManager.prototype._sizeChangeWindowDone
-        this._orig_scroll_to_active = WorkspacesView.prototype._scrollToActive
         this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
         this._services = new Services ()
@@ -121,11 +120,16 @@ export class Extension {
 
         const self = this
 
+        // WindowPreview is a widgets that show content of window in overview.
+        // this widget also contain a St.Label (show title of window), icon and
+        // close button for window.
+        //
         // When there is new window added into overview, this function will be
         // called. We need add our shadow actor and blur actor of rounded
         // corners window into overview.
         //
         WindowPreview.prototype._addWindow = function (window) {
+            // call original method from gnome-shell
             self._orig_add_window.apply (this, [window])
 
             // Make sure patched method only be called in _init() of
@@ -161,60 +165,26 @@ export class Extension {
 
             _log (`Add shadow for ${window.title} in overview`)
 
+            // WindowPreview.window_container used to show content of window
             const window_container = this.window_container
             let first_child: Clutter.Actor | null = window_container.first_child
 
-            // Set linear filter to window preview in overview
-            first_child.add_effect (new LinearFilterEffect ())
+            // Set linear filter to let it looks better
+            first_child?.add_effect (new LinearFilterEffect ())
 
-            const shadow_clone = new Clutter.Clone ({
-                source: shadow,
-                pivot_point: new Point ({ x: 0.5, y: 0.5 }),
-                name: constants.OVERVIEW_SHADOW_ACTOR,
-            })
+            // Add a clone of shadow to overview
+            const shadow_clone = new OverviewShadowActor (shadow, this)
             for (const prop of ['scale-x', 'scale-y']) {
-                window_container.bind_property (prop, shadow_clone, prop, 2)
+                window_container.bind_property (prop, shadow_clone, prop, 1)
             }
-
             this.insert_child_below (shadow_clone, window_container)
 
-            UI.UpdateShadowOfWindowPreview (this)
-
-            const c = connections.get ()
-            c.connect (this, 'notify::width', () =>
-                UI.UpdateShadowOfWindowPreview (this)
-            )
-            c.connect (this, 'drag-end', () =>
-                UI.UpdateShadowOfWindowPreview (this)
-            )
-
             // Disconnect all signals when Window preview in overview is destroy
+            const c = connections.get ()
             c.connect (this, 'destroy', () => {
                 first_child?.clear_effects ()
                 first_child = null
                 c.disconnect_all (this)
-            })
-        }
-
-        // When we change workspace in overview, this method will be called.
-        // Need to recompute the Clutter.BindConstraint for shadow actor
-        // in overview.
-        //
-        // Relative to #39
-        WorkspacesView.prototype._scrollToActive = function () {
-            self._orig_scroll_to_active.apply (this, [])
-
-            if (self._shadow_timeout_id != 0) {
-                GLib.Source.remove (self._shadow_timeout_id)
-                self._shadow_timeout_id = 0
-            }
-            self._shadow_timeout_id = GLib.timeout_add (0, 100, () => {
-                for (const ws of this._workspaces) {
-                    for (const win of ws._windows) {
-                        UI.UpdateShadowOfWindowPreview (win)
-                    }
-                }
-                return false
             })
         }
 
@@ -306,17 +276,12 @@ export class Extension {
         WindowPreview.prototype._addWindow = this._orig_add_window
         WorkspaceGroup.prototype._createWindows = this._orig_create_windows
         WindowManager.prototype._sizeChangeWindowDone = this._orig_size_changed
-        WorkspacesView.prototype._scrollToActive = this._orig_scroll_to_active
         BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
         // Remove main loop sources
         if (this._fs_timeout_id != 0) {
             GLib.Source.remove (this._fs_timeout_id)
             this._fs_timeout_id = 0
-        }
-        if (this._shadow_timeout_id != 0) {
-            GLib.Source.remove (this._shadow_timeout_id)
-            this._shadow_timeout_id = 0
         }
 
         // Remove the item to open preferences page in background menu
@@ -348,3 +313,70 @@ export class Extension {
 export function init () {
     return new Extension ()
 }
+
+/**
+ * Copy shadow of rounded corners window and show it in overview.
+ * This actor will be created when window preview has created for overview
+ */
+const OverviewShadowActor = registerClass (
+    {},
+    class extends Clutter.Clone {
+        _window_preview          !: WindowPreview
+
+        /**
+         * Create shadow actor for WindowPreview in overview
+         * @param source the shadow actor create for rounded corners shadow
+         * @param window_preview the window preview has shown in overview
+         */
+        _init (source: Clutter.Actor, window_preview: WindowPreview): void {
+            super._init ({
+                source, // the source shadow actor shown in desktop
+                name: constants.OVERVIEW_SHADOW_ACTOR,
+                pivot_point: new Point ({ x: 0.5, y: 0.5 }),
+            })
+
+            this._window_preview = window_preview
+        }
+
+        /**
+         * Recompute the position and size of shadow in overview
+         * This virtual function will be called when we:
+         * - entering/closing overview
+         * - dragging window
+         * - position and size of window preview in overview changed
+         * @param box The bound box of shadow actor
+         */
+        vfunc_allocate (box: Clutter.ActorBox): void {
+            const leaving_overview =
+                overview._overview.controls._workspacesDisplay._leavingOverview
+
+            // The window container that shown in overview
+            const window_container_box = leaving_overview
+                ? this._window_preview.window_container.get_allocation_box ()
+                : this._window_preview.get_allocation_box ()
+
+            // Meta.Window contain the all information about a window
+            const meta_win = this._window_preview._windowActor.meta_window
+
+            // As we known, preview shown in overview has been scaled
+            // in overview
+            const container_scaled =
+                window_container_box.get_width () /
+                meta_win.get_frame_rect ().width
+            const paddings =
+                constants.SHADOW_PADDING *
+                container_scaled *
+                UI.WindowScaleFactor (meta_win)
+
+            // Setup bounds box of shadow actor
+            box.set_origin (-paddings, -paddings)
+            box.set_size (
+                window_container_box.get_width () + 2 * paddings,
+                window_container_box.get_height () + 2 * paddings
+            )
+
+            // Make bounds box effect actor
+            super.vfunc_allocate (box)
+        }
+    }
+)
