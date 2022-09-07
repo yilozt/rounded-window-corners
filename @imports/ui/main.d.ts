@@ -12,3 +12,13 @@ declare const layoutManager: {
     _startingUp: boolean,
     connect (_: 'startup-complete', cb: () => void)
 } & GObject.Object
+
+declare const overview: {
+    _overview: {
+        controls: {
+            _workspacesDisplay: {
+                _leavingOverview: boolean
+            }
+        }
+    }
+}
