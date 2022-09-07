@@ -28,7 +28,7 @@ jobs:
       - name: Prepare
         run: |
           pacman -Sy
-          pacman -S --noconfirm base gnome-shell libnotify gtk3 libadwaita gtk4 glib2 gobject-introspection
+          pacman -S --noconfirm base gnome-shell gtk3 libadwaita gtk4 glib2 gobject-introspection
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3

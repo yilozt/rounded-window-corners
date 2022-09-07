@@ -1,6 +1,5 @@
 import * as Gtk                       from '@gi/Gtk'
 import * as Gdk                       from '@gi/Gdk'
-import * as Notify                    from '@gi/Notify'
 import { getCurrentExtension }        from '@imports/misc/extensionUtils'
 
 import { pages }                      from '@me/preferences/index'
@@ -18,7 +17,7 @@ function load_css () {
 }
 
 export function init () {
-    Notify.init ('yi.extensions.rounded-window-corners.prefs')
+    //
 }
 
 // Load preferences Pages for Gnome 40 / Gnome 41
@@ -35,10 +34,6 @@ export function buildPrefsWidget () {
         win.width_request = 550
         const titlebar = win.get_titlebar () as Gtk.HeaderBar | null
         titlebar?.set_title_widget (swither)
-
-        win.connect ('close-request', () => {
-            Notify.uninit ()
-        })
     })
 
     // Load pages
@@ -53,7 +48,7 @@ export function buildPrefsWidget () {
 }
 
 // Load ui for Gnome 42+
-export function fillPreferencesWindow (window: PreferencesWindow) {
+export function fillPreferencesWindow (win: PreferencesWindow) {
     const Adw = imports.gi.Adw
 
     for (const page of pages ()) {
@@ -64,12 +59,8 @@ export function fillPreferencesWindow (window: PreferencesWindow) {
         const group = new Adw.PreferencesGroup ()
         pref_page.add (group)
         group.add (page.widget)
-        window.add (pref_page)
+        win.add (pref_page)
     }
-
-    window.connect ('close-request', () => {
-        Notify.uninit ()
-    })
 
     load_css ()
 }
