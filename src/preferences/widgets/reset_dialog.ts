@@ -1,5 +1,6 @@
 import * as GObject              from '@gi/GObject'
 import * as Gtk                  from '@gi/Gtk'
+import { _ }                     from '@me/utils/i18n'
 import { _log }                  from '@me/utils/log'
 import { SchemasKeys, settings } from '@me/utils/settings'
 import { RoundedCornersCfg }     from '@me/utils/types'
@@ -56,22 +57,24 @@ export const ResetDialog = GObject.registerClass (
 
         private _init_cfg () {
             this._reset_keys = {
-                'skip-libadwaita-app': new Cfg ('Skip LibAdwaita Applications'),
-                'skip-libhandy-app': new Cfg ('Skip LibHandy Applications'),
-                'focused-shadow': new Cfg ('Focus Window Shadow Style'),
-                'unfocused-shadow': new Cfg ('Unfocus Window Shadow Style'),
-                'border-width': new Cfg ('Border Width'),
-                'border-color': new Cfg ('Border Color'),
-                'debug-mode': new Cfg ('Enable Log'),
+                'skip-libadwaita-app': new Cfg (
+                    _ ('Skip LibAdwaita Applications')
+                ),
+                'skip-libhandy-app': new Cfg (_ ('Skip LibHandy Applications')),
+                'focused-shadow': new Cfg (_ ('Focus Window Shadow Style')),
+                'unfocused-shadow': new Cfg (_ ('Unfocus Window Shadow Style')),
+                'border-width': new Cfg (_ ('Border Width')),
+                'border-color': new Cfg (_ ('Border Color')),
+                'debug-mode': new Cfg (_ ('Enable Log')),
             }
 
             this._reset_corners_cfg = {
-                border_radius: new Cfg ('Border Radius'),
-                padding: new Cfg ('Padding'),
+                border_radius: new Cfg (_ ('Border Radius')),
+                padding: new Cfg (_ ('Padding')),
                 keep_rounded_corners: new Cfg (
-                    'Keep Rounded Corners when Maximized or Fullscreen'
+                    _ ('Keep Rounded Corners when Maximized or Fullscreen')
                 ),
-                smoothing: new Cfg ('Corner Smoothing'),
+                smoothing: new Cfg (_ ('Corner Smoothing')),
             }
         }
 
@@ -83,7 +86,7 @@ export const ResetDialog = GObject.registerClass (
             // Title
             content.append (
                 new Gtk.Label ({
-                    label: 'Select Items to reset',
+                    label: _ ('Select Items to reset'),
                     css_classes: ['heading'],
                     halign: Gtk.Align.START,
                 })
@@ -92,7 +95,7 @@ export const ResetDialog = GObject.registerClass (
             // Select All Checkbox
             const select_all_check_btn = new Gtk.CheckButton ()
             const select_all_label = new Gtk.Label ({
-                label: 'Select All',
+                label: _ ('Select All'),
             })
             const row = new Gtk.Box ()
             row.append (select_all_check_btn)

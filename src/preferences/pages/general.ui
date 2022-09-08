@@ -282,7 +282,7 @@
     </child>
     <child>
       <object class="GtkButton" id="reset_preferences_btn">
-        <property name="label">Reset Preferences</property>
+        <property name="label" translatable="yes">Open Reset Preferences Dialog</property>
         <property name="halign">start</property>
         <style>
           <class name="destructive-action"/>

@@ -7,6 +7,7 @@ import { list_children, show_err_msg } from '@me/utils/prefs'
 import { constants }                   from '@me/utils/constants'
 import { settings }                    from '@me/utils/settings'
 import { connections }                 from '@me/utils/connections'
+import { _ }                           from '@me/utils/i18n'
 import { AppRowHandler, AppRow }       from '@me/preferences/widgets/app_row'
 import { RoundedCornersItem }          from '@me/preferences/widgets/rounded_corners_item'
 
@@ -154,7 +155,7 @@ export const Custom = GObject.registerClass (
             expanded_row.activatable = false
 
             if (title == '') {
-                expanded_row.description = constants.TIPS_EMPTY
+                expanded_row.description = constants.TIPS_EMPTY ()
             }
 
             this._custom_group.append (expanded_row)
@@ -194,11 +195,11 @@ export const Custom = GObject.registerClass (
         private create_enabled_row (active_widget: Widget): Gtk.ListBoxRow {
             const row = new Gtk.ListBoxRow ()
             const title = new Gtk.Label ({
-                label: 'Enable',
+                label: _ ('Enable'),
                 halign: Gtk.Align.START,
             })
             const description = new Gtk.Label ({
-                label: 'Enable custom settings for this window',
+                label: _ ('Enable custom settings for this window'),
                 halign: Gtk.Align.START,
                 css_classes: ['caption'],
             })

@@ -23,7 +23,7 @@
                     <child>
                       <object class="GtkToggleButton" id="focus_toggle_button">
                         <property name="active">true</property>
-                        <property name="label" translatable="yes">Focus</property>
+                        <property name="label" translatable="yes">Focus Window</property>
                         <property name="hexpand">true</property>
                         <style>
                           <class name="linked" />
@@ -32,7 +32,7 @@
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="unfocus_toggle_button">
-                        <property name="label" translatable="yes">Unfocus</property>
+                        <property name="label" translatable="yes">Unfocus Window</property>
                         <property name="hexpand">true</property>
                         <style>
                           <class name="linked" />

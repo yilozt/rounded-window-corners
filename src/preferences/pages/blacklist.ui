@@ -35,7 +35,7 @@ The item of list is instance part of WM_CLASS property with window. You can pick
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label">Add Window</property>
+                <property translatable="yes" name="label">Add Window</property>
               </object>
             </child>
           </object>

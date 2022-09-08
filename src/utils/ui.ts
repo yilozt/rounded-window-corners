@@ -9,6 +9,7 @@ import { openPrefs }       from '@imports/misc/extensionUtils'
 import { load }            from '@me/utils/io'
 import { _log, _logError } from '@me/utils/log'
 import { constants }       from '@me/utils/constants'
+import { _ }               from '@me/utils/i18n'
 
 // types
 import { global }          from '@global'
@@ -97,12 +98,12 @@ type BackgroundExtra = {
  */
 export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
     for (const item of menu._getMenuItems ()) {
-        if (item.label?.text === constants.ITEM_LABEL) {
+        if (item.label?.text === _ (constants.ITEM_LABEL ())) {
             return
         }
     }
 
-    menu.addAction (constants.ITEM_LABEL, () => {
+    menu.addAction (_ (constants.ITEM_LABEL ()), () => {
         try {
             openPrefs ()
         } catch (err) {
@@ -124,7 +125,7 @@ export const RestoreBackgroundMenu = () => {
         const items = menu._getMenuItems ()
 
         for (const i of items) {
-            if (i?.label?.text === constants.ITEM_LABEL) {
+            if (i?.label?.text === _ (constants.ITEM_LABEL ())) {
                 (i as Actor).destroy ()
                 break
             }

@@ -7,6 +7,7 @@ import { show_err_msg }    from '@me/utils/prefs'
 import { connections }     from '@me/utils/connections'
 import { constants }       from '@me/utils/constants'
 import { on_picked, pick } from '@me/dbus/client'
+import { _ }               from '@me/utils/i18n'
 
 // types
 import { Me }              from '@global'
@@ -107,8 +108,9 @@ export const AppRow = GObject.registerClass (
             })
             c.connect (this._pick_window_btn, 'clicked', () => {
                 on_picked ((wm_instance_class) => {
-                    const title =
+                    const title = _ (
                         'Can\'t pick a window window from this position'
+                    )
                     if (wm_instance_class == 'window-not-found') {
                         show_err_msg (title)
                         return
@@ -145,7 +147,7 @@ export const AppRow = GObject.registerClass (
                 this.description = ''
             } else {
                 if (this.title == '') {
-                    this.description = constants.TIPS_EMPTY
+                    this.description = constants.TIPS_EMPTY ()
                 }
             }
         }
