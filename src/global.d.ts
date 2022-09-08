@@ -12,9 +12,6 @@ declare const global: Global,
 declare const imports = {
     gi: { Adw },
     ui: { windowPreview },
-    __modulePath__: string,
-    __moduleName__: string,
-    __parentModule__: string,
 }
 
 declare const Me: {

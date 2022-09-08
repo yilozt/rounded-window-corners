@@ -369,8 +369,6 @@ export class RoundedCornersManager {
         if (!border_radius || !padding) {
             return
         }
-
-        // Padding for Kitty terminal should always be zero
         const { left, right, top, bottom } = padding
 
         // Increasing border_radius when smoothing is on
