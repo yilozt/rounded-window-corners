@@ -11,6 +11,8 @@ exports.build   = build
 exports.install = series(build, copy_extension)
 // Package extensions
 exports.pack    = require('./gulp/pack').pack
+// Generate po files
+exports.po      = require('./gulp/po').po
 
 // ----------------------------------------------- [Development Options]
 

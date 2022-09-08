@@ -70,6 +70,20 @@ Download extensions pack from [Releases](https://github.com/yilozt/rounded-windo
 gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
 ```
 
+## Translations
+
+To add new translations for extensions, you can add empty `.po` file to `po` directory, then use `yarn po` to fill it. 
+
+```
+touch po/zh_CN.po  # replace zh_CN to the locales you want to add
+yarn po            # auto fill po file
+vim po/zh_CN.po    # now let's start edit
+```
+
+You can run `yarn ext:install` to compile `.po` files and install extensions. if you are in XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session to preview the result.
+
+You can run `yarn dev` in your terminal to watch changes of `.po` files, once you have update `.po` files, it will compile and install extensions automatically.
+
 ## Development
 
 ### Build
