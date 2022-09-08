@@ -18,6 +18,7 @@ mkShell {
     networkmanager
     graphene
     gnome.gnome-shell
+    zip
   ];
 
   shellHook = ''
