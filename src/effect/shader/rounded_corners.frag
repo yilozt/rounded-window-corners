@@ -101,5 +101,5 @@ void main() {
 
     cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);
   }
-  cogl_color_out *=  outer_alpha;
+  cogl_color_out.a *=  outer_alpha;
 }
