@@ -56,4 +56,5 @@ const compile_po = () =>
     }))
     .pipe(dest('_build'))
 
+exports.compile_po = compile_po
 exports.po = series(gen_pot, fill_pot, compile_po)
