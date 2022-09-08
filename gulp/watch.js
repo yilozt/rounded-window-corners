@@ -1,7 +1,7 @@
 let lock = true
 
 const watch = (task) => () => {
-  const w = require('chokidar').watch(['./src', './resources'])
+  const w = require('chokidar').watch(['./src', './resources', './po'])
   w.on('all', (event, path) => {
     if (lock) {
       return

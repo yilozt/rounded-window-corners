@@ -1,5 +1,7 @@
 // This files use for store const variants will used by other modules.
 
+import { _ } from '@me/utils/i18n'
+
 /**
  * Loaded Message will be shown when debug.
  * see: https://patorjk.com/software/taag
@@ -25,11 +27,11 @@ export const constants = {
     /** Padding of shadow actors */
     SHADOW_PADDING: 80,
     /** Tips when add new items in preferences Page */
-    TIPS_EMPTY: 'Expand this row to pick a window.',
+    TIPS_EMPTY: () => _ ('Expand this row to pick a window.'),
     /** Used to mark widget in preferences/page/custom.ts */
     DON_T_CONFIG: 'Don\'t Configuration in Custom Page',
     /** Item label for background menu  */
-    ITEM_LABEL: 'Rounded Corners Settings...',
+    ITEM_LABEL: () => _ ('Rounded Corners Settings...'),
     /** Name of shadow actor to be added in overview */
     OVERVIEW_SHADOW_ACTOR: 'Shadow Actor (Overview)',
 }

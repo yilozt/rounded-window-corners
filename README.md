@@ -43,7 +43,7 @@ Install extensions from [here](https://extensions.gnome.org/extension/5237/round
 
 It will install extensions to `~/.local/share/gnome-shell/extensions`
 
-```
+```bash
 git clone https://github.com/yilozt/rounded-window-corners
 cd rounded-window-corners
 yarn install && yarn ext:install
@@ -52,7 +52,7 @@ yarn install && yarn ext:install
 In NixOS, you can use `nix-shell` to setup development shell then install
 extensions to `~/.local/share/gnome-shell/extensions`.
 
-```
+```bash
 git clone https://github.com/yilozt/rounded-window-corners
 cd rounded-window-corners
 nix-shell
@@ -66,9 +66,23 @@ Download extensions pack from [Releases](https://github.com/yilozt/rounded-windo
 [![](https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square)](https://github.com/yilozt/rounded-window-corners/releases)
 [![](https://img.shields.io/github/workflow/status/yilozt/rounded-window-corners/Pack%20extensions?label=Pack%20extensions&style=flat-square)](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml)
 
-```
+```bash
 gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
 ```
+
+## Translations
+
+To add new translations for extensions, you can add empty `.po` file to `po` directory, then use `yarn po` to fill it. 
+
+```bash
+touch po/zh_CN.po  # replace zh_CN to the locales you want to add
+yarn po            # auto fill po file
+vim po/zh_CN.po    # now let's start edit
+```
+
+You can run `yarn ext:install` to compile `.po` files and install extensions. In XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session then preview the result.
+
+You can run `yarn dev` in your terminal to watch changes of `.po` files, once you have update `.po` files, it will compile and install extensions automatically.
 
 ## Development
 

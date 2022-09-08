@@ -21,6 +21,7 @@ import { connections }                from '@me/utils/connections'
 import { settings }                   from '@me/utils/settings'
 import { Services }                   from '@me/dbus/services'
 import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
+import { init_translations }          from '@me/utils/i18n'
 
 // types, which will be removed in output
 import { WM }                         from '@gi/Shell'
@@ -311,6 +312,7 @@ export class Extension {
 }
 
 export function init () {
+    init_translations ()
     return new Extension ()
 }
 

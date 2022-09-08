@@ -15,14 +15,14 @@
                 <child>
                   <object class="GtkLabel" id="title">
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes"></property>
+                    <property name="label"></property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel" id="description">
                     <property name="halign">start</property>
                     <property name="use-markup">true</property>
-                    <property name="label" translatable="yes"></property>
+                    <property name="label"></property>
                     <style>
                       <class name="caption"/>
                     </style>  
@@ -33,7 +33,7 @@
             <child>
               <object class="GtkButton" id="remove_button">
                 <property name="has-tooltip">true</property>
-                <property name="tooltip-text">Remove Window from this List</property>
+                <property name="tooltip-text" translatable="yes">Remove Window from this List</property>
                 <property name="valign">center</property>
                 <property name="icon-name">window-close-symbolic</property>            
                 <style>
@@ -74,7 +74,7 @@
                         <child>
                           <object class="GtkButton" id="pick_window_btn">
                             <property name="has-tooltip">true</property>
-                            <property name="tooltip-text">Pick Window to add into list</property>
+                            <property name="tooltip-text" translatable="yes">Pick Window to add into list</property>
                             <property name="visible">true</property>
                             <property name="icon-name">find-location-symbolic</property>
                             <style>
@@ -89,7 +89,7 @@
                           <object class="GtkButton" id="change_title_btn">
                             <property name="visible">true</property>
                             <property name="has-tooltip">true</property>
-                            <property name="tooltip-text">Apply this title</property>
+                            <property name="tooltip-text" translatable="yes">Apply</property>
                             <property name="icon-name">object-select-symbolic</property>
                             <style>
                               <class name="list-button"/>

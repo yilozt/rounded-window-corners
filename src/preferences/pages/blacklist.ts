@@ -85,7 +85,7 @@ export const BlackList = GObject.registerClass (
             row.title = title
 
             if (!title) {
-                row.description = constants.TIPS_EMPTY
+                row.description = constants.TIPS_EMPTY ()
             }
 
             this._black_list_group.append (row)
