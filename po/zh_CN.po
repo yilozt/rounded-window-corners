@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
-"PO-Revision-Date: 2022-09-08 20:21+0000\n"
 "X-Generator: fill-pot-po/2.1.9\n"
 
 #: src/preferences/pages/blacklist.ui:14
@@ -143,7 +142,7 @@ msgstr "垂直偏移"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
-msgstr "模糊"
+msgstr "模糊半径"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
@@ -152,6 +151,10 @@ msgstr "扩散半径"
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
 msgstr "透明度"
+
+#: src/preferences/widgets/edit_shadow_window.ts:58
+msgid "Edit Shadow for Rounded Corners Windows"
+msgstr "编辑圆角窗口阴影"
 
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Focus Window Shadow Style"
