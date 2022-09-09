@@ -3,7 +3,7 @@ import * as Gdk                       from '@gi/Gdk'
 import { getCurrentExtension }        from '@imports/misc/extensionUtils'
 
 import { pages }                      from '@me/preferences/index'
-import { init_translations }          from '@me/utils/i18n'
+import { init_translations_prefs }    from '@me/utils/i18n'
 
 import { PreferencesWindow, imports } from '@global'
 
@@ -18,7 +18,7 @@ function load_css () {
 }
 
 export function init () {
-    init_translations ()
+    init_translations_prefs ()
 }
 
 // Load preferences Pages for Gnome 40 / Gnome 41

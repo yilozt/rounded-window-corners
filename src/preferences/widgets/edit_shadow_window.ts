@@ -5,6 +5,7 @@ import { registerClass }  from '@gi/GObject'
 // local modules
 import { box_shadow_css } from '@me/utils/types'
 import { settings }       from '@me/utils/settings'
+import { _ }              from '@me/utils/i18n'
 
 // just used to mark type of value, will be remove in output javascript
 import { BoxShadow }      from '@me/utils/types'
@@ -54,7 +55,7 @@ export const EditShadowWindow = registerClass (
 
         _init () {
             super._init ({
-                title: 'Edit Shadow for Rounded Corners Windows',
+                title: _ ('Edit Shadow for Rounded Corners Windows'),
                 modal: true,
             })
 

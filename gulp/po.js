@@ -42,7 +42,6 @@ const fill_pot = () =>
       poSources: ['po/*.po'],
       logResult: true,
       appendNonIncludedFromPO: true,
-      includePORevisionDate: true,
     }))
     .pipe(dest('po'))
 
