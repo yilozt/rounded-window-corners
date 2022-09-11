@@ -96,78 +96,6 @@ export class RoundedCornersManager {
             }
         })
 
-        // Connect 'minimized' signal, hide shadow actor when window minimized
-        this.connections.connect (
-            wm,
-            'minimize',
-            (_: WM, actor: WindowActor) => {
-                const win = actor.get_meta_window ()
-                const info = this.rounded_windows?.get (win)
-                const shadow = info?.shadow
-                const bindings = info?.bindings
-                if (shadow && bindings) {
-                    // Disconnect bindings temporary, it will be restored
-                    // when un-minimized
-                    const visible_binding = bindings['visible']
-                    if (visible_binding) {
-                        visible_binding.unbind ()
-                        delete bindings['visible']
-                    }
-                    shadow.visible = false
-                }
-            }
-        )
-
-        // Restore visible of shadow when un-minimized
-        this.connections.connect (
-            wm,
-            'unminimize',
-            (_: WM, actor: WindowActor) => {
-                const win = actor.get_meta_window ()
-                const info = this.rounded_windows?.get (win)
-                const shadow = info?.shadow
-                const bindings = info?.bindings
-                if (!shadow || !bindings) {
-                    return
-                }
-
-                const restore_binding = () => {
-                    if (!bindings['visible']) {
-                        bindings['visible'] = actor.bind_property (
-                            'visible',
-                            shadow,
-                            'visible',
-                            BindingFlags.SYNC_CREATE
-                        )
-                    }
-                }
-
-                // Handle visible of shader with Compiz alike magic lamp effect
-                // After MagicLampUnminimizeEffect completed, then show shadow
-                //
-                // https://github.com/hermes83/compiz-alike-magic-lamp-effect
-                const effect = actor.get_effect ('unminimize-magic-lamp-effect')
-                if (effect) {
-                    type Effect = Clutter.Effect & { timerId: Clutter.Timeline }
-                    const timer_id = (effect as Effect).timerId
-
-                    const id = timer_id.connect ('new-frame', (source) => {
-                        // Effect completed when get_process() touch 1.0
-                        // Need show shadow here
-                        if (source.get_progress () > 0.98) {
-                            _log ('Handle Unminimize with Magic Lamp Effect')
-
-                            restore_binding ()
-                            source.disconnect (id)
-                        }
-                    })
-                    return
-                }
-
-                restore_binding ()
-            }
-        )
-
         // Disconnect all signals of window when closed
         this.connections.connect (wm, 'destroy', (_: WM, actor: WindowActor) =>
             this._remove_effect (actor)
@@ -211,6 +139,55 @@ export class RoundedCornersManager {
 
     query_shadow (win: Window): Bin | undefined {
         return this.rounded_windows?.get (win)?.shadow
+    }
+
+    /** Query property bindings between window actor and shadow actor  */
+    query_shadow_prop_bindings (win: Window):
+        | {
+              [prop: string]: Binding | undefined
+          }
+        | undefined {
+        return this.rounded_windows?.get (win)?.bindings
+    }
+
+    /** Hide visible of shadow actor to false */
+    hide_shadow (win: Window) {
+        const shadow = this.query_shadow (win)
+        const bindings = this.query_shadow_prop_bindings (win)
+
+        if (!shadow || !bindings) {
+            return
+        }
+
+        // Disconnect bindings temporary, it will be restored
+        // when un-minimized
+        const visible_binding = bindings['visible']
+        if (visible_binding) {
+            visible_binding.unbind ()
+            delete bindings['visible']
+        }
+        shadow.visible = false
+    }
+
+    /** Restore visible of shadow actor to false */
+    restore_shadow (win: Window) {
+        const shadow = this.query_shadow (win)
+        const bindings = this.query_shadow_prop_bindings (win)
+
+        if (!shadow || !bindings) {
+            return
+        }
+
+        if (!bindings['visible']) {
+            bindings['visible'] = win
+                .get_compositor_private ()
+                .bind_property (
+                    'visible',
+                    shadow,
+                    'visible',
+                    BindingFlags.SYNC_CREATE
+                )
+        }
     }
 
     /** Return all rounded corners window  */
@@ -277,7 +254,7 @@ export class RoundedCornersManager {
      */
     private _create_shadow (actor: WindowActor): Bin {
         const shadow = new Bin ({
-            name: 'Shadow Actor',
+            name: constants.SHADOW_ACTOR_NAME,
             child: new Bin ({
                 x_expand: true,
                 y_expand: true,

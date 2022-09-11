@@ -22,6 +22,7 @@ import { settings }                   from '@me/utils/settings'
 import { Services }                   from '@me/dbus/services'
 import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
 import { init_translations }          from '@me/utils/i18n'
+import { Compatibility }              from '@me/compatibility/index'
 
 // types, which will be removed in output
 import { WM }                         from '@gi/Shell'
@@ -41,6 +42,7 @@ export class Extension {
 
     private _services: Services | null = null
     private _rounded_corners_manager: RoundedCornersManager | null = null
+    private _compatibility: Compatibility | null = null
 
     private _fs_timeout_id = 0
 
@@ -59,6 +61,7 @@ export class Extension {
 
         this._services = new Services ()
         this._rounded_corners_manager = new RoundedCornersManager ()
+        this._compatibility = new Compatibility ()
 
         this._services.export ()
 
@@ -239,7 +242,7 @@ export class Extension {
             })
         }
 
-        // Window Size Changed
+        // This method will be called when window maximized & tiled
         WindowManager.prototype._sizeChangeWindowDone = function (
             shell_wm,
             actor
@@ -297,6 +300,7 @@ export class Extension {
 
         // Set all props to null
         this._rounded_corners_manager = null
+        this._compatibility = null
         this._services = null
 
         _log ('Disabled')
@@ -304,10 +308,12 @@ export class Extension {
 
     private _enable_effect_managers () {
         this._rounded_corners_manager?.enable ()
+        this._compatibility?.enable (this._rounded_corners_manager)
     }
 
     private _disable_effect_managers () {
         this._rounded_corners_manager?.disable ()
+        this._compatibility?.disable ()
     }
 }
 

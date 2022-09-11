@@ -126,4 +126,4 @@ export const connections = {
 type _Map = Map<GObject.Object, { [signal_name: string]: number[] }>
 
 type Handler<T extends GObject.Object> = Parameters<T['connect']>
-type DefaultHandler = [string, (_: unknown[]) => unknown]
+type DefaultHandler = [string, (...params: never[]) => unknown]
