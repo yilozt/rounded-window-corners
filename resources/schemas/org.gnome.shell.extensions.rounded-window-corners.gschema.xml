@@ -103,5 +103,9 @@
     <key name="tweak-kitty-terminal" type="b">
       <default>false</default>
     </key>
+
+    <key name="enable-preferences-entry" type="b">
+      <default>false</default>
+    </key>
   </schema>
 </schemalist>

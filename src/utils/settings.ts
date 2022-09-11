@@ -36,6 +36,7 @@ export type SchemasKeys =
     | 'border-color'
     | 'settings-version'
     | 'tweak-kitty-terminal'
+    | 'enable-preferences-entry'
 
 /**
  * Simple wrapper of Gio.Settings, we will use this class to store and
@@ -52,6 +53,7 @@ class Settings {
     unfocused_shadow               !: BoxShadow
     debug_mode                     !: boolean
     tweak_kitty_terminal           !: boolean
+    enable_preferences_entry       !: boolean
     border_width                   !: number
     settings_version               !: number
     border_color                   !: [number, number, number, number]

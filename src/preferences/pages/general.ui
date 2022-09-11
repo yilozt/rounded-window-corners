@@ -269,6 +269,33 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Add Settings Entry in right-click menu of Background</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="preferences_entry_switch">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>

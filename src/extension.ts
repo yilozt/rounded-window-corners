@@ -2,6 +2,7 @@
 import { Point }                      from '@gi/Graphene'
 import * as Clutter                   from '@gi/Clutter'
 import * as GLib                      from '@gi/GLib'
+import { Settings }                   from '@gi/Gio'
 import { MonitorManager }             from '@gi/Meta'
 
 // gnome-shell modules
@@ -18,7 +19,7 @@ import { RoundedCornersManager }      from '@me/manager/rounded_corners_manager'
 import { stackMsg, _log }             from '@me/utils/log'
 import * as UI                        from '@me/utils/ui'
 import { connections }                from '@me/utils/connections'
-import { settings }                   from '@me/utils/settings'
+import { SchemasKeys, settings }      from '@me/utils/settings'
 import { Services }                   from '@me/dbus/services'
 import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
 import { init_translations }          from '@me/utils/i18n'
@@ -253,10 +254,14 @@ export class Extension {
             self._rounded_corners_manager._on_focus_changed (actor.meta_window)
         }
 
-        UI.SetupBackgroundMenu ()
+        if (settings ().enable_preferences_entry) {
+            UI.SetupBackgroundMenu ()
+        }
         BackgroundMenu.addBackgroundMenu = (actor, layout) => {
             this._add_background_menu (actor, layout)
-            UI.AddBackgroundMenuItem (actor._backgroundMenu)
+            if (settings ().enable_preferences_entry) {
+                UI.AddBackgroundMenuItem (actor._backgroundMenu)
+            }
         }
 
         // Gnome-shell will not disable extensions when _logout/shutdown/restart
@@ -268,6 +273,20 @@ export class Extension {
             _log ('Clear all resources because gnome-shell is shutdown')
             this.disable ()
         })
+
+        connections
+            .get ()
+            .connect (
+                settings ().g_settings,
+                'changed',
+                (_: Settings, key: string) => {
+                    if ((key as SchemasKeys) === 'enable-preferences-entry') {
+                        settings ().enable_preferences_entry
+                            ? UI.SetupBackgroundMenu ()
+                            : UI.RestoreBackgroundMenu ()
+                    }
+                }
+            )
 
         _log ('Enabled')
     }

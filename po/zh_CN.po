@@ -97,26 +97,30 @@ msgstr "在 Wayland 下为 Kitty 终端添加圆角效果"
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "调整 Kitty 终端的剪裁半径"
 
-#: src/preferences/pages/general.ui:277
+#: src/preferences/pages/general.ui:284
+msgid "Add Settings Entry in right-click menu of Background"
+msgstr "将首选项入口添加到桌面背景的右键菜单"
+
+#: src/preferences/pages/general.ui:304
 msgid "Debug"
 msgstr "调试"
 
-#: src/preferences/pages/general.ui:302
+#: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:68
 msgid "Enable Log"
 msgstr "启用日志"
 
-#: src/preferences/pages/general.ui:309
+#: src/preferences/pages/general.ui:336
 msgid ""
 "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
 "log"
 msgstr "可以在终端里运行 <i>journalctl -o cat -f /usr/bin/gnome-shell</i> 来查看日志"
 
-#: src/preferences/pages/general.ui:332
+#: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
 msgstr "重置设置"
 
-#: src/preferences/pages/general.ui:340
+#: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
 msgstr "打开重置对话框"
 
