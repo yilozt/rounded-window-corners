@@ -86,25 +86,37 @@ msgid "Border Color"
 msgstr "边框颜色"
 
 #: src/preferences/pages/general.ui:222
+msgid "Tweaks"
+msgstr "调整"
+
+#: src/preferences/pages/general.ui:247
+msgid "Try to add rounded corners to Kitty Terminal in Wayland"
+msgstr "在 Wayland 下为 Kitty 终端添加圆角效果"
+
+#: src/preferences/pages/general.ui:254
+msgid "Tweak clip paddings for Kitty Terminal"
+msgstr "调整 Kitty 终端的剪裁半径"
+
+#: src/preferences/pages/general.ui:277
 msgid "Debug"
 msgstr "调试"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:302
 #: src/preferences/widgets/reset_dialog.ts:68
 msgid "Enable Log"
 msgstr "启用日志"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:309
 msgid ""
 "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
 "log"
 msgstr "可以在终端里运行 <i>journalctl -o cat -f /usr/bin/gnome-shell</i> 来查看日志"
 
-#: src/preferences/pages/general.ui:277
+#: src/preferences/pages/general.ui:332
 msgid "Reset Preferences"
 msgstr "重置设置"
 
-#: src/preferences/pages/general.ui:285
+#: src/preferences/pages/general.ui:340
 msgid "Open Reset Preferences Dialog"
 msgstr "打开重置对话框"
 

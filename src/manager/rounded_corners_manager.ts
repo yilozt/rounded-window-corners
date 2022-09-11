@@ -234,15 +234,18 @@ export class RoundedCornersManager {
 
         // Kitty draw it's window decoration by itself, we need recompute the
         // outer bounds for kitty.
-        const kitty_adjustment =
-            actor.meta_window.get_client_type () === WindowClientType.WAYLAND &&
-            actor.meta_window.get_wm_class_instance () === 'kitty'
-        if (kitty_adjustment) {
-            const scale = UI.WindowScaleFactor (actor.meta_window)
-            bounds.x1 += 11 * scale /* shadow in left   of kitty */
-            bounds.y1 += 35 * scale /* shadow in top    of kitty */
-            bounds.x2 -= 11 * scale /* shadow in right  of kitty */
-            bounds.y2 -= 11 * scale /* shadow in bottom of kitty */
+        if (settings ().tweak_kitty_terminal) {
+            const type = WindowClientType.WAYLAND
+            if (
+                actor.meta_window.get_client_type () == type &&
+                actor.meta_window.get_wm_class_instance () === 'kitty'
+            ) {
+                const scale = UI.WindowScaleFactor (actor.meta_window)
+                bounds.x1 += 11 * scale /* shadow in left   of kitty */
+                bounds.y1 += 35 * scale /* shadow in top    of kitty */
+                bounds.x2 -= 11 * scale /* shadow in right  of kitty */
+                bounds.y2 -= 11 * scale /* shadow in bottom of kitty */
+            }
         }
 
         return bounds
@@ -728,6 +731,7 @@ export class RoundedCornersManager {
         case 'custom-rounded-corner-settings':
         case 'border-color':
         case 'border-width':
+        case 'tweak-kitty-terminal':
             this.update_all_rounded_corners_settings ()
             break
         default:

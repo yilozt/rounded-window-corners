@@ -30,6 +30,7 @@ export const General = GObject.registerClass (
             'enable_log_switch',
             'skip_libadwaita_app_switch',
             'skip_libhandy_app_switch',
+            'tweak_kitty_switch',
             'border_width_ajustment',
             'border_color_button',
             'edit_shadow_row',
@@ -43,6 +44,7 @@ export const General = GObject.registerClass (
         private _enable_log_switch                 !: Gtk.Switch
         private _skip_libhandy_app_switch          !: Gtk.Switch
         private _skip_libadwaita_app_switch        !: Gtk.Switch
+        private _tweak_kitty_switch                !: Gtk.Switch
         private _border_width_ajustment            !: Gtk.Adjustment
         private _border_color_button               !: Gtk.ColorButton
         private _edit_shadow_row                   !: Gtk.ListBoxRow
@@ -70,6 +72,12 @@ export const General = GObject.registerClass (
             settings ().bind (
                 'debug-mode',
                 this._enable_log_switch,
+                'active',
+                Gio.SettingsBindFlags.DEFAULT
+            )
+            settings ().bind (
+                'tweak-kitty-terminal',
+                this._tweak_kitty_switch,
                 'active',
                 Gio.SettingsBindFlags.DEFAULT
             )
