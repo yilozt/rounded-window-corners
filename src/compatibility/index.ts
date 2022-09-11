@@ -1,4 +1,5 @@
 import { CompizeAlikeMagicLampEffect } from '@me/compatibility/compiz_alike_magic_lamp_effect'
+import { CompizeWindowEffect }         from '@me/compatibility/compiz_windows_effect'
 import { RoundedCornersManager }       from '@me/manager/rounded_corners_manager'
 
 type DetailCompatibility = {
@@ -9,7 +10,10 @@ type DetailCompatibility = {
 export class Compatibility {
     private enable_list: null | DetailCompatibility[] = null
     enable (rounded_corners_manager: RoundedCornersManager | null) {
-        this.enable_list = [new CompizeAlikeMagicLampEffect ()]
+        this.enable_list = [
+            new CompizeAlikeMagicLampEffect (),
+            new CompizeWindowEffect (),
+        ]
 
         for (const e of this.enable_list) {
             e.enable (rounded_corners_manager)

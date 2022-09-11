@@ -18,10 +18,9 @@
 
 ## Compatibility
 
-- [_Compiz alike magic lamp effect_](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)
+- [_Compiz alike magic lamp effect_](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/) / [_Compiz windows effect_](https://github.com/hermes83/compiz-windows-effect)
   
-  Hide shadow when magic lamp effect running.
-  Need to restart (disable then enable) this extension when _Compiz alike magic lamp effect_ enabled. 
+  Hide shadow when magic lamp effect / wobbly effect running.
 
 ## Notes
 
@@ -46,16 +45,7 @@ It will install extensions to `~/.local/share/gnome-shell/extensions`
 ```bash
 git clone https://github.com/yilozt/rounded-window-corners
 cd rounded-window-corners
-yarn install && yarn ext:install
-```
-
-In NixOS, you can use `nix-shell` to setup development shell then install
-extensions to `~/.local/share/gnome-shell/extensions`.
-
-```bash
-git clone https://github.com/yilozt/rounded-window-corners
-cd rounded-window-corners
-nix-shell
+# Run `nix-shell` to setup development shell in NixOS
 yarn install && yarn ext:install
 ```
 
@@ -80,9 +70,7 @@ yarn po            # auto fill po file
 vim po/zh_CN.po    # now let's start edit
 ```
 
-You can run `yarn ext:install` to compile `.po` files and install extensions. In XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session then preview the result.
-
-You can run `yarn dev` in your terminal to watch changes of `.po` files, once you have update `.po` files, it will compile and install extensions automatically.
+You can run `yarn dev` in terminal to watch changes of `.po` files, it will compile and install extensions automatically. In XOrg sessions, press `Alt + F2 -> r` to reload gnome-shell to preview the result.
 
 ## Development
 
