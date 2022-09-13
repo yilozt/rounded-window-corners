@@ -1,7 +1,15 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2022-09-15 06:16+0000\n"
+"Last-Translator: Yi <yilozt@outlook.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/zh_Hans/>\n"
+"Language: zh_CN\n"
 "Content-Type: text/plain; charset=utf-8\n"
-"X-Generator: fill-pot-po/2.1.9\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -11,7 +19,8 @@ msgid ""
 "The item of list is instance part of WM_CLASS property with window. You can "
 "pick a window to add it into this list."
 msgstr ""
-"并非所有应用都可以在应用圆角时能良好运行，可以将其添加到黑名单中以关闭圆角。\n"
+"并非所有应用程序在使用圆角效果时都能够良好运行，可以将其添加到黑名单中以关闭"
+"圆角。\n"
 "\n"
 "每一项代表窗口的 WM_CLASS 属性，可以在添加窗口后选取窗口。"
 
@@ -212,7 +221,7 @@ msgstr "最大化时保留圆角"
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
-msgstr "窗口最大化或垂直平铺时保留圆角"
+msgstr "窗口最大化或垂直平铺时保留圆角。"
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
@@ -220,7 +229,7 @@ msgstr "窗口全屏时保留圆角"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr "当窗口全屏时保留圆角效果"
+msgstr "当窗口全屏时保留圆角效果。"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
@@ -260,8 +269,8 @@ msgstr "自定义"
 
 #: src/utils/constants.ts:30
 msgid "Expand this row to pick a window."
-msgstr "展开此控件以选取窗口"
+msgstr "展开此控件以选取窗口。"
 
 #: src/utils/constants.ts:34
 msgid "Rounded Corners Settings..."
-msgstr "圆角设置..."
+msgstr "圆角设置…"
