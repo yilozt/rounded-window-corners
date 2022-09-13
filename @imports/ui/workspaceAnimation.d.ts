@@ -19,4 +19,6 @@ export class WorkspaceGroup extends Actor {
     }>
     _createWindows(): void;
     _removeWindows(): void;
+    _syncStacking(): void;
+    _shouldShowWindow(win: Window): boolean;
 }
