@@ -49,15 +49,7 @@ cd rounded-window-corners
 yarn install && yarn ext:install
 ```
 
-In NixOS, you can use `nix-shell` to setup development shell then install
-extensions to `~/.local/share/gnome-shell/extensions`.
-
-```bash
-git clone https://github.com/yilozt/rounded-window-corners
-cd rounded-window-corners
-nix-shell
-yarn install && yarn ext:install
-```
+In NixOS, you can use `nix-shell` to enter a development shell before run `yarn install`.
 
 ### From Releases / Github Actions
 
@@ -72,7 +64,11 @@ gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
 
 ## Translations
 
-To add new translations for extensions, you can add empty `.po` file to `po` directory, then use `yarn po` to fill it. 
+[![](https://hosted.weblate.org/widgets/rounded-window-corners/-/rounded-window-corners/multi-auto.svg)](https://hosted.weblate.org/engage/rounded-window-corners/)
+
+You can help translate this extensions by using [Weblate](https://hosted.weblate.org/engage/rounded-window-corners/), or update po files then open a pull request.
+
+To add new translations for extensions, you can add empty `.po` file in `po` directory, then use `yarn po` or `yarn dev` to fill it. 
 
 ```bash
 touch po/zh_CN.po  # replace zh_CN to the locales you want to add
@@ -80,9 +76,9 @@ yarn po            # auto fill po file
 vim po/zh_CN.po    # now let's start edit
 ```
 
-You can run `yarn ext:install` to compile `.po` files and install extensions. In XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session then preview the result.
+You can run `yarn ext:install` or `yarn dev` to install extensions with with new translations. In XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session then preview the result.
 
-You can run `yarn dev` in your terminal to watch changes of `.po` files, once you have update `.po` files, it will compile and install extensions automatically.
+`yarn dev` will watch changes of `.po` files, once you have update translations, it will compile and install extensions automatically.
 
 ## Development
 
