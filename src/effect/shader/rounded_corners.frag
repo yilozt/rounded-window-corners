@@ -95,11 +95,22 @@ void main() {
   vec2 texture_coord = cogl_tex_coord0_in.xy / pixel_step;
 
   float outer_alpha = rounded_rect_coverage(texture_coord, bounds, radius, exponent);
-  if(border_width > 0.1) {
-    float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_radius, exponent);
-    float border_alpha = clamp(outer_alpha - inner_alpha, 0.0, 1.0) * cogl_color_out.a;
 
-    cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);
+  // Clip window corners first
+  cogl_color_out.a *= outer_alpha;
+
+  // Draw border later
+  if(border_width > 0.9 || border_width < -0.9) {
+    float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_radius, exponent);
+    float border_alpha = clamp(abs(outer_alpha - inner_alpha), 0.0, 1.0);
+
+    if (border_width > 0.9) {
+      // If border is drawing inside window, mix color of window
+      cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);
+      cogl_color_out.a *= outer_alpha;
+    } else {
+      // If border is drawing outside window, just draw border
+      cogl_color_out = mix(cogl_color_out, border_color, border_alpha);
+    }
   }
-  cogl_color_out.a *=  outer_alpha;
 }

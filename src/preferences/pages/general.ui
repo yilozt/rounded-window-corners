@@ -374,8 +374,8 @@
   </template>
 
   <object class="GtkAdjustment" id="border_width_ajustment">
-    <property name="lower">0</property>
-    <property name="upper">40</property>
+    <property name="lower">-20</property>
+    <property name="upper">20</property>
     <property name="page-increment">1</property>
     <property name="step-increment">1</property>
   </object>
