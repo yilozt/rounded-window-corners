@@ -12,3 +12,4 @@ docs.json
 .tmp
 .vscode
 *.zip
+*.po

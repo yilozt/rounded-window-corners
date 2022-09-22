@@ -7,15 +7,15 @@ import { log, logError } from '@global'
  * Log message Only when debug_mode of settings () is enabled
  */
 export const _log = (...args: unknown[]) => {
-    if (settings ().debug_mode) {
-        log (`[RoundedCornersEffect] ${args}`)
-    }
+  if (settings ().debug_mode) {
+    log (`[RoundedCornersEffect] ${args}`)
+  }
 }
 
 /** Always log error message  */
 export const _logError = (err: Error) => {
-    log (`[Rounded Corners Effect] Error occurs: ${err.message}`)
-    logError (err)
+  log (`[Rounded Corners Effect] Error occurs: ${err.message}`)
+  logError (err)
 }
 
 /**
@@ -24,9 +24,9 @@ export const _logError = (err: Error) => {
  * function invocations.
  */
 export const stackMsg = (): string | undefined => {
-    try {
-        throw Error ()
-    } catch (e) {
-        return (e as Error)?.stack?.trim ()
-    }
+  try {
+    throw Error ()
+  } catch (e) {
+    return (e as Error)?.stack?.trim ()
+  }
 }

@@ -7,13 +7,13 @@ import * as windowPreview   from '@imports/ui/windowPreview'
 declare const global: Global, log: any, logError: any
 
 declare const imports = {
-    gi: { Adw },
-    ui: { windowPreview },
+  gi: { Adw },
+  ui: { windowPreview },
 }
 
 declare const Me: {
-    path: string
-    uuid: string
+  path: string
+  uuid: string
 }
 
 type PreferencesWindow = Adw.PreferencesWindow

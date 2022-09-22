@@ -36,17 +36,17 @@ msgid "Blur Offset"
 msgstr ""
 
 #: src/preferences/pages/general.ui:201
-#: src/preferences/widgets/reset_dialog.ts:67
+#: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:72
+#: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
 msgstr ""
 
 #: src/preferences/pages/general.ui:168
-#: src/preferences/widgets/reset_dialog.ts:66
+#: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
 msgstr ""
 
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
-#: src/preferences/widgets/app_row.ts:111
+#: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
 msgstr ""
 
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Clip paddings of window"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:77
+#: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
 msgstr ""
@@ -83,16 +83,16 @@ msgstr ""
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr ""
 
-#: src/preferences/pages/custom.ts:198
+#: src/preferences/pages/custom.ts:190
 msgid "Enable"
 msgstr ""
 
-#: src/preferences/pages/custom.ts:202
+#: src/preferences/pages/custom.ts:194
 msgid "Enable custom settings for this window"
 msgstr ""
 
 #: src/preferences/pages/general.ui:329
-#: src/preferences/widgets/reset_dialog.ts:68
+#: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Focus Window"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:64
+#: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgstr ""
 msgid "Keep Rounded Corners when Maximized"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:75
+#: src/preferences/widgets/reset_dialog.ts:73
 msgid "Keep Rounded Corners when Maximized or Fullscreen"
 msgstr ""
 
@@ -151,7 +151,7 @@ msgstr ""
 msgid "Open Reset Preferences Dialog"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:73
+#: src/preferences/widgets/reset_dialog.ts:71
 msgid "Padding"
 msgstr ""
 
@@ -183,11 +183,11 @@ msgstr ""
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:98
+#: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:89
+#: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
 msgstr ""
 
@@ -199,12 +199,12 @@ msgid ""
 msgstr ""
 
 #: src/preferences/pages/general.ui:47
-#: src/preferences/widgets/reset_dialog.ts:61
+#: src/preferences/widgets/reset_dialog.ts:60
 msgid "Skip LibAdwaita Applications"
 msgstr ""
 
 #: src/preferences/pages/general.ui:74
-#: src/preferences/widgets/reset_dialog.ts:63
+#: src/preferences/widgets/reset_dialog.ts:61
 msgid "Skip LibHandy Applications"
 msgstr ""
 
@@ -240,7 +240,7 @@ msgstr ""
 msgid "Unfocus Window"
 msgstr ""
 
-#: src/preferences/widgets/reset_dialog.ts:65
+#: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr ""
 

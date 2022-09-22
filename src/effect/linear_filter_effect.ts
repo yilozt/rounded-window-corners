@@ -4,19 +4,19 @@ import { registerClass }           from '@gi/GObject'
 import { GLSLEffect, SnippetHook } from '@gi/Shell'
 
 export const LinearFilterEffect = registerClass (
-    {},
-    class extends GLSLEffect {
-        vfunc_build_pipeline (): void {
-            this.add_glsl_snippet (SnippetHook.FRAGMENT, '', '', false)
-        }
-
-        vfunc_paint_target (node: PaintNode, ctx: PaintContext): void {
-            this.get_pipeline ()?.set_layer_filters (
-                0,
-                PipelineFilter.LINEAR_MIPMAP_LINEAR,
-                PipelineFilter.NEAREST
-            )
-            super.vfunc_paint_target (node, ctx)
-        }
+  {},
+  class extends GLSLEffect {
+    vfunc_build_pipeline (): void {
+      this.add_glsl_snippet (SnippetHook.FRAGMENT, '', '', false)
     }
+
+    vfunc_paint_target (node: PaintNode, ctx: PaintContext): void {
+      this.get_pipeline ()?.set_layer_filters (
+        0,
+        PipelineFilter.LINEAR_MIPMAP_LINEAR,
+        PipelineFilter.NEAREST
+      )
+      super.vfunc_paint_target (node, ctx)
+    }
+  }
 )
