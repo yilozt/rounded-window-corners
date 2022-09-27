@@ -77,7 +77,7 @@ export const RoundedCornersEffect = registerClass (
       border: {
         width: number
         color: [number, number, number, number]
-      }
+      } = { width: 0, color: [0, 0, 0, 0] }
     ) {
       const actor = this.actor
 

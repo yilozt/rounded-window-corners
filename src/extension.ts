@@ -22,6 +22,7 @@ import { connections }                from '@me/utils/connections'
 import { SchemasKeys, settings }      from '@me/utils/settings'
 import { Services }                   from '@me/dbus/services'
 import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
+import { RoundedCornersEffect }       from '@me/effect/rounded_corners_effect'
 import { init_translations }          from '@me/utils/i18n'
 
 // types, which will be removed in output
@@ -182,11 +183,67 @@ export class Extension {
       }
       this.insert_child_below (shadow_clone, window_container)
 
+      // In Gnome 43, preview windows in overview will be blurry if there are
+      // more than two workspaces using, We need add rounded corners to preview
+      // window in overview manually to avoid blurry preview windows.
+      type TypeRoundedCornersEffect =
+        | InstanceType<typeof RoundedCornersEffect>
+        | null
+        | undefined
+      let rounded_effect_of_window_actor: TypeRoundedCornersEffect = null
+      if (UI.shell_version () >= 43) {
+        // Name of rounded corners effect added to preview window
+        const name = 'Rounded Corners Effect (Overview)'
+
+        // Disabled rounded corners of window temporarily when enter overview
+        const window_actor: WindowActor = window.get_compositor_private ()
+        rounded_effect_of_window_actor =
+          self._rounded_corners_manager?.get_rounded_corners_effect (
+            window_actor
+          )
+        rounded_effect_of_window_actor?.set_enabled (false)
+
+        // Add rounded corners effect to preview window actor
+        first_child.add_effect_with_name (name, new RoundedCornersEffect ())
+
+        // Update uniform variables of rounded corners effect when size of
+        // preview windows in overview changed.
+        const c = connections.get ()
+        c.connect (this, 'notify::width', () => {
+          const rounded_effect_of_preview_window = first_child?.get_effect (
+            name
+          ) as TypeRoundedCornersEffect
+          if (!rounded_effect_of_preview_window) {
+            return
+          }
+
+          const buf_rect = window.get_buffer_rect ()
+          const frame_rect = window.get_frame_rect ()
+          const scaled = this.window_container.get_width () / frame_rect.width
+          const x1 = (frame_rect.x - buf_rect.x) * scaled
+          const y1 = (frame_rect.y - buf_rect.y) * scaled
+          const x2 = x1 + frame_rect.width * scaled
+          const y2 = y1 + frame_rect.height * scaled
+          rounded_effect_of_preview_window.update_uniforms (
+            scaled,
+            settings ().global_rounded_corner_settings,
+            { x1, y1, x2, y2 }
+          )
+        })
+      }
+
       // Disconnect all signals when Window preview in overview is destroy
-      const c = connections.get ()
       c.connect (this, 'destroy', () => {
+        shadow_clone.destroy ()
         first_child?.clear_effects ()
         first_child = null
+
+        // Enabled rounded corners of window actor when leaving overview,
+        // works for gnome 43.
+        if (overview._overview.controls._workspacesDisplay._leavingOverview) {
+          rounded_effect_of_window_actor?.set_enabled (true)
+        }
+
         c.disconnect_all (this)
       })
     }
@@ -384,7 +441,10 @@ const OverviewShadowActor = registerClass (
         : this._window_preview.get_allocation_box ()
 
       // Meta.Window contain the all information about a window
-      const meta_win = this._window_preview._windowActor.meta_window
+      const meta_win = this._window_preview._windowActor.get_meta_window ()
+      if (!meta_win) {
+        return
+      }
 
       // As we known, preview shown in overview has been scaled
       // in overview

@@ -4,6 +4,7 @@ import { Settings }        from '@gi/Gio'
 
 // gnome modules
 import { openPrefs }       from '@imports/misc/extensionUtils'
+import { PACKAGE_VERSION } from '@imports/misc/config'
 
 // local modules
 import { load }            from '@me/utils/io'
@@ -177,4 +178,11 @@ export function ShouldHasRoundedCorners (
     (fullscreen && cfg.keep_rounded_corners.fullscreen)
 
   return should_has_rounded_corners
+}
+
+/**
+ * @returns Current version of gnome shell
+ */
+export function shell_version (): number {
+  return Number.parseFloat (PACKAGE_VERSION)
 }

@@ -206,6 +206,15 @@ export class RoundedCornersManager {
     return this.rounded_windows?.keys ()
   }
 
+  /** Query rounded corners effect of window actor  */
+  get_rounded_corners_effect (
+    actor: WindowActor
+  ): RoundedCornersEffectType | null | undefined {
+    const name = constants.ROUNDED_CORNERS_EFFECT
+    type Res = RoundedCornersEffectType | null | undefined
+    return this._get_actor_to_rounded (actor)?.get_effect (name) as Res
+  }
+
   // ------------------------------------------------------- [private methods]
 
   /** Compute outer bound of rounded corners for window actor */
@@ -617,20 +626,11 @@ export class RoundedCornersManager {
     return type == WindowClientType.X11 ? actor.get_first_child () : actor
   }
 
-  /** Query rounded corners effect of window actor  */
-  private _get_rounded_corners (
-    actor: WindowActor
-  ): RoundedCornersEffectType | null | undefined {
-    const name = constants.ROUNDED_CORNERS_EFFECT
-    type Res = RoundedCornersEffectType | null | undefined
-    return this._get_actor_to_rounded (actor)?.get_effect (name) as Res
-  }
-
   /** Traversal all windows, add or remove rounded corners for them */
   private _update_all_window_effect_state () {
     global.get_window_actors ().forEach ((actor) => {
       const [should_have_effect] = this.should_enable_effect (actor.meta_window)
-      const has_effect = this._get_rounded_corners (actor) != null
+      const has_effect = this.get_rounded_corners_effect (actor) != null
 
       if (should_have_effect && !has_effect) {
         this._add_effect (actor)
@@ -735,7 +735,7 @@ export class RoundedCornersManager {
     const cfg = this._get_rounded_corners_cfg (win)
 
     // Skip rounded corners when window is fullscreen & maximize
-    let effect = this._get_rounded_corners (actor)
+    let effect = this.get_rounded_corners_effect (actor)
     const should_rounded = UI.ShouldHasRoundedCorners (win, cfg)
 
     if (!should_rounded && effect) {
