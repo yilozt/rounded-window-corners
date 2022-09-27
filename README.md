@@ -8,7 +8,7 @@
 
 ## Features
 
-- Works with Gnome 40/41/42
+- Works with Gnome 40+
 - Custom border radius and clip paddings for windows
 - Black list for applications which draw window decoration itself
 - Custom shadow for rounded corners windows
