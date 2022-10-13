@@ -56,9 +56,11 @@
   ],
   "xdg_data_dirs": {
     "ext": [
+      "/usr/lib64/mutter-11",
       "/usr/lib64/mutter-10",
       "/usr/lib64/mutter-9",
       "/usr/lib64/mutter-8",
+      "/usr/lib/x86_64-linux-gnu/mutter-11",
       "/usr/lib/x86_64-linux-gnu/mutter-10",
       "/usr/lib/x86_64-linux-gnu/mutter-9",
       "/usr/lib/x86_64-linux-gnu/mutter-8",

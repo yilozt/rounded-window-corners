@@ -15,7 +15,7 @@ import { _ }               from '@me/utils/i18n'
 // types
 import { global }          from '@global'
 import * as types          from '@me/utils/types'
-import { Actor }           from '@gi/Clutter'
+import { Actor, Effect }   from '@gi/Clutter'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -113,7 +113,7 @@ export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
   })
 }
 
-/** Find all Background menu, then add a item for open preferences into menu */
+/** Find all Background menu, then add extra item to it */
 export const SetupBackgroundMenu = () => {
   for (const _bg of global.window_group.first_child.get_children ()) {
     const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
@@ -185,4 +185,17 @@ export function ShouldHasRoundedCorners (
  */
 export function shell_version (): number {
   return Number.parseFloat (PACKAGE_VERSION)
+}
+
+/**
+ * Get Rounded corners effect from a window actor
+ */
+export function get_rounded_corners_effect (
+  actor: Meta.WindowActor
+): Effect | null {
+  const win = actor.meta_window
+  const name = constants.ROUNDED_CORNERS_EFFECT
+  return win.get_client_type () === Meta.WindowClientType.X11
+    ? actor.first_child.get_effect (name)
+    : actor.get_effect (name)
 }

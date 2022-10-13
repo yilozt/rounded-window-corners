@@ -8,14 +8,12 @@ import { MonitorManager }             from '@gi/Meta'
 // gnome-shell modules
 import { WindowPreview }              from '@imports/ui/windowPreview'
 import { WorkspaceGroup }             from '@imports/ui/workspaceAnimation'
-import { WindowManager }              from '@imports/ui/windowManager'
 import BackgroundMenu                 from '@imports/ui/backgroundMenu'
 import { sessionMode, layoutManager } from '@imports/ui/main'
 import { overview }                   from '@imports/ui/main'
 
 // local modules
 import { constants }                  from '@me/utils/constants'
-import { RoundedCornersManager }      from '@me/manager/rounded_corners_manager'
 import { stackMsg, _log }             from '@me/utils/log'
 import * as UI                        from '@me/utils/ui'
 import { connections }                from '@me/utils/connections'
@@ -24,11 +22,12 @@ import { Services }                   from '@me/dbus/services'
 import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
 import { RoundedCornersEffect }       from '@me/effect/rounded_corners_effect'
 import { init_translations }          from '@me/utils/i18n'
+import { WindowActorTracker }         from '@me/manager/effect_manager'
 
 // types, which will be removed in output
-import { WM }                         from '@gi/Shell'
 import { RoundedCornersCfg }          from '@me/utils/types'
-import { Window, WindowActor }        from '@gi/Meta'
+import { ExtensionsWindowActor }      from '@me/utils/types'
+import { Window }                     from '@gi/Meta'
 import { global }                     from '@global'
 import { registerClass }              from '@gi/GObject'
 
@@ -39,18 +38,12 @@ export class Extension {
   private _orig_add_window     !: (_: Window) => void
   private _orig_create_windows !: () => void
   private _orig_sync_stacking  !: () => void
-  private _orig_size_changed   !: (wm: WM, actor: WindowActor) => void
   private _add_background_menu !: typeof BackgroundMenu.addBackgroundMenu
 
   private _services: Services | null = null
-  private _rounded_corners_manager: RoundedCornersManager | null = null
+  private _window_actor_tracker: WindowActorTracker | null = null
 
   private _fs_timeout_id = 0
-
-  constructor () {
-    // Show loaded message in debug mode
-    _log (constants.LOADED_MSG)
-  }
 
   enable () {
     // Restore original methods, those methods will be restore when
@@ -58,11 +51,10 @@ export class Extension {
     this._orig_add_window = WindowPreview.prototype._addWindow
     this._orig_create_windows = WorkspaceGroup.prototype._createWindows
     this._orig_sync_stacking = WorkspaceGroup.prototype._syncStacking
-    this._orig_size_changed = WindowManager.prototype._sizeChangeWindowDone
     this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
     this._services = new Services ()
-    this._rounded_corners_manager = new RoundedCornersManager ()
+    this._window_actor_tracker = new WindowActorTracker ()
 
     this._services.export ()
 
@@ -73,11 +65,11 @@ export class Extension {
 
     if (layoutManager._startingUp) {
       const id = layoutManager.connect ('startup-complete', () => {
-        this._enable_effect_managers ()
+        this._window_actor_tracker?.enable ()
         layoutManager.disconnect (id)
       })
     } else {
-      this._enable_effect_managers ()
+      this._window_actor_tracker?.enable ()
     }
 
     // Have to toggle fullscreen for all windows when changed scale factor
@@ -88,37 +80,43 @@ export class Extension {
     // solve this problem.
 
     const monitor_manager = MonitorManager.get ()
-    type _Window = Window & { __extensions_rounded_window_fs?: 1 }
+    type _Window = Window & { __rwc_rounded_window_fs?: 1 }
 
     connections.get ().connect (monitor_manager, 'monitors-changed', () => {
       if (sessionMode.isLocked || sessionMode.isGreeter) {
         return
       }
-      for (const win of this._rounded_corners_manager?.windows () ?? []) {
-        (win as _Window).__extensions_rounded_window_fs = 1
-        win.make_fullscreen ()
+      for (const actor of global.get_window_actors ()) {
+        if (UI.get_rounded_corners_effect (actor)) {
+          const win = actor.meta_window
+          ;(win as _Window).__rwc_rounded_window_fs = 1
+          win.make_fullscreen ()
+        }
       }
 
       // waiting 3 seconds then restore marked windows.
       this._fs_timeout_id = GLib.timeout_add_seconds (0, 3, () => {
-        for (const _win of this._rounded_corners_manager?.windows () ?? []) {
-          const win = _win as _Window
-          if (win && win.__extensions_rounded_window_fs == 1) {
+        for (const actor of global.get_window_actors ()) {
+          if (!UI.get_rounded_corners_effect (actor)) {
+            continue
+          }
+          const win = actor.meta_window as _Window
+          if (win && win.__rwc_rounded_window_fs == 1) {
             win.unmake_fullscreen ()
-            delete win.__extensions_rounded_window_fs
+            delete win.__rwc_rounded_window_fs
           }
         }
         return false
       })
     })
 
-    // Restore window that have __extensions_rounded_window_fs props when
+    // Restore window that have __rwc_rounded_window_fs props when
     // unlocked
     for (const win_actor of global.get_window_actors ()) {
       const win = win_actor.meta_window as _Window
-      if (win.__extensions_rounded_window_fs === 1) {
+      if (win.__rwc_rounded_window_fs === 1) {
         win.unmake_fullscreen ()
-        delete win.__extensions_rounded_window_fs
+        delete win.__rwc_rounded_window_fs
       }
     }
 
@@ -154,7 +152,9 @@ export class Extension {
       // just return
       let cfg: RoundedCornersCfg | null = null
       let has_rounded_corners = false
-      const shadow = self._rounded_corners_manager?.query_shadow (window)
+      const window_actor: ExtensionsWindowActor =
+        window.get_compositor_private ()
+      const shadow = window_actor.__rwc_rounded_window_info?.shadow
       if (shadow) {
         cfg = UI.ChoiceRoundedCornersCfg (
           settings ().global_rounded_corner_settings,
@@ -196,11 +196,9 @@ export class Extension {
         const name = 'Rounded Corners Effect (Overview)'
 
         // Disabled rounded corners of window temporarily when enter overview
-        const window_actor: WindowActor = window.get_compositor_private ()
-        rounded_effect_of_window_actor =
-          self._rounded_corners_manager?.get_rounded_corners_effect (
-            window_actor
-          )
+        rounded_effect_of_window_actor = UI.get_rounded_corners_effect (
+          window_actor
+        ) as TypeRoundedCornersEffect
         rounded_effect_of_window_actor?.set_enabled (false)
 
         // Add rounded corners effect to preview window actor
@@ -268,7 +266,8 @@ export class Extension {
           win.fullscreen
         const has_rounded_corners = cfg.keep_rounded_corners || !maximized
 
-        const shadow = self._rounded_corners_manager?.query_shadow (win)
+        const shadow = (actor as ExtensionsWindowActor)
+          .__rwc_rounded_window_info?.shadow
         if (shadow && has_rounded_corners) {
           // Only create shadow actor when window should have rounded
           // corners when switching workspace
@@ -311,17 +310,6 @@ export class Extension {
       }
     }
 
-    // Window Size Changed
-    WindowManager.prototype._sizeChangeWindowDone = function (shell_wm, actor) {
-      self._orig_size_changed.apply (this, [shell_wm, actor])
-      // Update shadow actor
-      if (!self._rounded_corners_manager) {
-        return
-      }
-      self._rounded_corners_manager.on_size_changed (actor)
-      self._rounded_corners_manager._on_focus_changed (actor.meta_window)
-    }
-
     if (settings ().enable_preferences_entry) {
       UI.SetupBackgroundMenu ()
     }
@@ -333,6 +321,7 @@ export class Extension {
     }
 
     const c = connections.get ()
+
     // Gnome-shell will not disable extensions when _logout/shutdown/restart
     // system, it means that the signal handlers will not be cleaned when
     // gnome-shell is closing.
@@ -343,11 +332,14 @@ export class Extension {
       this.disable ()
     })
 
+    // Watch changes of GSettings
     c.connect (settings ().g_settings, 'changed', (_: Settings, k: string) => {
-      if ((k as SchemasKeys) === 'enable-preferences-entry') {
+      switch (k as SchemasKeys) {
+      case 'enable-preferences-entry':
         settings ().enable_preferences_entry
           ? UI.SetupBackgroundMenu ()
           : UI.RestoreBackgroundMenu ()
+        break
       }
     })
 
@@ -359,7 +351,6 @@ export class Extension {
     WindowPreview.prototype._addWindow = this._orig_add_window
     WorkspaceGroup.prototype._createWindows = this._orig_create_windows
     WorkspaceGroup.prototype._syncStacking = this._orig_sync_stacking
-    WindowManager.prototype._sizeChangeWindowDone = this._orig_size_changed
     BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
     // Remove main loop sources
@@ -372,25 +363,17 @@ export class Extension {
     UI.RestoreBackgroundMenu ()
 
     this._services?.unexport ()
-    this._disable_effect_managers ()
+    this._window_actor_tracker?.disable ()
 
     // Disconnect all signals in global connections.get()
     connections.get ().disconnect_all ()
     connections.del ()
 
     // Set all props to null
-    this._rounded_corners_manager = null
+    this._window_actor_tracker = null
     this._services = null
 
     _log ('Disabled')
-  }
-
-  private _enable_effect_managers () {
-    this._rounded_corners_manager?.enable ()
-  }
-
-  private _disable_effect_managers () {
-    this._rounded_corners_manager?.disable ()
   }
 }
 

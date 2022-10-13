@@ -2,20 +2,7 @@
 
 import { _ } from '@me/utils/i18n'
 
-/**
- * Loaded Message will be shown when debug.
- * see: https://patorjk.com/software/taag
- */
-const LOADED_MSG = `
-╦═╗┌─┐┬ ┬┌┐┌┌┬┐┌─┐┌┬┐╔═╗┌─┐┬─┐┌┬┐┌─┐┬─┐┌─┐╔═╗┌─┐┌─┐┌─┐┌─┐┌┬┐┌─┐
-╠╦╝│ ││ ││││ ││├┤  ││║  │ │├┬┘ ││├┤ ├┬┘└─┐║╣ ├┤ ├┤ ├┤ │   │ └─┐
-╩╚═└─┘└─┘┘└┘─┴┘└─┘─┴┘╚═╝└─┘┴└──┴┘└─┘┴└─└─┘╚═╝└  └  └─┘└─┘ ┴ └─┘
-
-[RoundedCordersEffect] Loaded.`
-
 export const constants = {
-  /** Message to shown when extensions loaded successfully  */
-  LOADED_MSG,
   /** Name of shadow actors */
   SHADOW_ACTOR_NAME: 'Rounded Window Shadow Actor',
   /** Name of rounded corners effects */
