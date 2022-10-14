@@ -8,8 +8,9 @@ import * as types                  from '@me/utils/types'
 
 // types
 import { Me }                      from '@global'
+import { PaintContext, PaintNode } from '@gi/Clutter'
 
-// -------------------------------------------------------------- [end imports]
+// --------------------------------------------------------------- [end imports]
 
 // Load fragment shader of rounded corners effect.
 const { declarations, code } = loadShader (
@@ -63,6 +64,14 @@ export const RoundedCornersEffect = registerClass (
       const type = SnippetHook.FRAGMENT
       this.add_glsl_snippet (type, declarations, code, false)
       this._init_uniforms ()
+    }
+
+    vfunc_paint_target (node: PaintNode, ctx: PaintContext) {
+      // Reset to default blend string.
+      this.get_pipeline ()?.set_blend (
+        'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
+      )
+      super.vfunc_paint_target (node, ctx)
     }
 
     /**
