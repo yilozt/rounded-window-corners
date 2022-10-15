@@ -41,7 +41,7 @@ Install extensions from [here](https://extensions.gnome.org/extension/5237/round
 
 ### From source code
 
-It will install extensions to `~/.local/share/gnome-shell/extensions`
+It will install extensions to `~/.local/share/gnome-shell/extensions`, need to install `yarn` and Node.js
 
 ```bash
 git clone https://github.com/yilozt/rounded-window-corners
@@ -55,17 +55,24 @@ In NixOS, you can use `nix-shell` to enter a development shell before run `yarn 
 
 You may need to install those packages when building this extensions. Feel free to open issues if you got error.
 
-#### Arch Linux
+##### Arch Linux
 
 ```bash
 sudo pacman -S base gnome-shell gtk3 libadwaita gtk4 glib2 gobject-introspection
 ```
-#### Ubuntu (22.04)
+##### Ubuntu (22.04)
 
 ```bash
 apt install gnome-shell-common libpolkit-agent-1-dev libmutter-10-dev \
     libadwaita-1-dev libgtk-3-dev libgtk-4-dev libgraphene-1.0-dev    \
     libgirepository1.0-dev libnm-dev libgcr-3-dev gettext
+```
+
+##### Fedora
+
+```bash
+dnf install gtk3-devel gtk4-devel libadwaita-devel mutter-devel \
+    polkit-devel gcr-devel NetworkManager-libnm-devel
 ```
 
 ### From Releases / Github Actions
