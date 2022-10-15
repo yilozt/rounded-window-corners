@@ -28,6 +28,12 @@
     "Gdk": [ "4.0" ],
     "Adw": ["1"]
   },
+  "[4]": [
+    "The version of Cogl, Clutter and Meta is relate to gnome-shell you are using",
+    "You need update those version manually if built failed.                     ",
+    "For Gnome 40+, version_to_replace = gnome_version - 32                      ",
+    "For example, if you are using gnome 40, the version of Cogl should be 8.    "
+  ],
   "libraries_ext": {
     "Cogl":     [ "10" ],
     "Clutter":  [ "10" ],
@@ -41,7 +47,7 @@
     "GIRepository": ["2.0"]
   },
 
-  "[4]": [
+  "[5]": [
     "Gi.ts need $XDG_DATA_DIRS to generate .d.ts files for GIR, but not all system ",
     "have this environment variant. Path in this item will be read in gulp/build.js",
     "then been add into $XDG_DATA_DIRS.                                            ",

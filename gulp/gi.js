@@ -108,7 +108,7 @@ const rename_gi = (cb) => {
 }
 
 // Generate docs.json from gi.ts.rc.json
-// gi-ts will use .ts-for-girrc.js as configuration file.
+// gi-ts will use docs.json as configuration file.
 const generate_gi_prefs = (cb) => {
   if (!should_update()) {
     cb(null)
@@ -121,7 +121,7 @@ const generate_gi_prefs = (cb) => {
     ...conf
   }))
   exec(`cd .tmp/prefs && XDG_DATA_DIRS=$GIR_PREFS_PATH:${extra_lib_prefs}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
-    console.log ('Generate .d.ts files for preferences pages: ')
+    console.log('Generate .d.ts files for preferences pages: ')
     if (stdout) console.log(stdout)
     if (stderr) console.log(stderr)
     cb(err)
@@ -135,12 +135,30 @@ const generate_gi_ext = (cb) => {
   }
 
   mkdirSync('.tmp/ext', { recursive: true })
+
+  let gnome_shell_version = NaN
+  try {
+    console.log("Try to detect detect version of gnome-shell")
+    gnome_shell_version = Number.parseInt(execSync("gnome-shell --version").toString().replace(/[a-zA-Z ]/g, '') - 32)
+  } catch (e) { console.log(e) }
+
+  // Gnome 40+
+  if (gnome_shell_version > 7) {
+    conf.libraries_ext.Cogl = [ gnome_shell_version.toString() ]
+    conf.libraries_ext.Clutter = [ gnome_shell_version.toString() ]
+    conf.libraries_ext.Meta = [ gnome_shell_version.toString() ]
+  } else {
+    console.log("Failed to get gnome-shell version, you may need to edit .gi.ts.rc.json manually")
+  }
+
+  console.log("Gnome-shell version: ", gnome_shell_version)
+
   writeFileSync('.tmp/ext/docs.json', JSON.stringify({
     'libraries': conf.libraries_ext,
     ...conf
   }))
   exec(`cd .tmp/ext && XDG_DATA_DIRS=$GIR_EXT_PATH:${extra_lib_ext}:$XDG_DATA_DIRS gi-ts generate`, (err, stdout, stderr) => {
-    console.log ('Generate .d.ts files for extensions: ')
+    console.log('Generate .d.ts files for extensions: ')
     if (stdout) console.log(stdout)
     if (stderr) console.log(stderr)
     cb(err)
