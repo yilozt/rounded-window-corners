@@ -11,7 +11,7 @@ uniform float inner_clip_radius;
 uniform vec2  pixel_step;
 uniform float border_width;
 uniform vec4  border_color;
-uniform float smoothing;
+uniform float exponent;
 
 
 float circle_bounds(vec2 p, vec2 center, float clip_radius) {
@@ -79,29 +79,16 @@ float rounded_rect_coverage(vec2 p, vec4 bounds, float clip_radius, float expone
 }
 
 void main() {
-  float exponent = smoothing * 10.0 + 2.0;
-
-  float radius = clip_radius * 0.5 * exponent;
-
-  float max_radius = min(bounds.z - bounds.x, bounds.w - bounds.y) * 0.5;
-
-  if(radius > max_radius) {
-    exponent *= max_radius / radius;
-    radius = max_radius;
-  }
-
-  float inner_radius = inner_clip_radius * (radius / clip_radius);
-
   vec2 texture_coord = cogl_tex_coord0_in.xy / pixel_step;
 
-  float outer_alpha = rounded_rect_coverage(texture_coord, bounds, radius, exponent);
+  float outer_alpha = rounded_rect_coverage(texture_coord, bounds, clip_radius, exponent);
 
   // Clip window corners first
   cogl_color_out *= outer_alpha;
 
   // Draw border later
   if(border_width > 0.9 || border_width < -0.9) {
-    float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_radius, exponent);
+    float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_clip_radius, exponent);
     float border_alpha = clamp(abs(outer_alpha - inner_alpha), 0.0, 1.0);
 
     cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);

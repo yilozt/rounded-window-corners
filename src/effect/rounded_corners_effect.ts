@@ -21,7 +21,7 @@ const { declarations, code } = loadShader (
 class Uniforms {
   bounds = 0
   clip_radius = 0
-  smoothing = 0
+  exponent = 0
   inner_bounds = 0
   inner_clip_radius = 0
   pixel_step = 0
@@ -47,7 +47,7 @@ export const RoundedCornersEffect = registerClass (
       Effect.uniforms = {
         bounds: 0,
         clip_radius: 0,
-        smoothing: 0,
+        exponent: 0,
         inner_bounds: 0,
         inner_clip_radius: 0,
         pixel_step: 0,
@@ -93,7 +93,7 @@ export const RoundedCornersEffect = registerClass (
       const border_width = border.width * scale_factor
       const border_color = border.color
 
-      const radius = corners_cfg.border_radius * scale_factor
+      const outer_radius = corners_cfg.border_radius * scale_factor
       const { padding, smoothing } = corners_cfg
 
       const bounds = [
@@ -110,19 +110,29 @@ export const RoundedCornersEffect = registerClass (
         bounds[3] - border_width,
       ]
 
-      let inner_radius = radius - border_width
+      let inner_radius = outer_radius - border_width
       if (inner_radius < 0.001) {
         inner_radius = 0.0
       }
 
       const pixel_step = [1 / actor.get_width (), 1 / actor.get_height ()]
 
+      // Setup with squircle shape
+      let exponent = smoothing * 10.0 + 2.0
+      let radius = outer_radius * 0.5 * exponent
+      const max_radius = Math.min (bounds[3] - bounds[0], bounds[4] - bounds[1])
+      if (radius > max_radius) {
+        exponent *= max_radius / radius
+        radius = max_radius
+      }
+      inner_radius *= radius / outer_radius
+
       const location = Effect.uniforms
       this.set_uniform_float (location.bounds, 4, bounds)
       this.set_uniform_float (location.inner_bounds, 4, inner_bounds)
       this.set_uniform_float (location.pixel_step, 2, pixel_step)
       this.set_uniform_float (location.border_width, 1, [border_width])
-      this.set_uniform_float (location.smoothing, 1, [smoothing])
+      this.set_uniform_float (location.exponent, 1, [exponent])
       this.set_uniform_float (location.clip_radius, 1, [radius])
       this.set_uniform_float (location.border_color, 4, border_color)
       this.set_uniform_float (location.inner_clip_radius, 1, [inner_radius])
