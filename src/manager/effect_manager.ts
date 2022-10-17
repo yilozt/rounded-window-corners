@@ -11,10 +11,12 @@ import { RoundedCornersManager }     from '@me/manager/rounded_corners_manager'
 // types, those import statements will be removed in output javascript files.
 import { SchemasKeys }               from '@me/utils/settings'
 import { EffectManager }             from '@me/utils/types'
+import { ExtensionsWindowActor }             from '@me/utils/types'
 import { WindowActor, Window }       from '@gi/Meta'
 import { WM }                        from '@gi/Shell'
 import { global }                    from '@global'
 import * as Gio                      from '@gi/Gio'
+import * as Graphene                 from '@gi/Graphene'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -60,7 +62,6 @@ export class WindowActorTracker {
       global.display,
       'window-created',
       (_: Display, win: Window) => {
-        _log (`${win.title} mapped`)
         const actor: WindowActor = win.get_compositor_private ()
 
         // If wm_class_instance of Meta.Window is null, try to add rounded
@@ -139,7 +140,7 @@ export class WindowActorTracker {
    * Add rounded corners effect and setup shadow actor for a window actor
    * @param actor - window to add effect
    */
-  private _add_effect (actor: WindowActor) {
+  private _add_effect (actor: ExtensionsWindowActor) {
     const actor_is_ready = () => {
       if (!this.connections) {
         return
@@ -149,8 +150,16 @@ export class WindowActorTracker {
         this.run ((m) => m.on_size_changed (actor))
       })
 
+      actor.__rwc_last_size = Graphene.Size.zero ()
       this.connections.connect (actor, 'notify::size', () => {
-        this.run ((m) => m.on_size_changed (actor))
+        const last_size = actor.__rwc_last_size as Graphene.Size
+        if (!last_size.equal (actor.size)) {
+          last_size.width = actor.size.width
+          last_size.height = actor.size.height
+
+          _log ('Size changed')
+          this.run ((m) => m.on_size_changed (actor))
+        }
       })
 
       // Update shadow actor when focus of window has changed.
@@ -177,7 +186,6 @@ export class WindowActorTracker {
     }
 
     const win = actor.meta_window
-    _log ('Try to add effect to ', win.get_wm_class_instance ())
     if (win.get_client_type () === WindowClientType.X11) {
       // Add rounded corners to surface actor for X11 client
       if (actor.first_child) {
@@ -197,7 +205,9 @@ export class WindowActorTracker {
     }
   }
 
-  private _remove_effect (actor: WindowActor) {
+  private _remove_effect (actor: ExtensionsWindowActor) {
+    delete actor.__rwc_last_size
+
     if (this.connections) {
       this.connections.disconnect_all (actor.get_texture ())
       this.connections.disconnect_all (actor)

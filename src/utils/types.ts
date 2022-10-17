@@ -2,6 +2,7 @@ import { Actor }                   from '@gi/Clutter'
 import { Binding }                 from '@gi/GObject'
 import { ShadowMode, WindowActor } from '@gi/Meta'
 import { Bin }                     from '@gi/St'
+import * as Graphene               from '@gi/Graphene'
 import { SchemasKeys }             from '@me/utils/settings'
 
 /** Bounds of rounded corners  */
@@ -73,4 +74,5 @@ export type ExtensionsWindowActor = WindowActor & {
     visible_binding: Binding
   }
   shadow_mode?: ShadowMode
+  __rwc_last_size?: Graphene.Size
 }
