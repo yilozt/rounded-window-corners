@@ -11,7 +11,7 @@ import { RoundedCornersManager }     from '@me/manager/rounded_corners_manager'
 // types, those import statements will be removed in output javascript files.
 import { SchemasKeys }               from '@me/utils/settings'
 import { EffectManager }             from '@me/utils/types'
-import { ExtensionsWindowActor }             from '@me/utils/types'
+import { ExtensionsWindowActor }     from '@me/utils/types'
 import { WindowActor, Window }       from '@gi/Meta'
 import { WM }                        from '@gi/Shell'
 import { global }                    from '@global'

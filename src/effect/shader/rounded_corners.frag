@@ -83,14 +83,21 @@ void main() {
 
   float outer_alpha = rounded_rect_coverage(texture_coord, bounds, clip_radius, exponent);
 
-  // Clip window corners first
-  cogl_color_out *= outer_alpha;
-
-  // Draw border later
   if(border_width > 0.9 || border_width < -0.9) {
     float inner_alpha = rounded_rect_coverage(texture_coord, inner_bounds, inner_clip_radius, exponent);
     float border_alpha = clamp(abs(outer_alpha - inner_alpha), 0.0, 1.0);
-
-    cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);
+    if (border_width > 0.0) {
+      // Clip corners of window first
+      cogl_color_out *= outer_alpha;
+      // Then mix Rounded window and border
+      cogl_color_out = mix(cogl_color_out, vec4(border_color.rgb, 1.0), border_alpha * border_color.a);
+    } else {
+      // Fill an rounded rectangle with border color first
+      vec4 border_rect = vec4(border_color.rgb, 1.0) * inner_alpha * border_color.a;
+      // Then mix rounded window and border, rounded window is smaller than border_rect
+      cogl_color_out = mix(border_rect, cogl_color_out, outer_alpha);
+    }
+  } else {
+    cogl_color_out *= outer_alpha;
   }
 }
