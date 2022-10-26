@@ -88,9 +88,11 @@ export class Extension {
       }
       for (const actor of global.get_window_actors ()) {
         if (UI.get_rounded_corners_effect (actor)) {
-          const win = actor.meta_window
-          ;(win as _Window).__rwc_rounded_window_fs = 1
-          win.make_fullscreen ()
+          const win = actor.get_meta_window ()
+          if (win) {
+            ;(win as _Window).__rwc_rounded_window_fs = 1
+            win.make_fullscreen ()  
+          }
         }
       }
 
