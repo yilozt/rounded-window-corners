@@ -1,21 +1,29 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2022-10-28 04:01+0000\n"
+"Last-Translator: Simon Sommer <creatorsisohd@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: src/preferences/pages/general.ui:284
+#, fuzzy
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr ""
+msgstr "Einstellungseintrag zum Rechtsklickmenü für den Hintergrund hinzufügen."
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Fenster hinzufügen"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "Gerundete Ecken immer behalten wenn das Fenster im Vollbildmodus ist."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
