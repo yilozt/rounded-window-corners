@@ -13,6 +13,7 @@ import { load }        from '@me/utils/io'
 // types
 import { WindowActor } from '@gi/Meta'
 import { Me }          from '@global'
+import { Actor }       from '@gi/Clutter'
 // --------------------------------------------------------------- [end imports]
 
 const iface = load (`${Me.path}/dbus/iface.xml`)
@@ -53,16 +54,17 @@ export class Services {
         .filter ((e) => e.toString ().includes (effect_name))
         .forEach ((e) => target.remove_effect (e))
 
-      // Get wm_class_instance property of window, then pass it DBus
-      // client
-      const type_str = target.toString ()
+      let actor: Actor | null = target
 
-      let actor = target as WindowActor
-      if (type_str.includes ('MetaSurfaceActor')) {
-        actor = target.get_parent () as WindowActor
+      // User will pick to a Meta.SurfaceActor in most time, let's find the
+      // associate Meta.WindowActor
+      for (let i = 0; i < 2; i++) {
+        if (actor == null || actor instanceof WindowActor) break
+        // If picked actor is not a Meta.WindowActor, search it's parent
+        actor = actor.get_parent ()
       }
 
-      if (!actor.toString ().includes ('WindowActor')) {
+      if (!(actor instanceof WindowActor)) {
         _send_wm_class_instance ('window-not-found')
         return
       }
