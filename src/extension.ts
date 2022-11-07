@@ -1,35 +1,35 @@
 // imports.gi
-import { Point }                      from '@gi/Graphene'
-import * as Clutter                   from '@gi/Clutter'
-import * as GLib                      from '@gi/GLib'
-import { Settings }                   from '@gi/Gio'
-import { MonitorManager }             from '@gi/Meta'
+import { Point }                         from '@gi/Graphene'
+import * as Clutter                      from '@gi/Clutter'
+import * as GLib                         from '@gi/GLib'
+import { Settings }                      from '@gi/Gio'
+import { WindowActor, WindowClientType } from '@gi/Meta'
 
 // gnome-shell modules
-import { WindowPreview }              from '@imports/ui/windowPreview'
-import { WorkspaceGroup }             from '@imports/ui/workspaceAnimation'
-import BackgroundMenu                 from '@imports/ui/backgroundMenu'
-import { sessionMode, layoutManager } from '@imports/ui/main'
-import { overview }                   from '@imports/ui/main'
+import { WindowPreview }                 from '@imports/ui/windowPreview'
+import { WorkspaceGroup }                from '@imports/ui/workspaceAnimation'
+import BackgroundMenu                    from '@imports/ui/backgroundMenu'
+import { layoutManager }                 from '@imports/ui/main'
+import { overview }                      from '@imports/ui/main'
 
 // local modules
-import { constants }                  from '@me/utils/constants'
-import { stackMsg, _log }             from '@me/utils/log'
-import * as UI                        from '@me/utils/ui'
-import { connections }                from '@me/utils/connections'
-import { SchemasKeys, settings }      from '@me/utils/settings'
-import { Services }                   from '@me/dbus/services'
-import { LinearFilterEffect }         from '@me/effect/linear_filter_effect'
-import { RoundedCornersEffect }       from '@me/effect/rounded_corners_effect'
-import { init_translations }          from '@me/utils/i18n'
-import { WindowActorTracker }         from '@me/manager/effect_manager'
+import { constants }                     from '@me/utils/constants'
+import { stackMsg, _log }                from '@me/utils/log'
+import * as UI                           from '@me/utils/ui'
+import { connections }                   from '@me/utils/connections'
+import { SchemasKeys, settings }         from '@me/utils/settings'
+import { Services }                      from '@me/dbus/services'
+import { LinearFilterEffect }            from '@me/effect/linear_filter_effect'
+import { RoundedCornersEffect }          from '@me/effect/rounded_corners_effect'
+import { init_translations }             from '@me/utils/i18n'
+import { WindowActorTracker }            from '@me/manager/effect_manager'
 
 // types, which will be removed in output
-import { RoundedCornersCfg }          from '@me/utils/types'
-import { ExtensionsWindowActor }      from '@me/utils/types'
-import { Window }                     from '@gi/Meta'
-import { global }                     from '@global'
-import { registerClass }              from '@gi/GObject'
+import { RoundedCornersCfg }             from '@me/utils/types'
+import { ExtensionsWindowActor }         from '@me/utils/types'
+import { Window }                        from '@gi/Meta'
+import { global }                        from '@global'
+import { registerClass }                 from '@gi/GObject'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -42,8 +42,6 @@ export class Extension {
 
   private _services: Services | null = null
   private _window_actor_tracker: WindowActorTracker | null = null
-
-  private _fs_timeout_id = 0
 
   enable () {
     // Restore original methods, those methods will be restore when
@@ -70,56 +68,6 @@ export class Extension {
       })
     } else {
       this._window_actor_tracker?.enable ()
-    }
-
-    // Have to toggle fullscreen for all windows when changed scale factor
-    // of windows because rounded-corners-manager may got incorrect frame
-    // rect & buffer rect to calculate position of shadow & bound of rounded
-    // corners.
-    // FIXME: This is an ugly way but works. Should found a better way to
-    // solve this problem.
-
-    const monitor_manager = MonitorManager.get ()
-    type _Window = Window & { __rwc_rounded_window_fs?: 1 }
-
-    connections.get ().connect (monitor_manager, 'monitors-changed', () => {
-      if (sessionMode.isLocked || sessionMode.isGreeter) {
-        return
-      }
-      for (const actor of global.get_window_actors ()) {
-        if (UI.get_rounded_corners_effect (actor)) {
-          const win = actor.get_meta_window ()
-          if (win) {
-            ;(win as _Window).__rwc_rounded_window_fs = 1
-            win.make_fullscreen ()  
-          }
-        }
-      }
-
-      // waiting 3 seconds then restore marked windows.
-      this._fs_timeout_id = GLib.timeout_add_seconds (0, 3, () => {
-        for (const actor of global.get_window_actors ()) {
-          if (!UI.get_rounded_corners_effect (actor)) {
-            continue
-          }
-          const win = actor.meta_window as _Window
-          if (win && win.__rwc_rounded_window_fs == 1) {
-            win.unmake_fullscreen ()
-            delete win.__rwc_rounded_window_fs
-          }
-        }
-        return false
-      })
-    })
-
-    // Restore window that have __rwc_rounded_window_fs props when
-    // unlocked
-    for (const win_actor of global.get_window_actors ()) {
-      const win = win_actor.meta_window as _Window
-      if (win.__rwc_rounded_window_fs === 1) {
-        win.unmake_fullscreen ()
-        delete win.__rwc_rounded_window_fs
-      }
     }
 
     const self = this
@@ -224,10 +172,26 @@ export class Extension {
           const y1 = (frame_rect.y - buf_rect.y) * scaled
           const x2 = x1 + frame_rect.width * scaled
           const y2 = y1 + frame_rect.height * scaled
+
+          const scale_factor = UI.WindowScaleFactor (window) * scaled
+          let pixel_step: [number, number] | undefined = undefined
+          if (
+            UI.shell_version () >= 43.1 &&
+            window.get_client_type () == WindowClientType.WAYLAND
+          ) {
+            const surface = (window.get_compositor_private () as WindowActor)
+              .first_child
+            pixel_step = [
+              1.0 / (scale_factor * surface.get_width ()),
+              1.0 / (scale_factor * surface.get_height ()),
+            ]
+          }
           rounded_effect_of_preview_window.update_uniforms (
-            scaled,
+            scale_factor,
             settings ().global_rounded_corner_settings,
-            { x1, y1, x2, y2 }
+            { x1, y1, x2, y2 },
+            { width: 0, color: [0, 0, 0, 0] },
+            pixel_step
           )
         })
       }
@@ -354,12 +318,6 @@ export class Extension {
     WorkspaceGroup.prototype._createWindows = this._orig_create_windows
     WorkspaceGroup.prototype._syncStacking = this._orig_sync_stacking
     BackgroundMenu.addBackgroundMenu = this._add_background_menu
-
-    // Remove main loop sources
-    if (this._fs_timeout_id != 0) {
-      GLib.Source.remove (this._fs_timeout_id)
-      this._fs_timeout_id = 0
-    }
 
     // Remove the item to open preferences page in background menu
     UI.RestoreBackgroundMenu ()
