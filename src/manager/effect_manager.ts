@@ -1,6 +1,5 @@
 // imports.gi
 import * as Clutter              from '@gi/Clutter'
-import { Source, timeout_add }   from '@gi/GLib'
 import * as Graphene             from '@gi/Graphene'
 
 // local modules
@@ -18,6 +17,7 @@ import { WM }                    from '@gi/Shell'
 import { global }                from '@global'
 import * as Gio                  from '@gi/Gio'
 import { Display }               from '@gi/Meta'
+import { shell_version }         from '@me/utils/ui'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -29,7 +29,6 @@ export class WindowActorTracker {
    * disconnect_all() to disconnect all signals when extension disabled
    */
   private connections: Connections | null = null
-  private timeout_id = 0
 
   // ---------------------------------------------------------- [public methods]
 
@@ -135,9 +134,6 @@ export class WindowActorTracker {
     // Disconnect all signal
     this.connections?.disconnect_all ()
     this.connections = null
-
-    // Remove main loop resource
-    Source.remove (this.timeout_id)
   }
 
   // ------------------------------------------------------- [private methods]
@@ -167,6 +163,17 @@ export class WindowActorTracker {
         }
       })
 
+      if (shell_version () >= 43.1) {
+        // let's update effects when surface size of window actor changed in the
+        // first time. After Gnome 43.1, we need do this to make sure effects
+        // works when wayland client opened.
+        const id = actor.first_child.connect ('notify::size', () => {
+          this.run ((m) => m.on_size_changed (actor))
+          // Now updated, just disconnect it
+          actor.first_child.disconnect (id)
+        })
+      }
+
       // Update shadow actor when focus of window has changed.
       this.connections.connect (
         actor.meta_window,
@@ -191,10 +198,7 @@ export class WindowActorTracker {
     }
 
     if (actor.first_child) {
-      this.timeout_id = timeout_add (0, 500, () => {
-        actor_is_ready ()
-        return false
-      })
+      actor_is_ready ()
     } else {
       // In wayland session, Surface Actor of XWayland client not ready when
       // window created, waiting it
@@ -213,6 +217,7 @@ export class WindowActorTracker {
       this.connections.disconnect_all (actor.get_texture ())
       this.connections.disconnect_all (actor)
       this.connections.disconnect_all (actor.meta_window)
+      this.connections.disconnect_all (actor.first_child)
     }
     this.run ((m) => m.on_remove_effect (actor))
   }
