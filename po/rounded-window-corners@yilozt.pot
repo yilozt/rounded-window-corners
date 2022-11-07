@@ -96,7 +96,7 @@ msgstr ""
 msgid "Enable Log"
 msgstr ""
 
-#: src/utils/constants.ts:30
+#: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
 msgstr ""
 
@@ -175,7 +175,7 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-#: src/utils/constants.ts:34
+#: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
 msgstr ""
 

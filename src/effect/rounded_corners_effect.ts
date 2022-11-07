@@ -9,6 +9,8 @@ import * as types                  from '@me/utils/types'
 // types
 import { Me }                      from '@global'
 import { PaintContext, PaintNode } from '@gi/Clutter'
+import { shell_version }           from '@me/utils/ui'
+import { WindowActor }             from '@gi/Meta'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -86,10 +88,9 @@ export const RoundedCornersEffect = registerClass (
       border: {
         width: number
         color: [number, number, number, number]
-      } = { width: 0, color: [0, 0, 0, 0] }
+      } = { width: 0, color: [0, 0, 0, 0] },
+      pixel_step?: [number, number]
     ) {
-      const actor = this.actor
-
       const border_width = border.width * scale_factor
       const border_color = border.color
 
@@ -115,7 +116,22 @@ export const RoundedCornersEffect = registerClass (
         inner_radius = 0.0
       }
 
-      const pixel_step = [1 / actor.get_width (), 1 / actor.get_height ()]
+      if (!pixel_step) {
+        const actor = this.actor
+        pixel_step = [1 / actor.get_width (), 1 / actor.get_height ()]
+
+        // For wayland clients in Gnome 43.1, we can't get correct buffer size
+        // from Meta.WindowActor to calculate pixel step, but its first child
+        // offers correct one.
+        if (
+          shell_version () >= 43.1 &&
+          actor instanceof WindowActor &&
+          actor.first_child
+        ) {
+          const { width, height } = actor.first_child
+          pixel_step = [1 / (width * scale_factor), 1 / (height * scale_factor)]
+        }
+      }
 
       // Setup with squircle shape
       let exponent = smoothing * 10.0 + 2.0

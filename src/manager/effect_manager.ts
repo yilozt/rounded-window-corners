@@ -1,22 +1,23 @@
 // imports.gi
-import * as Clutter                  from '@gi/Clutter'
-import { Display, WindowClientType } from '@gi/Meta'
+import * as Clutter              from '@gi/Clutter'
+import { Source, timeout_add }   from '@gi/GLib'
+import * as Graphene             from '@gi/Graphene'
 
 // local modules
-import { _log }                      from '@me/utils/log'
-import { settings }                  from '@me/utils/settings'
-import { Connections }               from '@me/utils/connections'
-import { RoundedCornersManager }     from '@me/manager/rounded_corners_manager'
+import { _log }                  from '@me/utils/log'
+import { settings }              from '@me/utils/settings'
+import { Connections }           from '@me/utils/connections'
+import { RoundedCornersManager } from '@me/manager/rounded_corners_manager'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }               from '@me/utils/settings'
-import { EffectManager }             from '@me/utils/types'
-import { ExtensionsWindowActor }     from '@me/utils/types'
-import { WindowActor, Window }       from '@gi/Meta'
-import { WM }                        from '@gi/Shell'
-import { global }                    from '@global'
-import * as Gio                      from '@gi/Gio'
-import * as Graphene                 from '@gi/Graphene'
+import { SchemasKeys }           from '@me/utils/settings'
+import { EffectManager }         from '@me/utils/types'
+import { ExtensionsWindowActor } from '@me/utils/types'
+import { WindowActor, Window }   from '@gi/Meta'
+import { WM }                    from '@gi/Shell'
+import { global }                from '@global'
+import * as Gio                  from '@gi/Gio'
+import { Display }               from '@gi/Meta'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -28,6 +29,7 @@ export class WindowActorTracker {
    * disconnect_all() to disconnect all signals when extension disabled
    */
   private connections: Connections | null = null
+  private timeout_id = 0
 
   // ---------------------------------------------------------- [public methods]
 
@@ -133,6 +135,9 @@ export class WindowActorTracker {
     // Disconnect all signal
     this.connections?.disconnect_all ()
     this.connections = null
+
+    // Remove main loop resource
+    Source.remove (this.timeout_id)
   }
 
   // ------------------------------------------------------- [private methods]
@@ -185,23 +190,19 @@ export class WindowActorTracker {
       })
     }
 
-    const win = actor.meta_window
-    if (win.get_client_type () === WindowClientType.X11) {
-      // Add rounded corners to surface actor for X11 client
-      if (actor.first_child) {
+    if (actor.first_child) {
+      this.timeout_id = timeout_add (0, 500, () => {
         actor_is_ready ()
-      } else {
-        // In wayland session, Surface Actor of XWayland client not ready when
-        // window created, waiting it
-        const id = actor.connect ('notify::first-child', () => {
-          // now it's ready
-          actor_is_ready ()
-          actor.disconnect (id)
-        })
-      }
+        return false
+      })
     } else {
-      // Add rounded corners to WindowActor for Wayland client
-      actor_is_ready ()
+      // In wayland session, Surface Actor of XWayland client not ready when
+      // window created, waiting it
+      const id = actor.connect ('notify::first-child', () => {
+        // now it's ready
+        actor_is_ready ()
+        actor.disconnect (id)
+      })
     }
   }
 

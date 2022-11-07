@@ -35,6 +35,8 @@ export class RoundedCornersManager implements EffectManager {
   // ---------------------------------------------------------- [public methods]
 
   on_add_effect (actor: ExtensionsWindowActor): void {
+    _log ('opened: ' + actor?.meta_window.title + ': ' + actor)
+
     const win = actor.meta_window
 
     // If application failed check, then just return.
@@ -139,9 +141,6 @@ export class RoundedCornersManager implements EffectManager {
       return
     }
 
-    // Cache the offset, so that we can calculate this value once
-    const content_offset_of_win = UI.computeWindowContentsOffset (win)
-
     // Skip rounded corners when window is fullscreen & maximize
     const cfg = this._get_rounded_corners_cfg (win)
     const should_rounded = UI.ShouldHasRoundedCorners (win, cfg)
@@ -158,6 +157,9 @@ export class RoundedCornersManager implements EffectManager {
       effect.enabled = true
       this.on_focus_changed (actor)
     }
+
+    // Cache the offset, so that we can calculate this value once
+    const content_offset_of_win = UI.computeWindowContentsOffset (win)
 
     // When size changed. update uniforms for window
     effect.update_uniforms (
@@ -324,8 +326,7 @@ export class RoundedCornersManager implements EffectManager {
 
     // Insert shadow actor below window actor, now shadow actor
     // will show below window actor
-    const parent = actor.get_parent ()
-    parent != null && parent.insert_child_below (shadow, actor)
+    global.window_group.insert_child_below (shadow, actor)
 
     // Bind position and size between window and shadow
     for (let i = 0; i < 4; i++) {
