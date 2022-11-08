@@ -1,8 +1,15 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2022-11-09 15:48+0000\n"
+"Last-Translator: ilLekaL <tommikela@pm.me>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/fi/>\n"
 "Language: fi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -11,7 +18,7 @@ msgstr ""
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Lisää ikkuna"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
@@ -23,15 +30,15 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Sovellukset"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "Käytä"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "Musta lista"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
@@ -40,21 +47,21 @@ msgstr ""
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "Reunan väri"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "Reunan säde"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "Reunan leveys"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "Alaosa"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
@@ -71,11 +78,11 @@ msgstr ""
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
-msgstr ""
+msgstr "Mukauta pyöristetyn kulman varjoa"
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
@@ -112,7 +119,7 @@ msgstr ""
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "Yleinen"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
@@ -136,7 +143,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "Vasen"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -147,7 +154,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
-msgstr ""
+msgstr "Opasiteetti"
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
@@ -175,7 +182,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "Oikea"
 
 #: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
@@ -187,7 +194,7 @@ msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "Valitse kaikki"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
@@ -224,7 +231,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
-msgstr ""
+msgstr "Yläosa"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
@@ -252,4 +259,4 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
-msgstr ""
+msgstr "Ikkunan varjo"
