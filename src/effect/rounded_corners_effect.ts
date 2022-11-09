@@ -126,9 +126,9 @@ export const RoundedCornersEffect = registerClass (
         if (
           shell_version () >= 43.1 &&
           actor instanceof WindowActor &&
-          actor.first_child
+          actor.first_child?.first_child
         ) {
-          const { width, height } = actor.first_child
+          const { width, height } = actor.first_child.first_child
           pixel_step = [1 / (width * scale_factor), 1 / (height * scale_factor)]
         }
       }
