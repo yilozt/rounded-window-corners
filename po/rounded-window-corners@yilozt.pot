@@ -2,6 +2,10 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: src/preferences/pages/general.ui:311
+msgid "Add rounded corners for all windows in overview"
+msgstr ""
+
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
@@ -75,7 +79,7 @@ msgstr ""
 msgid "Customize the shadow of the rounded corner window"
 msgstr ""
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:331
 msgid "Debug"
 msgstr ""
 
@@ -91,7 +95,7 @@ msgstr ""
 msgid "Enable custom settings for this window"
 msgstr ""
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:356
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr ""
@@ -147,7 +151,7 @@ msgstr ""
 msgid "Opacity"
 msgstr ""
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:394
 msgid "Open Reset Preferences Dialog"
 msgstr ""
 
@@ -167,7 +171,7 @@ msgstr ""
 msgid "Remove Window from this List"
 msgstr ""
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:386
 msgid "Reset Preferences"
 msgstr ""
 
@@ -179,7 +183,7 @@ msgstr ""
 msgid "Rounded Corners Settings..."
 msgstr ""
 
-#: src/preferences/pages/general.ui:336
+#: src/preferences/pages/general.ui:363
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
 msgstr ""
 

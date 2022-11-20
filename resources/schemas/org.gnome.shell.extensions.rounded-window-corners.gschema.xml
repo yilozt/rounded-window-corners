@@ -108,5 +108,10 @@
     <key name="enable-preferences-entry" type="b">
       <default>false</default>
     </key>
+
+    <key name="rounded-all-overview-windows" type="b">
+      <default>false</default>
+    </key>
+
   </schema>
 </schemalist>

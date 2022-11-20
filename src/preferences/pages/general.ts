@@ -32,6 +32,7 @@ export const General = GObject.registerClass (
       'skip_libhandy_app_switch',
       'tweak_kitty_switch',
       'preferences_entry_switch',
+      'rounded_overview_window_switch',
       'border_width_ajustment',
       'border_color_button',
       'edit_shadow_row',
@@ -47,6 +48,7 @@ export const General = GObject.registerClass (
     private _skip_libadwaita_app_switch        !: Gtk.Switch
     private _tweak_kitty_switch                !: Gtk.Switch
     private _preferences_entry_switch          !: Gtk.Switch
+    private _rounded_overview_window_switch    !: Gtk.Switch
     private _border_width_ajustment            !: Gtk.Adjustment
     private _border_color_button               !: Gtk.ColorButton
     private _edit_shadow_row                   !: Gtk.ListBoxRow
@@ -98,6 +100,12 @@ export const General = GObject.registerClass (
       settings ().bind (
         'skip-libhandy-app',
         this._skip_libhandy_app_switch,
+        'active',
+        Gio.SettingsBindFlags.DEFAULT
+      )
+      settings ().bind (
+        'rounded-all-overview-windows',
+        this._rounded_overview_window_switch,
         'active',
         Gio.SettingsBindFlags.DEFAULT
       )
