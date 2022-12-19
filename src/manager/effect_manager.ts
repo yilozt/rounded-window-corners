@@ -158,7 +158,6 @@ export class WindowActorTracker {
           last_size.width = actor.size.width
           last_size.height = actor.size.height
 
-          _log ('Size changed')
           this.run ((m) => m.on_size_changed (actor))
         }
       })

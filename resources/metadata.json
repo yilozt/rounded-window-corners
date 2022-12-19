@@ -2,7 +2,7 @@
   "name": "Rounded Window Corners",
   "description": "Add rounded corners for all windows",
   "uuid": "rounded-window-corners@yilozt",
-  "version": "9",
+  "version": "10",
   "url": "https://github.com/yilozt/rounded-window-corners",
   "shell-version": ["40", "41", "42", "43"]
 }

@@ -93,6 +93,7 @@ export class RoundedCornersManager implements EffectManager {
     const shadow = actor.__rwc_rounded_window_info?.shadow
     if (shadow) {
       global.window_group.remove_child (shadow)
+      shadow.clear_effects ()
       shadow.destroy ()
     }
     delete actor.__rwc_rounded_window_info
