@@ -1,64 +1,74 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-01-03 01:54+0000\n"
+"Last-Translator: Aurélien Hamy <aunetx@yandex.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
+"Ajoute un accès aux paramètres dans le menu clique-droit de l'arrière plan"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Ajouter une fenêtre"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "Toujours garder les coins arrondis quand la fenêtre est en plein écran."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
 msgstr ""
+"Toujours garder les coins arrondis quand la fenêtre est maximisée ou en "
+"pavage."
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Applications"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "Appliquer"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "Liste noire"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
-msgstr ""
+msgstr "Décalage du flou"
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "Couleur de la bordure"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "Rayon du coin"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "Largeur de la bordure"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "Bas"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
-msgstr ""
+msgstr "Impossible de sélectionner une fenêtre depuis cette position"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
@@ -67,36 +77,36 @@ msgstr ""
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
-msgstr ""
+msgstr "Lissage du coin"
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "Customiser"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
-msgstr ""
+msgstr "Customiser l'ombre de la bordure de la fenêtre"
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "Débogage"
 
 #: src/preferences/widgets/edit_shadow_window.ts:58
 msgid "Edit Shadow for Rounded Corners Windows"
-msgstr ""
+msgstr "Éditer l'ombre de la bordure de la fenêtre"
 
 #: src/preferences/pages/custom.ts:190
 msgid "Enable"
-msgstr ""
+msgstr "Activer"
 
 #: src/preferences/pages/custom.ts:194
 msgid "Enable custom settings for this window"
-msgstr ""
+msgstr "Active les préférences customisées pour cette fenêtre"
 
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "Activer les journaux"
 
 #: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
