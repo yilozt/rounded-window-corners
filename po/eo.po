@@ -1,8 +1,15 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-01-04 20:51+0000\n"
+"Last-Translator: phlostically <phlostically@mailinator.com>\n"
+"Language-Team: Esperanto <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/eo/>\n"
 "Language: eo\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -23,11 +30,11 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Programoj"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "Efektivigi"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
@@ -40,21 +47,21 @@ msgstr ""
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "Randa koloro"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "Randa radiuso"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "Randa larĝo"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "Malsupro"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
@@ -71,7 +78,7 @@ msgstr ""
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "Propra"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
@@ -87,7 +94,7 @@ msgstr ""
 
 #: src/preferences/pages/custom.ts:190
 msgid "Enable"
-msgstr ""
+msgstr "Ŝalti"
 
 #: src/preferences/pages/custom.ts:194
 msgid "Enable custom settings for this window"
@@ -104,7 +111,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
-msgstr ""
+msgstr "Enfokusa fenestro"
 
 #: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
@@ -112,7 +119,7 @@ msgstr ""
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "Ĝenerala"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
@@ -136,7 +143,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "Maldekstro"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -147,7 +154,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
-msgstr ""
+msgstr "Opako"
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
@@ -175,7 +182,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "Dekstro"
 
 #: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
@@ -187,7 +194,7 @@ msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "Elekti ĉion"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
@@ -203,12 +210,12 @@ msgstr ""
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
 msgid "Skip LibAdwaita Applications"
-msgstr ""
+msgstr "Preterpasi libadwaita-programojn"
 
 #: src/preferences/pages/general.ui:74
 #: src/preferences/widgets/reset_dialog.ts:61
 msgid "Skip LibHandy Applications"
-msgstr ""
+msgstr "Preterpasi libhandy-programojn"
 
 #: src/preferences/pages/general.ui:23
 msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
@@ -224,7 +231,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
-msgstr ""
+msgstr "Supro"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
@@ -240,7 +247,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr ""
+msgstr "Eksterfokusa fenestro"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
