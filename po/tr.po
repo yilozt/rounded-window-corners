@@ -1,17 +1,24 @@
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-02-19 07:39+0000\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr ""
+msgstr "Arka Plan'ın sağ tıklama menüsüne Ayarlar Girdisi Ekle"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Pencere Ekle"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
