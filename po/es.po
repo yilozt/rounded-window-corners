@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-02-19 07:39+0000\n"
-"Last-Translator: Isaias Carrillo <icarrillo1304@gmail.com>\n"
+"PO-Revision-Date: 2023-02-28 12:39+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/es/>\n"
 "Language: es\n"
@@ -47,7 +47,7 @@ msgstr "Lista negra"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
-msgstr ""
+msgstr "Desenfoque"
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
@@ -73,9 +73,8 @@ msgid "Can't pick a window window from this position"
 msgstr "No se puede elegir una ventana desde esta posición"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
-#, fuzzy
 msgid "Clip paddings of window"
-msgstr "Recortar márgenes de la ventana"
+msgstr "Recortar los márgenes de la ventana"
 
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
@@ -112,9 +111,8 @@ msgid "Enable Log"
 msgstr "Habilitar registro"
 
 #: src/utils/constants.ts:17
-#, fuzzy
 msgid "Expand this row to pick a window."
-msgstr "Expande esta fila para elegir una ventana."
+msgstr "Amplíe esta fila para elegir una ventana."
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
@@ -134,7 +132,7 @@ msgstr "Opciones generales"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
-msgstr ""
+msgstr "Desplazamiento horizontal"
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
@@ -154,17 +152,16 @@ msgid "Left"
 msgstr "Izquierda"
 
 #: src/preferences/pages/blacklist.ui:14
-#, fuzzy
 msgid ""
 "Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
-"No todas las aplicaciones pueden funcionar apropiadamente con efectos de "
-"bordes redondeados, añádelas a la lista deshabilitar los efectos.\n"
+"No todas las aplicaciones funcionan bien con los efectos de esquinas "
+"redondeadas, añádalas a esta lista para desactivar los efectos.\n"
 "\n"
-"El elemento de la lista es una instancia que forma parte de la propiedad "
-"WM_CLASS de una ventana. Puede elegir una ventana para añadirla a esta lista."
+"El elemento de la lista es la instancia de la propiedad WM_CLASS con la "
+"ventana. Puede elegir una ventana para añadirla a esta lista."
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
@@ -175,23 +172,20 @@ msgid "Open Reset Preferences Dialog"
 msgstr "Abrir el diálogo de Restaurar preferencias"
 
 #: src/preferences/widgets/reset_dialog.ts:71
-#, fuzzy
 msgid "Padding"
-msgstr "Margen"
+msgstr "Relleno"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
-#, fuzzy
 msgid "Paddings"
-msgstr "Márgenes"
+msgstr "Rellenos"
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
 msgstr "Selecciona una ventana para añadirla a la lista"
 
 #: src/preferences/widgets/app-row.ui:36
-#, fuzzy
 msgid "Remove Window from this List"
-msgstr "Elimina una ventana de esta lista"
+msgstr "Quitar una ventana de esta lista"
 
 #: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
@@ -216,21 +210,19 @@ msgid "Select All"
 msgstr "Selecciona todo"
 
 #: src/preferences/widgets/reset_dialog.ts:87
-#, fuzzy
 msgid "Select Items to reset"
-msgstr "Selecciona elementos a restaurar"
+msgstr "Seleccione los elementos que desea reiniciar"
 
 #: src/preferences/pages/custom.ui:14
-#, fuzzy
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
-"Configura diferentes recortes de márgenes agregando ventanas a esta lista.\n"
+"Configure diferentes rellenos de clips agregando una ventana a esta lista. \n"
 "\n"
-"El elemento de la lista es una instancia que forma parte de la propiedad "
-"WM_CLASS de una ventana. Puede elegir una ventana para añadirla a esta lista."
+"El elemento de la lista es parte de la instancia de la propiedad WM_CLASS "
+"con ventana. Puede elegir una ventana para agregarla a esta lista."
 
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
@@ -249,14 +241,12 @@ msgstr ""
 "redondeados de forma nativa, así que podemos omitirlas con estas opciones"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
-#, fuzzy
 msgid "Spread Radius"
-msgstr "Radio de dispersión"
+msgstr "Radio de extensión"
 
 #: src/preferences/pages/general.ui:143
-#, fuzzy
 msgid "This settings will try to effects all windows"
-msgstr "Estos ajustes se intentarán aplicar a todas las ventanas"
+msgstr "Estas configuraciones intentan aplicarse a todas las ventanas"
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
@@ -267,9 +257,8 @@ msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Intentar añadir bordes redondeados a la terminal Kitty en Wayland"
 
 #: src/preferences/pages/general.ui:254
-#, fuzzy
 msgid "Tweak clip paddings for Kitty Terminal"
-msgstr "Retocar recorte de márgenes para la terminal Kitty"
+msgstr "Optimizar el relleno para Kitty Terminal"
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
@@ -285,7 +274,7 @@ msgstr "Estilo de sombra de ventana no enfocada"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
-msgstr ""
+msgstr "Desplazamiento vertical"
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
