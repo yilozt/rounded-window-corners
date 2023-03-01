@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2022-09-15 06:16+0000\n"
+"PO-Revision-Date: 2023-03-02 12:35+0000\n"
 "Last-Translator: Yi <yilozt@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/zh_Hans/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -64,7 +64,7 @@ msgstr "下边距"
 
 #: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "已在列表中，无法添加"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
