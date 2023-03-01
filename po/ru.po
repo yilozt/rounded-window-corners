@@ -3,8 +3,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2022-11-13 13:16+0000\n"
 "Last-Translator: Evgeniy Khramov <thejenjagamertjg@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/ru/>\n"
 "Language: ru\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,8 +16,7 @@ msgstr ""
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Добавить запись настроек в меню правой кнопки мыши фона"
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Добавить окно"
 
@@ -65,6 +64,10 @@ msgstr "Ширина границы"
 msgid "Bottom"
 msgstr "Нижний"
 
+#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+msgid "Can't add to list, because it has exists"
+msgstr ""
+
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
 msgstr "Невозможно выбрать окно с этой позиции"
@@ -94,11 +97,11 @@ msgstr "Отладка"
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Редактировать тени для окон с закругленными углами"
 
-#: src/preferences/pages/custom.ts:190
+#: src/preferences/pages/custom.ts:189
 msgid "Enable"
 msgstr "Включить"
 
-#: src/preferences/pages/custom.ts:194
+#: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
 msgstr "Включить пользовательские настройки для этого окна"
 
@@ -149,9 +152,11 @@ msgstr "Слева"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Не все приложения могут хорошо работать с эффектом закругленных углов, "
 "добавьте их в этот список, чтобы отключить эффект.\n"
@@ -196,7 +201,9 @@ msgid "Rounded Corners Settings..."
 msgstr "Настройки закругленных углов..."
 
 #: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "Запустите <i>journalctl -o cat -f /usr/bin/gnome-shell</i> в терминале, "
 "чтобы посмотреть журнал"
@@ -213,7 +220,8 @@ msgstr "Выберите элементы для сброса"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Настройте различные отступы для клипов, добавив окно в этот список.\n"
 "\n"
@@ -231,7 +239,9 @@ msgid "Skip LibHandy Applications"
 msgstr "Пропустить приложения LibHandy"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "Некоторые приложения, написанные с использованием LibAdwaita или LibHandy, "
 "уже имеют встроенные скругленные углы, поэтому мы можем пропустить их через "

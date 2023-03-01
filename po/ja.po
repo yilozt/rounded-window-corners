@@ -3,8 +3,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-02-06 05:38+0000\n"
 "Last-Translator: maboroshin <maboroshin@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/ja/>\n"
 "Language: ja\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,8 +15,7 @@ msgstr ""
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "ウィンドウ追加"
 
@@ -63,6 +62,10 @@ msgstr "境界線の幅"
 msgid "Bottom"
 msgstr "下"
 
+#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+msgid "Can't add to list, because it has exists"
+msgstr ""
+
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
 msgstr "この位置からウィンドウを選択できません"
@@ -92,11 +95,11 @@ msgstr "デバッグ"
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "角丸ウィンドウの影を編集"
 
-#: src/preferences/pages/custom.ts:190
+#: src/preferences/pages/custom.ts:189
 msgid "Enable"
 msgstr "有効化"
 
-#: src/preferences/pages/custom.ts:194
+#: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
 msgstr "このウィンドウの独自設定を有効化"
 
@@ -147,9 +150,11 @@ msgstr "左"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "すべてのアプリで角丸の効果がうまく効くわけではないため、この一覧に追加して無"
 "効にしてください。\n"
@@ -194,9 +199,12 @@ msgid "Rounded Corners Settings..."
 msgstr "角丸の設定..."
 
 #: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
-msgstr "ログ閲覧にはターミナルで <i>journalctl -o cat -f /usr/bin/gnome-shell</i> "
-"を実行"
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
+msgstr ""
+"ログ閲覧にはターミナルで <i>journalctl -o cat -f /usr/bin/gnome-shell</i> を"
+"実行"
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
@@ -210,7 +218,8 @@ msgstr "初期化する項目を選択"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "この一覧にウィンドウを追加してそれぞれの clip padding を設定できます。\n"
 "\n"
@@ -228,8 +237,11 @@ msgid "Skip LibHandy Applications"
 msgstr "LibHandy のアプリは無視"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
-msgstr "LibAdwaita や LibHandy を使ったアプリには、すでに角丸なものがあるので、この設"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
+msgstr ""
+"LibAdwaita や LibHandy を使ったアプリには、すでに角丸なものがあるので、この設"
 "定で無視することができます"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107

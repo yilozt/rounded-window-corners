@@ -3,8 +3,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2022-12-29 16:51+0000\n"
 "Last-Translator: Philip Goto <philip.goto@gmail.com>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/nl/>\n"
 "Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,8 +15,7 @@ msgstr ""
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Voorkeurenitem tonen in rechtermuisknopmenu van achtergrond"
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Venster toevoegen"
 
@@ -65,6 +64,10 @@ msgstr "Randbreedte"
 msgid "Bottom"
 msgstr "Onderaan"
 
+#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+msgid "Can't add to list, because it has exists"
+msgstr ""
+
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
 msgstr "Er kan vanaf deze positie geen venster worden gekozen"
@@ -94,11 +97,11 @@ msgstr "Foutopsporing"
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Pas de schaduw van afgeronde vensters aan"
 
-#: src/preferences/pages/custom.ts:190
+#: src/preferences/pages/custom.ts:189
 msgid "Enable"
 msgstr "Inschakelen"
 
-#: src/preferences/pages/custom.ts:194
+#: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
 msgstr "Gebruik aangepaste voorkeuren in dit venster"
 
@@ -107,7 +110,7 @@ msgstr "Gebruik aangepaste voorkeuren in dit venster"
 msgid "Enable Log"
 msgstr "Logboek bijhouden"
 
-#: src/utils/constants.ts:30
+#: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
 msgstr "Klap deze rij uit om een venster te kiezen."
 
@@ -150,9 +153,11 @@ msgstr "Links"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Niet alle apps kunnen omgaan met afgeronde hoeken, voeg deze hier toe om "
 "effecten uit te schakelen.\n"
@@ -192,12 +197,14 @@ msgstr "Voorkeuren herstellen"
 msgid "Right"
 msgstr "Rechts"
 
-#: src/utils/constants.ts:34
+#: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
 msgstr "Afgeronde hoeken-voorkeuren…"
 
 #: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "Voer <i>journalctl -o cat -f /usr/bin/gnome-shell</i> uit in een "
 "terminalvenster om het logboek te bekijken"
@@ -214,7 +221,8 @@ msgstr "Selecteer te herstellen items"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Stel verschillende opvullingen in door een venster toe te voegen aan de "
 "lijst.\n"
@@ -233,7 +241,9 @@ msgid "Skip LibHandy Applications"
 msgstr "LibHandy-apps negeren"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "Sommige LibAdwaita- en LibHandy-apps hebben al afgeronde hoeken. Hierdoor is "
 "het niet nodig voor deze uitbreiding om te proberen ze ervan te voorzien."
