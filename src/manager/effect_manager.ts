@@ -78,6 +78,21 @@ export class WindowActorTracker {
       }
     )
 
+    this.connections.connect (
+      wm,
+      'switch-workspace',
+      (_: WM, from: number, to: number) => {
+        this.run ((m) => {
+          const ws = global.workspace_manager.get_workspace_by_index (to)
+          if (!m.on_switch_workspace) return
+          for (const win of ws?.list_windows () ?? []) {
+            m.on_switch_workspace (win.get_compositor_private ())
+          }
+        })
+        _log (`Change WorkSpace ${from} -> ${to}`)
+      }
+    )
+
     // Connect 'minimized' signal
     this.connections.connect (wm, 'minimize', (_: WM, actor: WindowActor) => {
       this.run ((m) => m.on_minimize (actor))

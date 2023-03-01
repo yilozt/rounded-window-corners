@@ -110,13 +110,11 @@ export class RoundedCornersManager implements EffectManager {
   }
 
   on_unminimize (actor: ExtensionsWindowActor): void {
-    const info = actor.__rwc_rounded_window_info
-    if (!info) {
-      return
-    }
-    const prop = 'visible'
-    const flag = BindingFlags.SYNC_CREATE
-    info.visible_binding = actor.bind_property (prop, info.shadow, prop, flag)
+    this._restore_shadow (actor)
+  }
+
+  on_switch_workspace (actor: types.ExtensionsWindowActor) {
+    this._restore_shadow (actor)
   }
 
   on_restacked (actor: ExtensionsWindowActor): void {
@@ -232,6 +230,16 @@ export class RoundedCornersManager implements EffectManager {
   }
 
   // --------------------------------------------------------- [private methods]
+
+  private _restore_shadow (actor: ExtensionsWindowActor) {
+    const info = actor.__rwc_rounded_window_info
+    if (!info) {
+      return
+    }
+    const prop = 'visible'
+    const flag = BindingFlags.SYNC_CREATE
+    info.visible_binding = actor.bind_property (prop, info.shadow, prop, flag)
+  }
 
   /**
    * Check whether a window should be enable rounded corners effect

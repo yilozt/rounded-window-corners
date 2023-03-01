@@ -62,6 +62,7 @@ export interface EffectManager {
   on_restacked(actor: ExtensionsWindowActor): void
   on_size_changed(actor: ExtensionsWindowActor): void
   on_focus_changed(actor: ExtensionsWindowActor): void
+  on_switch_workspace?: (actor: ExtensionsWindowActor) => void
 }
 
 export type ExtensionsWindowActor = WindowActor & {
