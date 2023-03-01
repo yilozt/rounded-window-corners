@@ -2,11 +2,14 @@
 
 const { GettextExtractor, JsExtractors, HtmlExtractors } = require('gettext-extractor');
 const fs = require('fs')
-const { uuid } = require('../resources/metadata.json')
+const { uuid, version } = require('../resources/metadata.json')
 const { series, src, dest } = require('gulp')
-const fillPotPo = require('gulp-fill-pot-po')
 const potomo = require('gulp-potomo');
 const rename = require('gulp-rename');
+const fg = require('fast-glob');
+const { spawnSync } = require('child_process');
+const colors = require('ansi-colors');
+const { stdout } = require('process');
 
 const gen_pot = async () => {
   let extractor = new GettextExtractor()
@@ -32,18 +35,24 @@ const gen_pot = async () => {
   ]).parseFilesGlob('src/**/*.ui')
 
   fs.mkdirSync('po', { recursive: true })
-  extractor.savePotFile(`po/${uuid}.pot`)
+  extractor.savePotFile(`po/${uuid}.pot`, {
+    'Report-Msgid-Bugs-To': 'yilozt@outlook.com',
+    'Content-Type': 'text/plain; charset=UTF-8',
+    'Project-Id-Version': version,
+  })
   extractor.printStats()
 }
 
-const fill_pot = () =>
-  src('po/*.pot')
-    .pipe(fillPotPo({
-      poSources: ['po/*.po'],
-      logResult: true,
-      appendNonIncludedFromPO: true,
-    }))
-    .pipe(dest('po'))
+const fill_pot = async () => {
+  const cmd = (command, args) => spawnSync(command, args, { shell: true, stdio: 'inherit' })
+  const pot = (await fg('po/*.pot'))[0]
+  const po_files = await fg('po/*.po')
+
+  for (const po of po_files) {
+    stdout.write(colors.green(`Update ${po} `))
+    cmd('msgmerge', [ po, pot, '-o', po ])
+  }
+}
 
 const compile_po = () =>
     src('po/*.po')
