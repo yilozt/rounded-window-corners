@@ -90,9 +90,9 @@ const install_extension = () => {
 
 // -------------------------------------------------------- [Export gulp tasks]
 
-const compile = series (parallel(format, compile_ts), copy_resources, compile_schema)
+const compile = series (compile_ts, copy_resources, compile_schema)
 
-exports.build = series(compile, po)
+exports.build = parallel(format, compile, po)
 exports.github_action = series(compile, compile_po)
 exports.copy_extension = install_extension
 
