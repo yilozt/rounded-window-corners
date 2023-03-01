@@ -1,5 +1,5 @@
-import { Window } from '../../@gi/Meta'
-import { WindowPreview } from 'windowPreview'
+import { Window } from '@gi/Meta'
+import { WindowPreview } from './windowPreview'
 import { Actor } from '@gi/Clutter';
 
 export class Workspace extends Actor {

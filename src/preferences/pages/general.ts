@@ -117,15 +117,19 @@ export const General = GObject.registerClass (
       })
 
       const c = connections.get ()
-      c.connect (this._border_color_button, 'color-set', (source) => {
-        const color = source.get_rgba ()
-        settings ().border_color = [
-          color.red,
-          color.green,
-          color.blue,
-          color.alpha,
-        ]
-      })
+      c.connect (
+        this._border_color_button,
+        'color-set',
+        (btn: Gtk.ColorButton) => {
+          const color = btn.get_rgba ()
+          settings ().border_color = [
+            color.red,
+            color.green,
+            color.blue,
+            color.alpha,
+          ]
+        }
+      )
 
       // Handler active event for BoxList
       c.connect (

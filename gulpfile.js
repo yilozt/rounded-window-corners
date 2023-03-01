@@ -3,8 +3,6 @@ const { build, copy_extension, github_action }  = require('./gulp/build')
 const { vagrant } = require('./gulp/vagrant')
 const { watch } = require('./gulp/watch')
 
-// Generate @gi Folder
-exports.gi      = require('./gulp/gi').gi
 // Build Extension
 exports.build   = build
 // Build & Install extension

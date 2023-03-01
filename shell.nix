@@ -1,4 +1,4 @@
-{ pkgs ? import (fetchTarball https://nixos.org/channels/nixos-22.05/nixexprs.tar.xz) { } }:
+{ pkgs ? import (fetchTarball https://nixos.org/channels/nixos-22.11/nixexprs.tar.xz) { } }:
 
 # Use to setup development shell for NixOS.
 

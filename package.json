@@ -6,9 +6,9 @@
   "license": "GPL-3.0-or-later",
   "main": "src/extension.ts",
   "devDependencies": {
-    "@gi.ts/cli": "^1.5.7",
-    "@gi.ts/lib": "^1.5.9",
-    "@gi.ts/parser": "^1.5.3",
+    "@gi-types/gtk4": "^4.6.1",
+    "@gi-types/meta10": "^10.0.1",
+    "@gi-types/shell0": "^0.1.1",
     "@types/gulp": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.30.4",
     "@typescript-eslint/parser": "^5.30.4",

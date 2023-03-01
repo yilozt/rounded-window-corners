@@ -29,18 +29,19 @@ export class Connections {
    * @param source - Signal source
    * @param args - Arguments pass into GObject.Object.connect()
    */
-  connect<T extends GObject.Object>(source: T, ...args: Handler<T>): void
-  connect(source: GObject.Object, ...args: DefaultHandler): void
-  connect<T extends GObject.Object> (source: T, ...[signal, cb]: Handler<T>) {
+  connect<T extends GObject.Object> (source: T, ...args: any): void {
+    const signal: string = args[0]
+    const id: number = source.connect (args[0], args[1])
+
     // Source has been added into manager
     {
       const handlers = this.connections.get (source)
       if (handlers !== undefined) {
         if (handlers[signal] !== undefined) {
-          handlers[signal].push (source.connect (signal, cb))
+          handlers[signal].push (id)
           return
         } else {
-          handlers[signal] = [source.connect (signal, cb)]
+          handlers[signal] = [id]
           return
         }
       }
@@ -48,7 +49,7 @@ export class Connections {
 
     // Source is first time register signal
     const handlers: { [signal: string]: number[] } = {}
-    handlers[signal] = [source.connect (signal, cb)]
+    handlers[signal] = [id]
     this.connections.set (source, handlers)
   }
 
@@ -124,6 +125,3 @@ export const connections = {
 
 //              Signal source     signal name            it's handler
 type _Map = Map<GObject.Object, { [signal_name: string]: number[] }>
-
-type Handler<T extends GObject.Object> = Parameters<T['connect']>
-type DefaultHandler = [string, (_: unknown[]) => unknown]

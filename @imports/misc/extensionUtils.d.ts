@@ -1,4 +1,4 @@
-import * as Gio from '../../@gi/Gio'
+import * as Gio from '@gi/Gio'
 
 /**
  * getCurrentExtension:

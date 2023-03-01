@@ -13,12 +13,11 @@ const prettier = require('gulp-prettier')
 const gulpESLintNew = require('gulp-eslint-new')
 const colors = require('ansi-colors')
 const { align_imports } = require('./format')
-const { gi } = require('./gi')
 const { po, compile_po } = require('./po')
 
 const tsProject = ts.createProject('tsconfig.json')
 const BUILD_DIR = require('../tsconfig.json').compilerOptions.outDir
-const SRC_DIR = require('../tsconfig.json').compilerOptions.baseUrl
+const SRC_DIR = require('../tsconfig.json').compilerOptions.baseUrl + "/src"
 
 // Compile Typescript source code, because typescript compile will remove all empty
 // lines in compiled javascript files, and make the output files looks uncomfortable.
@@ -93,8 +92,8 @@ const install_extension = () => {
 
 const compile = series (compile_ts, copy_resources, compile_schema)
 
-exports.build = series(gi, format, compile, po)
-exports.github_action = series(gi, compile, compile_po)
+exports.build = series(format, compile, po)
+exports.github_action = series(compile, compile_po)
 exports.copy_extension = install_extension
 
 // ---------------------------------------------------------- [Private methods]
