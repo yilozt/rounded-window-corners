@@ -1,6 +1,8 @@
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
+"Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"Project-Id-Version: 10\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -54,6 +56,11 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
+#: src/preferences/pages/blacklist.ts:65
+#: src/preferences/pages/custom.ts:177
+msgid "Can't add to list, because it has exists"
+msgstr ""
+
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
 msgstr ""
@@ -83,11 +90,11 @@ msgstr ""
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr ""
 
-#: src/preferences/pages/custom.ts:190
+#: src/preferences/pages/custom.ts:189
 msgid "Enable"
 msgstr ""
 
-#: src/preferences/pages/custom.ts:194
+#: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
 msgstr ""
 

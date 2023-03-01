@@ -173,10 +173,9 @@ export const Custom = GObject.registerClass (
       return expanded_row
     }
 
-    private show_exists_error_toast (title: string) {
-      const tip =
-        `'${title}': ` + 'can\'t add into list, because this item has exists'
-      show_err_msg (tip)
+    private show_exists_error_toast (item: string) {
+      const title = `${item}: ` + _ ('Can\'t add to list, because it has exists')
+      show_err_msg (title)
     }
 
     private _on_cfg_changed (k: string, v: RoundedCornersCfg) {

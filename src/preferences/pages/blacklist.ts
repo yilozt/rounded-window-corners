@@ -13,6 +13,7 @@ import { AppRowHandler } from '../widgets/app_row'
 import { Me }            from '@global'
 
 import * as Gtk          from '@gi/Gtk'
+import { _ }             from '@me/utils/i18n'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -61,7 +62,7 @@ export const BlackList = GObject.registerClass (
     }
 
     private show_err_msg (item: string) {
-      const title = `"${item}": Can't add to list, because it has exists`
+      const title = `${item}: ` + _ ('Can\'t add to list, because it has exists')
       show_err_msg (title)
     }
 
