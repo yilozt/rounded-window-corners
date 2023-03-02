@@ -13,35 +13,38 @@
 - Black list for applications which draw window decoration itself
 - Custom shadow for rounded corners windows
 - Skip libadwaita / libhandy application
-- [Superelliptical](https://en.wikipedia.org/wiki/Superellipse) shape for rounded corners, thanks to [@YuraIz](https://github.com/YuraIz) 
+- [Superelliptical][1] shape for rounded corners, thanks to [@YuraIz][2]
 - A simple reset preferences dialog
 
 ## Compatibility
 
-- [_Compiz alike magic lamp effect_](https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/)
+- [_Compiz alike magic lamp effect_][3]
   
   Hide shadow when magic lamp effect running.
-  Need to restart (disable then enable) this extension when _Compiz alike magic lamp effect_ enabled. 
+  Need to restart (disable then enable) this extension when
+  _Compiz alike magic lamp effect_ enabled. 
 
 ## Notes
 
-- The rounded corners effect for window is base on this [shader](https://gitlab.gnome.org/GNOME/mutter/-/blob/main/src/compositor/meta-background-content.c#L138) from mutter project
-- The TypeScript support for GJS is power by [gi.ts](https://gitlab.gnome.org/ewlsh/gi.ts)
+- The rounded corners effect for window is base on this [shader][4] from
+  mutter project
+- The TypeScript support for GJS is power by [gi.ts][5]
 
 ## Screenshots
 
-![2022-07-29 23-49-57](https://user-images.githubusercontent.com/32430186/181902857-d4d10740-82fe-4941-b064-d436b9ea7317.png)
+![2022-07-29 23-49-57][6]
 
 
 ## Installation
 
 ### From Ego
 
-Install extensions from [here](https://extensions.gnome.org/extension/5237/rounded-window-corners/).
+Install extensions from [here][7].
 
 ### From source code
 
-It will install extensions to `~/.local/share/gnome-shell/extensions`, need to install `yarn` and Node.js
+It will install extensions to `~/.local/share/gnome-shell/extensions`,
+need to install `yarn`, Node.js and `gettext`
 
 ```bash
 git clone https://github.com/yilozt/rounded-window-corners
@@ -49,38 +52,27 @@ cd rounded-window-corners
 yarn install && yarn ext:install
 ```
 
-In NixOS, you can use `nix-shell` to enter a development shell before run `yarn install`.
+In NixOS, you can use `nix-shell` to enter a development shell before
+run `yarn install`.
 
-#### Build dependencies
-
-You may need to install those packages when building this extensions. Feel free to open issues if you got error.
-
-##### Arch Linux
+You may need to install those packages when building this extensions. Feel free
+to open issues if you got error.
 
 ```bash
-sudo pacman -S base gnome-shell gtk3 libadwaita gtk4 glib2 gobject-introspection
-```
-##### Ubuntu (22.04)
-
-```bash
-apt install gnome-shell-common libpolkit-agent-1-dev libmutter-10-dev \
-    libadwaita-1-dev libgtk-3-dev libgtk-4-dev libgraphene-1.0-dev    \
-    libgirepository1.0-dev libnm-dev libgcr-3-dev gettext
-```
-
-##### Fedora
-
-```bash
-dnf install gtk3-devel gtk4-devel libadwaita-devel mutter-devel \
-    polkit-devel gcr-devel NetworkManager-libnm-devel
+sudo pacman -S nodejs yarn gettext        # Arch Linix
+sudo apt install nodejs yarnpkg gettext   # Ubuntu
+sudo dnf install nodejs yarnpkg gettext   # Fedora
 ```
 
 ### From Releases / Github Actions
 
-Download extensions pack from [Releases](https://github.com/yilozt/rounded-window-corners/releases) Page, or download git version from [Github Actions](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml). After download extensions pack, you need use `gnome-extensions` to install it, then restart gnome-shell to enable this extensions.
+Download extensions pack from [Releases][8] Page, or download git version from
+[Github Actions][9]. After download extensions pack, you need use
+`gnome-extensions` to install it, then restart gnome-shell to enable this
+extensions.
 
-[![](https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square)](https://github.com/yilozt/rounded-window-corners/releases)
-[![](https://img.shields.io/github/workflow/status/yilozt/rounded-window-corners/Pack%20extensions?label=Pack%20extensions&style=flat-square)](https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml)
+[![release-badge][10]][8]
+[![pack-padge][11]][9]
 
 ```bash
 gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
@@ -88,21 +80,25 @@ gnome-extensions install rounded-window-corners@yilozt.shell-extension.zip
 
 ## Translations
 
-[![](https://hosted.weblate.org/widgets/rounded-window-corners/-/rounded-window-corners/multi-auto.svg)](https://hosted.weblate.org/engage/rounded-window-corners/)
+[![weblate-state][12]][13]
 
-You can help translate this extensions by using [Weblate](https://hosted.weblate.org/engage/rounded-window-corners/), or update po files then open a pull request.
+You can help translate this extensions by using [Weblate][13], or update po
+files then open a pull request.
 
-To add new translations for extensions, you can add empty `.po` file in `po` directory, then use `yarn po` or `yarn dev` to fill it. 
+To add new translations for extensions, you can add `.po` files in `po`
+directory via `msginit`, then use your favorite text editor to edit it.
 
 ```bash
-touch po/zh_CN.po  # replace zh_CN to the locales you want to add
-yarn po            # auto fill po file
-vim po/zh_CN.po    # now let's start edit
+cd po && msginit   # Add po file for new translations
 ```
 
-You can run `yarn ext:install` or `yarn dev` to install extensions with with new translations. In XOrg sessions, just press `Alt + F2 -> r` to restart gnome-session then preview the result.
+You can run `yarn ext:install` or `yarn dev` to install extensions with with
+new translations. In XOrg sessions, just press `Alt + F2 -> r` to restart
+gnome-session then preview the result. In Wayland session, have to logout
+session then login again to reload extensions.
 
-`yarn dev` will watch changes of `.po` files, once you have update translations, it will compile and install extensions automatically.
+`yarn dev` will watch changes of `.po` files, once you have update translations,
+it will compile and install extensions automatically.
 
 ## Development
 
@@ -122,8 +118,26 @@ yarn dev
 
 ### Test in Virtual Box by Vagrant
 
-Need to install [`Vagrant`](https://github.com/hashicorp/vagrant) and Virtual Box. This command will setup a virtual machine that enable log of extensions in terminal.
+Need to install [`Vagrant`](https://github.com/hashicorp/vagrant) and
+Virtual Box. This command will setup a virtual machine that enable log of
+extensions in terminal.
 
 ```
 yarn vm
 ```
+
+<!-- links -->
+
+[1]: https://en.wikipedia.org/wiki/Superellipse
+[2]: https://github.com/YuraIz
+[3]: https://extensions.gnome.org/extension/3740/compiz-alike-magic-lamp-effect/
+[4]: https://gitlab.gnome.org/GNOME/mutter/-/blob/main/src/compositor/meta-background-content.c#L138
+[5]: https://gitlab.gnome.org/ewlsh/gi.ts
+[6]: https://user-images.githubusercontent.com/32430186/181902857-d4d10740-82fe-4941-b064-d436b9ea7317.png
+[7]: https://extensions.gnome.org/extension/5237/rounded-window-corners/
+[8]: https://github.com/yilozt/rounded-window-corners/releases
+[9]: https://github.com/yilozt/rounded-window-corners/actions/workflows/pack.yml
+[10]: https://img.shields.io/github/v/release/yilozt/rounded-window-corners?style=flat-square
+[11]: https://img.shields.io/github/actions/workflow/status/yilozt/rounded-window-corners/pack.yml?branch=main&style=flat-square
+[12]: https://hosted.weblate.org/widgets/rounded-window-corners/-/rounded-window-corners/multi-auto.svg
+[13]: https://hosted.weblate.org/engage/rounded-window-corners/
