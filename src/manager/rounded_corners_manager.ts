@@ -1,5 +1,6 @@
 // imports.gi
 import * as Clutter               from '@gi/Clutter'
+import * as GLib                  from '@gi/GLib'
 import { ShadowMode, WindowType } from '@gi/Meta'
 import { WindowClientType }       from '@gi/Meta'
 import { Bin }                    from '@gi/St'
@@ -76,7 +77,11 @@ export class RoundedCornersManager implements EffectManager {
     const visible_binding = actor.bind_property (prop, shadow, prop, flag)
 
     // Store shadow, app type, visible binding, so that we can query them later
-    actor.__rwc_rounded_window_info = { shadow, visible_binding }
+    actor.__rwc_rounded_window_info = {
+      shadow,
+      visible_binding,
+      unminimized_timeout_id: 0,
+    }
   }
 
   on_remove_effect (actor: ExtensionsWindowActor): void {
@@ -96,6 +101,10 @@ export class RoundedCornersManager implements EffectManager {
       shadow.clear_effects ()
       shadow.destroy ()
     }
+
+    // Remove all timeout handler
+    const timeout_id = actor.__rwc_rounded_window_info?.unminimized_timeout_id
+    if (timeout_id) GLib.source_remove (timeout_id)
     delete actor.__rwc_rounded_window_info
   }
 
@@ -111,6 +120,22 @@ export class RoundedCornersManager implements EffectManager {
 
   on_unminimize (actor: ExtensionsWindowActor): void {
     this._restore_shadow (actor)
+
+    // Requeue layout after 300ms
+    if (actor.first_child && actor.__rwc_rounded_window_info) {
+      const info = actor.__rwc_rounded_window_info
+
+      // Clear prev handler
+      let id = info.unminimized_timeout_id
+      if (id) GLib.source_remove (id)
+      id = GLib.timeout_add (GLib.PRIORITY_DEFAULT, 300, () => {
+        actor.first_child.queue_relayout ()
+        return false
+      })
+
+      // update handler, it will be clear when window is closed
+      info.unminimized_timeout_id = id
+    }
   }
 
   on_switch_workspace (actor: types.ExtensionsWindowActor) {
