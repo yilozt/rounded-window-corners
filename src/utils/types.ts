@@ -69,6 +69,7 @@ export type ExtensionsWindowActor = WindowActor & {
   __rwc_rounded_window_info?: {
     shadow: Bin
     visible_binding: Binding
+    unminimized_timeout_id: number
   }
   __rwc_blurred_window_info?: {
     blur_actor: Actor
