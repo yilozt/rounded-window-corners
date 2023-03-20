@@ -1,19 +1,19 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-02-06 05:38+0000\n"
+"PO-Revision-Date: 2023-03-21 15:37+0000\n"
 "Last-Translator: maboroshin <maboroshin@users.noreply.hosted.weblate.org>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/rounded-window-"
-"corners/rounded-window-corners/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/ja/>\n"
 "Language: ja\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr ""
+msgstr "背景の右クリックメニューに設定項目を追加"
 
 #: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
@@ -64,7 +64,7 @@ msgstr "下"
 
 #: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "既に存在するため、一覧に追加できません"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
