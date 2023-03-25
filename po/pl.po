@@ -2,9 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-03-26 19:41+0000\n"
+"Last-Translator: Szymon Kajak <szymonkajak542@gmail.com>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/pl/>\n"
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -13,11 +20,11 @@ msgstr ""
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Dodaj okno"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "Zawsze zachowuj, gdy okno jest w trybie pełnoekranowym."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
