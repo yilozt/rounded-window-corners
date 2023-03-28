@@ -1,34 +1,31 @@
 // imports.gi
-import { Point }                 from '@gi/Graphene'
-import * as Clutter              from '@gi/Clutter'
-import { Settings }              from '@gi/Gio'
-import { WindowClientType }      from '@gi/Meta'
+import { Point }                                    from '@gi/Graphene'
+import * as Clutter                                 from '@gi/Clutter'
+import { Settings }                                 from '@gi/Gio'
+import { WindowClientType, Window, WindowActor }    from '@gi/Meta'
 
 // gnome-shell modules
-import { WindowPreview }         from '@imports/ui/windowPreview'
-import { WorkspaceGroup }        from '@imports/ui/workspaceAnimation'
-import BackgroundMenu            from '@imports/ui/backgroundMenu'
-import { layoutManager }         from '@imports/ui/main'
-import { overview }              from '@imports/ui/main'
+import { WindowPreview }                            from '@imports/ui/windowPreview'
+import { WorkspaceGroup }                           from '@imports/ui/workspaceAnimation'
+import BackgroundMenu                               from '@imports/ui/backgroundMenu'
+import { layoutManager, overview }                  from '@imports/ui/main'
 
 // local modules
-import { constants }             from '@me/utils/constants'
-import { stackMsg, _log }        from '@me/utils/log'
-import * as UI                   from '@me/utils/ui'
-import { connections }           from '@me/utils/connections'
-import { SchemasKeys, settings } from '@me/utils/settings'
-import { Services }              from '@me/dbus/services'
-import { LinearFilterEffect }    from '@me/effect/linear_filter_effect'
-import { RoundedCornersEffect }  from '@me/effect/rounded_corners_effect'
-import { init_translations }     from '@me/utils/i18n'
-import { WindowActorTracker }    from '@me/manager/effect_manager'
+import { constants }                                from '@me/utils/constants'
+import { stackMsg, _log }                           from '@me/utils/log'
+import * as UI                                      from '@me/utils/ui'
+import { connections }                              from '@me/utils/connections'
+import { SchemasKeys, settings }                    from '@me/utils/settings'
+import { Services }                                 from '@me/dbus/services'
+import { LinearFilterEffect }                       from '@me/effect/linear_filter_effect'
+import { RoundedCornersEffect }                     from '@me/effect/rounded_corners_effect'
+import { init_translations }                        from '@me/utils/i18n'
+import { WindowActorTracker }                       from '@me/manager/effect_manager'
 
 // types, which will be removed in output
-import { RoundedCornersCfg }     from '@me/utils/types'
-import { ExtensionsWindowActor } from '@me/utils/types'
-import { Window, WindowActor }   from '@gi/Meta'
-import { global }                from '@global'
-import { registerClass }         from '@gi/GObject'
+import { RoundedCornersCfg, ExtensionsWindowActor } from '@me/utils/types'
+import { global }                                   from '@global'
+import { registerClass }                            from '@gi/GObject'
 
 // --------------------------------------------------------------- [end imports]
 

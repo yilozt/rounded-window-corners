@@ -4,8 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-03-26 19:41+0000\n"
 "Last-Translator: Szymon Kajak <szymonkajak542@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/pl/>\n"
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,8 +17,7 @@ msgstr ""
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Dodaj okno"
 
@@ -65,8 +64,7 @@ msgstr ""
 msgid "Bottom"
 msgstr ""
 
-#: src/preferences/pages/blacklist.ts:65
-#: src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
 msgstr ""
 
@@ -154,9 +152,11 @@ msgstr ""
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
@@ -196,7 +196,9 @@ msgid "Rounded Corners Settings..."
 msgstr ""
 
 #: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:96
@@ -211,7 +213,8 @@ msgstr ""
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 
 #: src/preferences/pages/general.ui:47
@@ -225,7 +228,9 @@ msgid "Skip LibHandy Applications"
 msgstr ""
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
