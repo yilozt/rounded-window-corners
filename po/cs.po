@@ -2,9 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-04-18 06:49+0000\n"
+"Last-Translator: Fjuro <ifjuro@proton.me>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.17\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -25,7 +31,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Aplikace"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
