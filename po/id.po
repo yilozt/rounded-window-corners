@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2022-09-20 02:22+0000\n"
-"Last-Translator: Bima <abimanyusrisetyo@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/rounded-"
-"window-corners/rounded-window-corners/id/>\n"
+"PO-Revision-Date: 2023-05-24 00:51+0000\n"
+"Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/id/>\n"
 "Language: id\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -66,7 +66,7 @@ msgstr "Bawah"
 
 #: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "Tidak dapat menambahkan ke daftar, karena sudah ada"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
