@@ -2,9 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-10-01 14:00+0000\n"
+"Last-Translator: olevo <imagyarcsik@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/hu/>\n"
 "Language: hu\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -41,27 +47,28 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
+#, fuzzy
 msgid "Border Color"
-msgstr ""
+msgstr "A border széle"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "A border radius vastagsága"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "A border szélessége"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "Alja"
 
 #: src/preferences/pages/blacklist.ts:65
 #: src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "Sikertelen hozzáadás, ez már létezik"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
@@ -74,11 +81,11 @@ msgstr ""
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
-msgstr ""
+msgstr "A sarkok simítása/simasága"
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "Egyéni"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
@@ -86,7 +93,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/preferences/widgets/edit_shadow_window.ts:58
 msgid "Edit Shadow for Rounded Corners Windows"
@@ -94,7 +101,7 @@ msgstr ""
 
 #: src/preferences/pages/custom.ts:189
 msgid "Enable"
-msgstr ""
+msgstr "Bekapcsolás"
 
 #: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
@@ -103,7 +110,7 @@ msgstr ""
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "Napló bekapcsolása"
 
 #: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
@@ -111,7 +118,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
-msgstr ""
+msgstr "Ablak előtérbe helyezése"
 
 #: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
@@ -119,11 +126,11 @@ msgstr ""
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "Általános"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
-msgstr ""
+msgstr "Globál beállítások"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
@@ -143,7 +150,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "Bal"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -154,7 +161,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
-msgstr ""
+msgstr "Áttettszőség"
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
@@ -182,7 +189,7 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "Jobb"
 
 #: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
