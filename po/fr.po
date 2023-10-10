@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-02-13 20:35+0000\n"
-"Last-Translator: Augustin Lucas <augustin.lucas64@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/rounded-window-"
-"corners/rounded-window-corners/fr/>\n"
+"PO-Revision-Date: 2023-10-11 16:02+0000\n"
+"Last-Translator: luxluth <delphin.blehoussi93@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -68,7 +68,7 @@ msgstr "Bas"
 
 #: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "Impossible d'ajouter à la liste, car l'élément existe déjà"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
@@ -76,7 +76,7 @@ msgstr "Impossible de sélectionner une fenêtre depuis cette position"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
-msgstr ""
+msgstr "Recadrer les marges de la fenêtre"
 
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
@@ -113,9 +113,8 @@ msgid "Enable Log"
 msgstr "Activer les journaux"
 
 #: src/utils/constants.ts:17
-#, fuzzy
 msgid "Expand this row to pick a window."
-msgstr "Développer la ligne pour choisir une fenêtre"
+msgstr "Développer la ligne pour choisir une fenêtre."
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
@@ -226,6 +225,11 @@ msgid ""
 "The item of list is instance part of WM_CLASS property with window. You can "
 "pick a window to add it into this list."
 msgstr ""
+"Configurez différents marges de recadrage en ajoutant une fenêtre à cette "
+"liste.\n"
+"\n"
+"L'élément de la liste est une instance de la propriété WM_CLASS avec la "
+"fenêtre. Vous pouvez sélectionner une fenêtre pour l'ajouter à cette liste."
 
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
@@ -247,7 +251,7 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
-msgstr ""
+msgstr "Rayon de dispersion"
 
 #: src/preferences/pages/general.ui:143
 msgid "This settings will try to effects all windows"
@@ -259,28 +263,28 @@ msgstr "Haut"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
-msgstr ""
+msgstr "Essayer d'ajouter des coins arrondis à la console Kitty sous Wayland"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
-msgstr ""
+msgstr "Customiser les marges de la console Kitty"
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
-msgstr ""
+msgstr "Customisations"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr ""
+msgstr "Fenêtre non activ"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
-msgstr ""
+msgstr "Style de l'ombre de la fenêtre non active"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
-msgstr ""
+msgstr "Décalage vertical"
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
-msgstr ""
+msgstr "Ombre de la fenêtre"
