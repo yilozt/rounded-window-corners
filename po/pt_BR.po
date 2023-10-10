@@ -2,9 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-10-11 16:02+0000\n"
+"Last-Translator: Heder Barreto <matheusmr640@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/pt_BR/>\n"
 "Language: pt_BR\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -13,15 +19,18 @@ msgstr ""
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Adicionar janela"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
 msgstr ""
+"Sempre mantenha os cantos arredondados quando a janela estiver em tela cheia."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
 msgstr ""
+"Sempre mantenha os cantos arredondados quando a janela estiver maximizada ou "
+"lado a lado."
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
@@ -29,11 +38,11 @@ msgstr ""
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "Aplicar"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "Lista negra"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
