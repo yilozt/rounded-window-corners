@@ -1,5 +1,5 @@
 import { LookingGlass } from "./lookingGlass";
-import * as GObject from '@gi/GObject'
+import * as GObject from 'gi://GObject'
 
 export const createLookingGlass: () => LookingGlass;
 

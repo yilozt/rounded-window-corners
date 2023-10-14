@@ -1,5 +1,5 @@
-import { Window, WindowActor } from '@gi/Meta'
-import { Actor, Clone } from '@gi/Clutter'
+import { Window, WindowActor } from 'gi://Meta'
+import { Actor, Clone } from 'gi://Clutter'
 
 export class WorkspaceAnimationController {
     _movingWindow: Window;
