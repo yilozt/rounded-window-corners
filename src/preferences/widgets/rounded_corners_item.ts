@@ -1,20 +1,18 @@
 // imports.gi
-import * as GObject          from '@gi/GObject'
-import * as Gtk              from '@gi/Gtk'
+import * as GObject from 'gi://GObject'
+import * as Gtk from 'gi://Gtk'
 
 // local modules
-import { RoundedCornersCfg } from '@me/utils/types'
-import { connections }       from '@me/utils/connections'
+import { RoundedCornersCfg } from '../../utils/types.js'
+import { connections } from '../../utils/connections.js'
+import { uri } from '../../utils/io.js'
 
 // types
-import { Me }                from '@global'
 // ------------------------------------------------------------------ end import
-
-const Template = `file://${Me.path}/preferences/widgets/rounded-corners-item.ui`
 
 export const RoundedCornersItem = GObject.registerClass (
   {
-    Template,
+    Template: uri (import.meta.url, 'rounded-corners-item.ui'),
     GTypeName: 'RoundedCornersItem',
     InternalChildren: [
       'rounded_in_maximized_switch',
@@ -31,21 +29,21 @@ export const RoundedCornersItem = GObject.registerClass (
     ],
   },
   class extends Gtk.ListBox {
-    private _rounded_in_maximized_switch  !: Gtk.Switch
-    private _rounded_in_fullscreen_switch !: Gtk.Switch
-    private _border_radius_scale          !: Gtk.Scale
-    private _smoothing_scale              !: Gtk.Scale
-    private _padding_left_scale           !: Gtk.Scale
-    private _padding_right_scale          !: Gtk.Scale
-    private _padding_top_scale            !: Gtk.Scale
-    private _padding_bottom_scale         !: Gtk.Scale
-    private _revealer                     !: Gtk.Revealer
-    private _expander_img                 !: Gtk.Image
+    private _rounded_in_maximized_switch!: Gtk.Switch
+    private _rounded_in_fullscreen_switch!: Gtk.Switch
+    private _border_radius_scale!: Gtk.Scale
+    private _smoothing_scale!: Gtk.Scale
+    private _padding_left_scale!: Gtk.Scale
+    private _padding_right_scale!: Gtk.Scale
+    private _padding_top_scale!: Gtk.Scale
+    private _padding_bottom_scale!: Gtk.Scale
+    private _revealer!: Gtk.Revealer
+    private _expander_img!: Gtk.Image
 
-    _paddings_row                         !: Gtk.ListBoxRow
+    _paddings_row!: Gtk.ListBoxRow
 
-    private _scales                       !: Gtk.Scale[]
-    private _switches                     !: Gtk.Switch[]
+    private _scales!: Gtk.Scale[]
+    private _switches!: Gtk.Switch[]
 
     _init () {
       super._init ()

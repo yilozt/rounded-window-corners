@@ -1,27 +1,27 @@
 // imports.gi
-import * as GObject           from '@gi/GObject'
-import * as Gdk               from '@gi/Gdk'
-import * as Gio               from '@gi/Gio'
+import * as GObject from 'gi://GObject'
+import * as Gdk from 'gi://Gdk'
+import * as Gio from 'gi://Gio'
 
 // local modules
-import { settings }           from '@me/utils/settings'
-import { SchemasKeys }        from '@me/utils/settings'
-import { connections }        from '@me/utils/connections'
-import { list_children }      from '@me/utils/prefs'
-import { _log }               from '@me/utils/log'
-import { RoundedCornersItem } from '@me/preferences/widgets/rounded_corners_item'
-import { EditShadowWindow }   from '@me/preferences/widgets/edit_shadow_window'
-import { ResetDialog }        from '@me/preferences/widgets/reset_dialog'
+import { settings } from '../../utils/settings.js'
+import { SchemasKeys } from '../../utils/settings.js'
+import { connections } from '../../utils/connections.js'
+import { list_children } from '../../utils/prefs.js'
+import { _log } from '../../utils/log.js'
+import { RoundedCornersItem } from '../widgets/rounded_corners_item.js'
+import { EditShadowWindow } from '../widgets/edit_shadow_window.js'
+import { ResetDialog } from '../widgets/reset_dialog.js'
 
 // types
-import * as Gtk               from '@gi/Gtk'
-import { Me }                 from '@global'
+import * as Gtk from 'gi://Gtk'
+import { uri } from '../../utils/io.js'
 
 // --------------------------------------------------------------- [end imports]
 
 export const General = GObject.registerClass (
   {
-    Template: `file://${Me.path}/preferences/pages/general.ui`,
+    Template: uri (import.meta.url, 'general.ui'),
     GTypeName: 'RoundedWindowCornersPrefsGeneral',
 
     // Widgets export from template ui
@@ -41,19 +41,19 @@ export const General = GObject.registerClass (
   },
   class extends Gtk.Box {
     // Those properties come from 'InternalChildren'
-    private _global_settings_preferences_group !: Gtk.ListBox
-    private _enable_log_switch                 !: Gtk.Switch
-    private _skip_libhandy_app_switch          !: Gtk.Switch
-    private _skip_libadwaita_app_switch        !: Gtk.Switch
-    private _tweak_kitty_switch                !: Gtk.Switch
-    private _preferences_entry_switch          !: Gtk.Switch
-    private _border_width_ajustment            !: Gtk.Adjustment
-    private _border_color_button               !: Gtk.ColorButton
-    private _edit_shadow_row                   !: Gtk.ListBoxRow
-    private _applications_group                !: Gtk.ListBox
-    private _reset_preferences_btn             !: Gtk.Button
+    private _global_settings_preferences_group!: Gtk.ListBox
+    private _enable_log_switch!: Gtk.Switch
+    private _skip_libhandy_app_switch!: Gtk.Switch
+    private _skip_libadwaita_app_switch!: Gtk.Switch
+    private _tweak_kitty_switch!: Gtk.Switch
+    private _preferences_entry_switch!: Gtk.Switch
+    private _border_width_ajustment!: Gtk.Adjustment
+    private _border_color_button!: Gtk.ColorButton
+    private _edit_shadow_row!: Gtk.ListBoxRow
+    private _applications_group!: Gtk.ListBox
+    private _reset_preferences_btn!: Gtk.Button
 
-    private config_items                       !: _Items
+    private config_items!: _Items
 
     _init () {
       super._init ()

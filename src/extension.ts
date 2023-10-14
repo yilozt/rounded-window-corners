@@ -1,54 +1,46 @@
 // imports.gi
-import { Point }                 from '@gi/Graphene'
-import * as Clutter              from '@gi/Clutter'
-import { Settings }              from '@gi/Gio'
-import { WindowClientType }      from '@gi/Meta'
+import * as Graphene from 'gi://Graphene'
+import * as Clutter from 'gi://Clutter'
+import * as Gio from 'gi://Gio'
+import * as Meta from 'gi://Meta'
+import * as GObject from 'gi://GObject'
 
 // gnome-shell modules
-import { WindowPreview }         from '@imports/ui/windowPreview'
-import { WorkspaceGroup }        from '@imports/ui/workspaceAnimation'
-import BackgroundMenu            from '@imports/ui/backgroundMenu'
-import { layoutManager }         from '@imports/ui/main'
-import { overview }              from '@imports/ui/main'
+import { WindowPreview } from 'resource:///org/gnome/shell/ui/windowPreview.js'
+import { overview, layoutManager } from 'resource:///org/gnome/shell/ui/main.js'
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js'
 
 // local modules
-import { constants }             from '@me/utils/constants'
-import { stackMsg, _log }        from '@me/utils/log'
-import * as UI                   from '@me/utils/ui'
-import { connections }           from '@me/utils/connections'
-import { SchemasKeys, settings } from '@me/utils/settings'
-import { Services }              from '@me/dbus/services'
-import { LinearFilterEffect }    from '@me/effect/linear_filter_effect'
-import { RoundedCornersEffect }  from '@me/effect/rounded_corners_effect'
-import { init_translations }     from '@me/utils/i18n'
-import { WindowActorTracker }    from '@me/manager/effect_manager'
+import { constants } from './utils/constants.js'
+import { stackMsg, _log } from './utils/log.js'
+import * as UI from './utils/ui.js'
+import { connections } from './utils/connections.js'
+import { SchemasKeys, init_settings, settings } from './utils/settings.js'
+import { Services } from './dbus/services.js'
+import { LinearFilterEffect } from './effect/linear_filter_effect.js'
+import { RoundedCornersEffect } from './effect/rounded_corners_effect.js'
+import { WindowActorTracker } from './manager/effect_manager.js'
 
 // types, which will be removed in output
-import { RoundedCornersCfg }     from '@me/utils/types'
-import { ExtensionsWindowActor } from '@me/utils/types'
-import { Window, WindowActor }   from '@gi/Meta'
-import { global }                from '@global'
-import { registerClass }         from '@gi/GObject'
+import { RoundedCornersCfg } from './utils/types.js'
+import { ExtensionsWindowActor } from './utils/types.js'
+import { global } from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
-export class Extension {
+export default class RoundedWindowCorners extends Extension {
   // The methods of gnome-shell to monkey patch
-  private _orig_add_window     !: (_: Window) => void
-  private _orig_create_windows !: () => void
-  private _orig_sync_stacking  !: () => void
-  private _add_background_menu !: typeof BackgroundMenu.addBackgroundMenu
+  private _orig_add_window!: (_: Meta.Window) => void
 
   private _services: Services | null = null
   private _window_actor_tracker: WindowActorTracker | null = null
 
   enable () {
+    init_settings (this.getSettings ())
+
     // Restore original methods, those methods will be restore when
     // extensions is disabled
     this._orig_add_window = WindowPreview.prototype._addWindow
-    this._orig_create_windows = WorkspaceGroup.prototype._createWindows
-    this._orig_sync_stacking = WorkspaceGroup.prototype._syncStacking
-    this._add_background_menu = BackgroundMenu.addBackgroundMenu
 
     this._services = new Services ()
     this._window_actor_tracker = new WindowActorTracker ()
@@ -151,7 +143,7 @@ export class Extension {
         rounded_effect_of_window_actor?.set_enabled (false)
 
         // Add rounded corners effect to preview window actor
-        first_child.add_effect_with_name (name, new RoundedCornersEffect ())
+        first_child?.add_effect_with_name (name, new RoundedCornersEffect ())
 
         // Update uniform variables of rounded corners effect when size of
         // preview windows in overview changed.
@@ -176,10 +168,11 @@ export class Extension {
           let pixel_step: [number, number] | undefined = undefined
           if (
             UI.shell_version () >= 43.1 &&
-            window.get_client_type () == WindowClientType.WAYLAND
+            window.get_client_type () == Meta.WindowClientType.WAYLAND
           ) {
-            const surface = (window.get_compositor_private () as WindowActor)
-              .first_child
+            const surface = (
+              window.get_compositor_private () as Meta.WindowActor
+            ).first_child
             pixel_step = [
               1.0 / (scale_factor * surface.get_width ()),
               1.0 / (scale_factor * surface.get_height ()),
@@ -211,78 +204,8 @@ export class Extension {
       })
     }
 
-    // Just Like the monkey patch when enter overview, need to add shadow
-    // actor and blur actor into WorkspaceGroup to see them when switching
-    // workspace
-    WorkspaceGroup.prototype._createWindows = function () {
-      self._orig_create_windows.apply (this)
-
-      this._windowRecords.forEach (({ windowActor: actor, clone }) => {
-        const win = actor.meta_window
-        const frame_rect = win.get_frame_rect ()
-        const cfg = UI.ChoiceRoundedCornersCfg (
-          settings ().global_rounded_corner_settings,
-          settings ().custom_rounded_corner_settings,
-          win
-        )
-        const maximized =
-          win.maximized_horizontally ||
-          win.maximized_vertically ||
-          win.fullscreen
-        const has_rounded_corners = cfg.keep_rounded_corners || !maximized
-
-        const shadow = (actor as ExtensionsWindowActor)
-          .__rwc_rounded_window_info?.shadow
-        if (shadow && has_rounded_corners) {
-          // Only create shadow actor when window should have rounded
-          // corners when switching workspace
-
-          // Copy shadow actor to workspace group, so that to see
-          // shadow when switching workspace
-          const shadow_clone = new Clutter.Clone ({ source: shadow })
-          const paddings = constants.SHADOW_PADDING * UI.WindowScaleFactor (win)
-
-          shadow_clone.width = frame_rect.width + paddings * 2
-          shadow_clone.height = frame_rect.height + paddings * 2
-          shadow_clone.x = clone.x + frame_rect.x - actor.x - paddings
-          shadow_clone.y = clone.y + frame_rect.y - actor.y - paddings
-
-          clone.connect (
-            'notify::translation-z',
-            () => (shadow_clone.translation_z = clone.translation_z + 0.006)
-          )
-
-          // Add reference shadow clone for clone actor, so that we
-          // can restack position of shadow when we need
-          ;(clone as WsAnimationActor)._shadow_clone = shadow_clone
-          clone.bind_property ('visible', shadow_clone, 'visible', 0)
-          this.insert_child_below (shadow_clone, clone)
-        }
-      })
-    }
-
-    // Let shadow actor always behind the window clone actor when we
-    // switch workspace by Ctrl+Alt+Left/Right
-    //
-    // Fix #55
-    WorkspaceGroup.prototype._syncStacking = function () {
-      self._orig_sync_stacking.apply (this, [])
-      for (const { clone } of this._windowRecords) {
-        const shadow_clone = (clone as WsAnimationActor)._shadow_clone
-        if (shadow_clone && shadow_clone.visible) {
-          this.set_child_below_sibling (shadow_clone, clone)
-        }
-      }
-    }
-
     if (settings ().enable_preferences_entry) {
       UI.SetupBackgroundMenu ()
-    }
-    BackgroundMenu.addBackgroundMenu = (actor, layout) => {
-      this._add_background_menu (actor, layout)
-      if (settings ().enable_preferences_entry) {
-        UI.AddBackgroundMenuItem (actor._backgroundMenu)
-      }
     }
 
     const c = connections.get ()
@@ -298,15 +221,19 @@ export class Extension {
     })
 
     // Watch changes of GSettings
-    c.connect (settings ().g_settings, 'changed', (_: Settings, k: string) => {
-      switch (k as SchemasKeys) {
-      case 'enable-preferences-entry':
-        settings ().enable_preferences_entry
-          ? UI.SetupBackgroundMenu ()
-          : UI.RestoreBackgroundMenu ()
-        break
+    c.connect (
+      settings ().g_settings,
+      'changed',
+      (_: Gio.Settings, k: string) => {
+        switch (k as SchemasKeys) {
+        case 'enable-preferences-entry':
+          settings ().enable_preferences_entry
+            ? UI.SetupBackgroundMenu ()
+            : UI.RestoreBackgroundMenu ()
+          break
+        }
       }
-    })
+    )
 
     _log ('Enabled')
   }
@@ -314,9 +241,6 @@ export class Extension {
   disable () {
     // Restore patched methods
     WindowPreview.prototype._addWindow = this._orig_add_window
-    WorkspaceGroup.prototype._createWindows = this._orig_create_windows
-    WorkspaceGroup.prototype._syncStacking = this._orig_sync_stacking
-    BackgroundMenu.addBackgroundMenu = this._add_background_menu
 
     // Remove the item to open preferences page in background menu
     UI.RestoreBackgroundMenu ()
@@ -336,19 +260,14 @@ export class Extension {
   }
 }
 
-export function init () {
-  init_translations ()
-  return new Extension ()
-}
-
 /**
  * Copy shadow of rounded corners window and show it in overview.
  * This actor will be created when window preview has created for overview
  */
-const OverviewShadowActor = registerClass (
+const OverviewShadowActor = GObject.registerClass (
   {},
   class extends Clutter.Clone {
-    _window_preview            !: WindowPreview
+    _window_preview!: WindowPreview
 
     /**
      * Create shadow actor for WindowPreview in overview
@@ -359,7 +278,7 @@ const OverviewShadowActor = registerClass (
       super._init ({
         source, // the source shadow actor shown in desktop
         name: constants.OVERVIEW_SHADOW_ACTOR,
-        pivot_point: new Point ({ x: 0.5, y: 0.5 }),
+        pivot_point: new Graphene.Point ({ x: 0.5, y: 0.5 }),
       })
 
       this._window_preview = window_preview
@@ -409,5 +328,3 @@ const OverviewShadowActor = registerClass (
     }
   }
 )
-
-type WsAnimationActor = Clutter.Actor & { _shadow_clone?: Clutter.Actor }

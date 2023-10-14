@@ -1,9 +1,9 @@
-import { Actor }                   from '@gi/Clutter'
-import { Binding }                 from '@gi/GObject'
-import { ShadowMode, WindowActor } from '@gi/Meta'
-import { Bin }                     from '@gi/St'
-import * as Graphene               from '@gi/Graphene'
-import { SchemasKeys }             from '@me/utils/settings'
+import * as Clutter from 'gi://Clutter'
+import * as GObject from 'gi://GObject'
+import * as Meta from 'gi://Meta'
+import * as St from 'gi://St'
+import * as Graphene from 'gi://Graphene'
+import { SchemasKeys } from '../utils/settings.js'
 
 /** Bounds of rounded corners  */
 export class Bounds {
@@ -65,16 +65,16 @@ export interface EffectManager {
   on_switch_workspace?: (actor: ExtensionsWindowActor) => void
 }
 
-export type ExtensionsWindowActor = WindowActor & {
+export type ExtensionsWindowActor = Meta.WindowActor & {
   __rwc_rounded_window_info?: {
-    shadow: Bin
-    visible_binding: Binding
+    shadow: St.Bin
+    visible_binding: GObject.Binding
     unminimized_timeout_id: number
   }
   __rwc_blurred_window_info?: {
-    blur_actor: Actor
-    visible_binding: Binding
+    blur_actor: Clutter.Actor
+    visible_binding: GObject.Binding
   }
-  shadow_mode?: ShadowMode
+  shadow_mode?: Meta.ShadowMode
   __rwc_last_size?: Graphene.Size
 }

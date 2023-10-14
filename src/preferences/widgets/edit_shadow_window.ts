@@ -1,15 +1,16 @@
 // imports.gi
-import * as Gtk           from '@gi/Gtk'
-import { registerClass }  from '@gi/GObject'
+import * as Gtk from 'gi://Gtk'
+import * as GObject from 'gi://GObject'
 
 // local modules
-import { box_shadow_css } from '@me/utils/types'
-import { settings }       from '@me/utils/settings'
-import { _ }              from '@me/utils/i18n'
+import { box_shadow_css } from '../../utils/types.js'
+import { settings } from '../../utils/settings.js'
+
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
 // just used to mark type of value, will be remove in output javascript
-import { BoxShadow }      from '@me/utils/types'
-import { Me }             from '@global'
+import { BoxShadow } from '../../utils/types.js'
+import { uri } from '../../utils/io.js'
 // ----------------------------------------------------------------- end imports
 
 /**
@@ -18,9 +19,9 @@ import { Me }             from '@global'
  * This widget used to edit shadow of windows which use rounded corners
  * effects.
  */
-export const EditShadowWindow = registerClass (
+export const EditShadowWindow = GObject.registerClass (
   {
-    Template: `file://${Me.path}/preferences/widgets/edit-shadow-window.ui`,
+    Template: uri (import.meta.url, 'edit-shadow-window.ui'),
     GTypeName: 'EditShadowWindow',
     InternalChildren: [
       'opacity_scale',
@@ -35,23 +36,23 @@ export const EditShadowWindow = registerClass (
     ],
   },
   class extends Gtk.Window {
-    private _opacity_scale           !: Gtk.Scale
-    private _spread_radius_scale     !: Gtk.Scale
-    private _blur_offset_scale       !: Gtk.Scale
-    private _vertical_offset_scale   !: Gtk.Scale
-    private _horizontal_offset_scale !: Gtk.Scale
-    private _unfocus_shadow_widget   !: Gtk.Widget
-    private _focus_shadow_widget     !: Gtk.Widget
-    private _focus_toggle_button     !: Gtk.ToggleButton
-    private _unfocus_toggle_button   !: Gtk.ToggleButton
+    private _opacity_scale!: Gtk.Scale
+    private _spread_radius_scale!: Gtk.Scale
+    private _blur_offset_scale!: Gtk.Scale
+    private _vertical_offset_scale!: Gtk.Scale
+    private _horizontal_offset_scale!: Gtk.Scale
+    private _unfocus_shadow_widget!: Gtk.Widget
+    private _focus_shadow_widget!: Gtk.Widget
+    private _focus_toggle_button!: Gtk.ToggleButton
+    private _unfocus_toggle_button!: Gtk.ToggleButton
 
     // CssProvider to change style of preview widgets in edit window
-    private unfocus_provider         !: Gtk.CssProvider
-    private focus_provider           !: Gtk.CssProvider
+    private unfocus_provider!: Gtk.CssProvider
+    private focus_provider!: Gtk.CssProvider
 
     // Load box-shadow from settings
-    private focused_shadow           !: BoxShadow
-    private unfocused_shadow         !: BoxShadow
+    private focused_shadow!: BoxShadow
+    private unfocused_shadow!: BoxShadow
 
     _init () {
       super._init ({

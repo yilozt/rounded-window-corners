@@ -1,7 +1,5 @@
 // This files use for store const variants will used by other modules.
 
-import { _ } from '@me/utils/i18n'
-
 export const constants = {
   /** Name of shadow actors */
   SHADOW_ACTOR_NAME: 'Rounded Window Shadow Actor',
@@ -13,12 +11,8 @@ export const constants = {
   BLUR_EFFECT: 'Patched Blur Effect',
   /** Padding of shadow actors */
   SHADOW_PADDING: 80,
-  /** Tips when add new items in preferences Page */
-  TIPS_EMPTY: () => _ ('Expand this row to pick a window.'),
   /** Used to mark widget in preferences/page/custom.ts */
   DON_T_CONFIG: 'Don\'t Configuration in Custom Page',
-  /** Item label for background menu  */
-  ITEM_LABEL: () => _ ('Rounded Corners Settings...'),
   /** Name of shadow actor to be added in overview */
   OVERVIEW_SHADOW_ACTOR: 'Shadow Actor (Overview)',
 }

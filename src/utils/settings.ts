@@ -1,16 +1,15 @@
 // imports.gi
-import * as GLib                   from '@gi/GLib'
-import * as Gio                    from '@gi/Gio'
-
-// gnome modules
-import { getSettings }             from '@imports/misc/extensionUtils'
+import * as GLib from 'gi://GLib'
+import * as Gio from 'gi://Gio'
 
 // used to mark types, will be remove in output files.
-import * as GObject                from '@gi/GObject'
-import { BoxShadow }               from './types'
-import { CustomRoundedCornersCfg } from './types'
-import { RoundedCornersCfg }       from './types'
-import { log }                     from '@global'
+import * as GObject from 'gi://GObject'
+import {
+  BoxShadow,
+  CustomRoundedCornersCfg,
+  RoundedCornersCfg,
+} from './types.js'
+import { log } from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -42,28 +41,28 @@ export type SchemasKeys =
  * Simple wrapper of Gio.Settings, we will use this class to store and
  * load settings for this gnome-shell extensions.
  */
-class Settings {
+export class Settings {
   // Keys of settings, define getter and setter in constructor()
-  black_list                     !: string[]
-  skip_libadwaita_app            !: boolean
-  skip_libhandy_app              !: boolean
-  global_rounded_corner_settings !: RoundedCornersCfg
-  custom_rounded_corner_settings !: CustomRoundedCornersCfg
-  focused_shadow                 !: BoxShadow
-  unfocused_shadow               !: BoxShadow
-  debug_mode                     !: boolean
-  tweak_kitty_terminal           !: boolean
-  enable_preferences_entry       !: boolean
-  border_width                   !: number
-  settings_version               !: number
-  border_color                   !: [number, number, number, number]
+  black_list!: string[]
+  skip_libadwaita_app!: boolean
+  skip_libhandy_app!: boolean
+  global_rounded_corner_settings!: RoundedCornersCfg
+  custom_rounded_corner_settings!: CustomRoundedCornersCfg
+  focused_shadow!: BoxShadow
+  unfocused_shadow!: BoxShadow
+  debug_mode!: boolean
+  tweak_kitty_terminal!: boolean
+  enable_preferences_entry!: boolean
+  border_width!: number
+  settings_version!: number
+  border_color!: [number, number, number, number]
 
   /** GSettings, which used to store and load settings */
-  g_settings: Gio.Settings = getSettings (
-    'org.gnome.shell.extensions.rounded-window-corners'
-  )
+  g_settings: Gio.Settings
 
-  constructor () {
+  constructor (g_settings: Gio.Settings) {
+    this.g_settings = g_settings
+
     // Define getter and setter for properties in class for keys in
     // schemas
     this.g_settings.list_keys ().forEach ((key) => {
@@ -207,13 +206,13 @@ class Settings {
 }
 
 /** A singleton instance of Settings */
-let _settings: Settings | null = null
+let _settings!: Settings
+
+export const init_settings = (g_settings: Gio.Settings) => {
+  _settings = new Settings (g_settings)
+}
 
 /** Access _settings by this method */
 export const settings = () => {
-  if (_settings != null) {
-    return _settings
-  }
-  _settings = new Settings ()
   return _settings
 }

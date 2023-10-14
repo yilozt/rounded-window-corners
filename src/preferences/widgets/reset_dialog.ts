@@ -1,9 +1,9 @@
-import * as GObject              from '@gi/GObject'
-import * as Gtk                  from '@gi/Gtk'
-import { _ }                     from '@me/utils/i18n'
-import { _log }                  from '@me/utils/log'
-import { SchemasKeys, settings } from '@me/utils/settings'
-import { RoundedCornersCfg }     from '@me/utils/types'
+import * as GObject from 'gi://GObject'
+import * as Gtk from 'gi://Gtk'
+import { _log } from '../../utils/log.js'
+import { SchemasKeys, settings } from '../../utils/settings.js'
+import { RoundedCornersCfg } from '../../utils/types.js'
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
 class Cfg {
   description: string
@@ -18,15 +18,15 @@ export const ResetDialog = GObject.registerClass (
   {},
   class extends Gtk.Dialog {
     /** Keys to reset  */
-    private _reset_keys        !: {
+    private _reset_keys!: {
       [name in SchemasKeys]?: Cfg
     }
     /** Global rounded corners settings to reset  */
-    private _reset_corners_cfg !: {
+    private _reset_corners_cfg!: {
       [name in keyof RoundedCornersCfg]?: Cfg
     }
     /** Used to select all CheckButtons  */
-    private _all_check_btns    !: Gtk.CheckButton[]
+    private _all_check_btns!: Gtk.CheckButton[]
 
     _init (): void {
       super._init ({

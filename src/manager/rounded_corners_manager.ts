@@ -1,27 +1,23 @@
 // imports.gi
-import * as Clutter               from '@gi/Clutter'
-import * as GLib                  from '@gi/GLib'
-import { ShadowMode, WindowType } from '@gi/Meta'
-import { WindowClientType }       from '@gi/Meta'
-import { Bin }                    from '@gi/St'
-import { BindingFlags }           from '@gi/GObject'
-import { ThemeContext }           from '@gi/St'
+import * as Clutter from 'gi://Clutter'
+import * as GLib from 'gi://GLib'
+import * as Meta from 'gi://Meta'
+import * as St from 'gi://St'
+import * as GObject from 'gi://GObject'
 
 // local modules
-import * as UI                    from '@me/utils/ui'
-import { _log }                   from '@me/utils/log'
-import { constants }              from '@me/utils/constants'
-import { ClipShadowEffect }       from '@me/effect/clip_shadow_effect'
-import * as types                 from '@me/utils/types'
-import { settings }               from '@me/utils/settings'
-import { RoundedCornersEffect }   from '@me/effect/rounded_corners_effect'
+import * as UI from '../utils/ui.js'
+import { _log } from '../utils/log.js'
+import { constants } from '../utils/constants.js'
+import { ClipShadowEffect } from '../effect/clip_shadow_effect.js'
+import * as types from '../utils/types.js'
+import { settings } from '../utils/settings.js'
+import { RoundedCornersEffect } from '../effect/rounded_corners_effect.js'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }            from '../utils/settings'
-import { Window, WindowActor }    from '@gi/Meta'
-import { global }                 from '@global'
-import { EffectManager }          from '@me/utils/types'
-import { ExtensionsWindowActor }  from '@me/utils/types'
+import { SchemasKeys } from '../utils/settings.js'
+import { global } from '@global'
+import { EffectManager, ExtensionsWindowActor } from '../utils/types.js'
 type RoundedCornersEffectType = InstanceType<typeof RoundedCornersEffect>
 
 // --------------------------------------------------------------- [end imports]
@@ -56,12 +52,12 @@ export class RoundedCornersManager implements EffectManager {
     // - For csd client, shadow is drew by application itself, it has been cut
     //   out by rounded corners effect
     if (actor.shadow_mode !== undefined) {
-      actor.shadow_mode = ShadowMode.FORCED_OFF
+      actor.shadow_mode = Meta.ShadowMode.FORCED_OFF
     }
     // So we have to create an shadow actor for rounded corners shadows
     const shadow = this._create_shadow (actor)
     // Bind properties between shadow and window
-    const flag = BindingFlags.SYNC_CREATE
+    const flag = GObject.BindingFlags.SYNC_CREATE
     for (const prop of [
       'pivot-point',
       'translation-x',
@@ -91,7 +87,7 @@ export class RoundedCornersManager implements EffectManager {
 
     // Restore shadow for x11 windows
     if (actor.shadow_mode) {
-      actor.shadow_mode = ShadowMode.AUTO
+      actor.shadow_mode = Meta.ShadowMode.AUTO
     }
 
     // Remove shadow actor
@@ -262,7 +258,7 @@ export class RoundedCornersManager implements EffectManager {
       return
     }
     const prop = 'visible'
-    const flag = BindingFlags.SYNC_CREATE
+    const flag = GObject.BindingFlags.SYNC_CREATE
     info.visible_binding = actor.bind_property (prop, info.shadow, prop, flag)
   }
 
@@ -271,7 +267,7 @@ export class RoundedCornersManager implements EffectManager {
    * @param win Meta.Window to test
    */
   private _should_enable_effect (
-    win: Window & { __app_type?: UI.AppType }
+    win: Meta.Window & { __app_type?: UI.AppType }
   ): boolean {
     // DING (Desktop Icons NG) is a extensions that create a gtk
     // application to show desktop grid on background, we need to
@@ -294,9 +290,9 @@ export class RoundedCornersManager implements EffectManager {
     // Check type of window, only need to add rounded corners to normal
     // window and dialog.
     const normal_type = [
-      WindowType.NORMAL,
-      WindowType.DIALOG,
-      WindowType.MODAL_DIALOG,
+      Meta.WindowType.NORMAL,
+      Meta.WindowType.DIALOG,
+      Meta.WindowType.MODAL_DIALOG,
     ].includes (win.window_type)
     if (!normal_type) {
       return false
@@ -323,24 +319,24 @@ export class RoundedCornersManager implements EffectManager {
    * In Wayland, we will add rounded corners effect to WindowActor
    * In XOrg, we will add rounded corners effect to WindowActor.first_child
    */
-  private _actor_to_rounded (actor: WindowActor): Clutter.Actor | null {
+  private _actor_to_rounded (actor: Meta.WindowActor): Clutter.Actor | null {
     const type = actor.meta_window.get_client_type ()
-    return type == WindowClientType.X11 ? actor.get_first_child () : actor
+    return type == Meta.WindowClientType.X11 ? actor.get_first_child () : actor
   }
 
   /**
    * Create Shadow for rounded corners window
    * @param actor -  window actor which has been setup rounded corners effect
    */
-  private _create_shadow (actor: WindowActor): Bin {
-    const shadow = new Bin ({
+  private _create_shadow (actor: Meta.WindowActor): St.Bin {
+    const shadow = new St.Bin ({
       name: 'Shadow Actor',
-      child: new Bin ({
+      child: new St.Bin ({
         x_expand: true,
         y_expand: true,
       }),
     })
-    ;(shadow.first_child as Bin).add_style_class_name ('shadow')
+    ;(shadow.first_child as St.Bin).add_style_class_name ('shadow')
 
     this._update_shadow_actor_style (
       actor.meta_window,
@@ -379,7 +375,7 @@ export class RoundedCornersManager implements EffectManager {
 
   /** Compute outer bound of rounded corners for window actor */
   private _compute_bounds (
-    actor: WindowActor,
+    actor: Meta.WindowActor,
     [x, y, width, height]: [number, number, number, number]
   ): types.Bounds {
     const bounds = {
@@ -392,7 +388,7 @@ export class RoundedCornersManager implements EffectManager {
     // Kitty draw it's window decoration by itself, we need recompute the
     // outer bounds for kitty.
     if (settings ().tweak_kitty_terminal) {
-      const type = WindowClientType.WAYLAND
+      const type = Meta.WindowClientType.WAYLAND
       if (
         actor.meta_window.get_client_type () == type &&
         actor.meta_window.get_wm_class_instance () === 'kitty'
@@ -409,7 +405,7 @@ export class RoundedCornersManager implements EffectManager {
   }
 
   private _compute_shadow_actor_offset (
-    actor: WindowActor,
+    actor: Meta.WindowActor,
     [offset_x, offset_y, offset_width, offset_height]: [
       number,
       number,
@@ -434,8 +430,8 @@ export class RoundedCornersManager implements EffectManager {
 
   /** Update css style of shadow actor */
   private _update_shadow_actor_style (
-    win: Window,
-    actor: Bin,
+    win: Meta.Window,
+    actor: St.Bin,
     border_radius = this.global_rounded_corners?.border_radius,
     shadow = settings ().focused_shadow,
     padding = this.global_rounded_corners?.padding
@@ -457,7 +453,7 @@ export class RoundedCornersManager implements EffectManager {
     //
     // So, we have to adjustment this different
 
-    const original_scale = ThemeContext.get_for_stage (
+    const original_scale = St.ThemeContext.get_for_stage (
       global.stage as Clutter.Stage
     ).scale_factor
     const win_scale = UI.WindowScaleFactor (win)
@@ -470,7 +466,7 @@ export class RoundedCornersManager implements EffectManager {
     actor.style = `padding: ${constants.SHADOW_PADDING * scale_of_style}px
         /*background: yellow*/;`
 
-    const child = actor.first_child as Bin
+    const child = actor.first_child as St.Bin
 
     if (
       win.maximized_horizontally ||
@@ -537,7 +533,7 @@ export class RoundedCornersManager implements EffectManager {
     }
   }
 
-  private _get_rounded_corners_cfg (win: Window): types.RoundedCornersCfg {
+  private _get_rounded_corners_cfg (win: Meta.Window): types.RoundedCornersCfg {
     return UI.ChoiceRoundedCornersCfg (
       this.global_rounded_corners ?? settings ().global_rounded_corner_settings,
       this.custom_rounded_corners ?? settings ().custom_rounded_corner_settings,
