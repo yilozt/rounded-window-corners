@@ -12,7 +12,6 @@ const ts = require('gulp-typescript')
 const prettier = require('gulp-prettier')
 const gulpESLintNew = require('gulp-eslint-new')
 const colors = require('ansi-colors')
-const { align_imports } = require('./format')
 const { po, compile_po } = require('./po')
 
 const tsProject = ts.createProject('tsconfig.json')
@@ -42,7 +41,6 @@ const compile_ts = () => tsProject.src()  // Setup source
   .pipe(tsProject()).js                   // Compile ts into js
   .pipe(restoreWhitespace())              // Restore white space
   .pipe(prettier())                       // Format the output
-  .pipe(align_imports())                  // Align import statements
   .pipe(eslint_out())                     // eslint for output
   .pipe(gulpESLintNew.fix())              // Auto fix
   .pipe(gulpESLintNew.format())
@@ -56,7 +54,6 @@ const compile_ts = () => tsProject.src()  // Setup source
 
 const format = () =>  tsProject.src()
   .pipe(prettier())                       // Format the source
-  .pipe(align_imports())                  // Align import statements in source
   .pipe(eslint_src())                     // eslint
   .pipe(gulpESLintNew.fix())              // Auto Fix
   .pipe(gulpESLintNew.format())
@@ -136,57 +133,25 @@ const replace = () => require('through2').obj(/** @param file {Vinyl} */ functio
     }
 
     const imports_gi = p2.includes('@gi/') || p2.includes('gi://')
-    const imports_shell = p2.includes('@imports')
-    const imports_me = p2.includes('@me')
 
     let res = null
 
-    if (imports_gi || imports_shell || imports_me) {
+    // Replace import .* as XXX from 'gi://XXX'
+    // to import XXX from 'gi://XXX' 
+    if (imports_gi) {
       // We will convert `import * as Abc from 'Xyz'`
       // to `const Abc = imports.XXXX`, so ' * as ' is unnecessary
       if (p1.includes('* as')) {
         p1 = p1.replace('* as ', '') + '     '
       }
-
-      if (imports_gi) {
-        // When we import something from gi
-        // generate const XXX = imports.gi.XXX
-        p2 = 'imports.gi.' + p2.replace(/.*@gi\//, '').replace('gi://', '').replace(/-.*/, '')
-      } else if (imports_shell) {
-        // When we import something from gnome shell
-        // generate const XXX = imports.XXX.XXX
-        p2 = 'imports' + p2.replace(/.*@imports/, '').replace(/\//g, '.')
-      } else if (imports_me) {
-        // When we import local modules
-        // generate const XXX = Me.imports.XXX.XXX
-        p2 = 'Me.imports' + p2.replace(/.*@me/, '').replace(/\//g, '.')
-      }
-      res = `const ${p1}  = ${p2}`
-    } else {
-      ERR_IMPORTS.push(match)
-      return '\n// ------------------------------------------------------------------\n'
-          +    '// error: Can replace this import statement.\n'
-          +    `// error: ${match}\n`
-          +    '// ------------------------------------------------------------------\n\n'
+  
+      return `import ${p1} from '${p2}'`
     }
 
-    return res
+    return match
   }
 
   let replaced = file.contents.toString()
-
-  const header = 'const ExtensionUtils = imports.misc.extensionUtils;\n'
-               + 'const Me = ExtensionUtils.getCurrentExtension();\n\n';
-
-  // Add header to every js file
-  if (!replaced.includes(header)) {
-    replaced = header + replaced
-  }
-
-  // replace export in output js files
-  replaced = replaced.replace(/^export const/gm, 'var')
-    .replace(/^export class (.*?) {/gm, 'var $1 = class $1 {')
-    .replace(/^export /gm, '')
 
   // We will handles all import statements with this simple regex express
   replaced = replaced.replace(/import (.*?) from\s+?['"](.*?)['"]/gm, replace_func)
