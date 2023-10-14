@@ -1,5 +1,5 @@
-import { WindowActor } from '@gi/Meta';
-import { WM } from '@gi/Shell'
+import { WindowActor } from 'gi://Meta';
+import { WM } from 'gi://Shell'
 
 declare function getWindowDimmer(actor: any): any;
 
