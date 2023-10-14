@@ -1,38 +1,35 @@
 // imports.gi
-import * as GObject                    from '@gi/GObject'
-import * as Gtk                        from '@gi/Gtk'
+import * as GObject from 'gi://GObject'
+import * as Gtk from 'gi://Gtk'
 
 // local modules
-import { list_children, show_err_msg } from '@me/utils/prefs'
-import { constants }                   from '@me/utils/constants'
-import { settings }                    from '@me/utils/settings'
-import { connections }                 from '@me/utils/connections'
-import { _ }                           from '@me/utils/i18n'
-import { AppRowHandler, AppRow }       from '@me/preferences/widgets/app_row'
-import { RoundedCornersItem }          from '@me/preferences/widgets/rounded_corners_item'
+import { list_children, show_err_msg, TIPS_EMPTY } from '../../utils/prefs.js'
+import { constants } from '../../utils/constants.js'
+import { settings } from '../../utils/settings.js'
+import { connections } from '../../utils/connections.js'
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
+import { AppRowHandler, AppRow } from '../widgets/app_row.js'
+import { RoundedCornersItem } from '../widgets/rounded_corners_item.js'
 
-// types
-import { Align, Switch }               from '@gi/Gtk'
-import { Button, Widget }              from '@gi/Gtk'
-
-// import { AppRowHandler }               from '../../../widgets/app-row'
-import { CustomRoundedCornersCfg }     from '../../utils/types'
-import { RoundedCornersCfg }           from '../../utils/types'
-import { Me }                          from '@global'
+import {
+  CustomRoundedCornersCfg,
+  RoundedCornersCfg,
+} from '../../utils/types.js'
+import { uri } from '../../utils/io.js'
 
 // --------------------------------------------------------------- [end imports]
 
 export const Custom = GObject.registerClass (
   {
-    Template: `file://${Me.path}/preferences/pages/custom.ui`,
+    Template: uri (import.meta.url, 'custom.ui'),
     GTypeName: 'RoundedWindowCornersPrefsCustomPage',
     InternalChildren: ['custom_group', 'add_row_btn'],
   },
   class extends Gtk.Box {
-    private _custom_group !: Gtk.ListBox
-    private _add_row_btn  !: Button
+    private _custom_group!: Gtk.ListBox
+    private _add_row_btn!: Gtk.Button
 
-    private _settings_cfg !: CustomRoundedCornersCfg
+    private _settings_cfg!: CustomRoundedCornersCfg
 
     _init () {
       super._init ()
@@ -64,8 +61,8 @@ export const Custom = GObject.registerClass (
       let rounded_corners_item: RoundedCornersItemType | null =
         new RoundedCornersItem ()
 
-      const enabled_switch = new Switch ({
-        valign: Align.CENTER,
+      const enabled_switch = new Gtk.Switch ({
+        valign: Gtk.Align.CENTER,
         active: true,
         visible: true,
       })
@@ -148,7 +145,7 @@ export const Custom = GObject.registerClass (
       expanded_row.activatable = false
 
       if (title == '') {
-        expanded_row.description = constants.TIPS_EMPTY ()
+        expanded_row.description = TIPS_EMPTY ()
       }
 
       this._custom_group.append (expanded_row)
@@ -183,7 +180,7 @@ export const Custom = GObject.registerClass (
       settings ().custom_rounded_corner_settings = this._settings_cfg
     }
 
-    private create_enabled_row (active_widget: Widget): Gtk.ListBoxRow {
+    private create_enabled_row (active_widget: Gtk.Widget): Gtk.ListBoxRow {
       const row = new Gtk.ListBoxRow ()
       const title = new Gtk.Label ({
         label: _ ('Enable'),
@@ -213,7 +210,7 @@ export const Custom = GObject.registerClass (
   }
 )
 
-function add_row (parent: InstanceType<typeof AppRow>, child: Widget) {
+function add_row (parent: InstanceType<typeof AppRow>, child: Gtk.Widget) {
   parent.add_row (child)
 }
 

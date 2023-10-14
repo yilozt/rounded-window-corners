@@ -1,23 +1,22 @@
 // imports.gi
-import * as Clutter              from '@gi/Clutter'
-import * as Graphene             from '@gi/Graphene'
+import * as Clutter from 'gi://Clutter'
+import * as Graphene from 'gi://Graphene'
+import * as Shell from 'gi://Shell'
+import * as Meta from 'gi://Meta'
 
 // local modules
-import { _log }                  from '@me/utils/log'
-import { settings }              from '@me/utils/settings'
-import { Connections }           from '@me/utils/connections'
-import { RoundedCornersManager } from '@me/manager/rounded_corners_manager'
+import { _log } from '../utils/log.js'
+import { settings } from '../utils/settings.js'
+import { Connections } from '../utils/connections.js'
+import { RoundedCornersManager } from '../manager/rounded_corners_manager.js'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }           from '@me/utils/settings'
-import { EffectManager }         from '@me/utils/types'
-import { ExtensionsWindowActor } from '@me/utils/types'
-import { WindowActor, Window }   from '@gi/Meta'
-import { WM }                    from '@gi/Shell'
-import { global }                from '@global'
-import * as Gio                  from '@gi/Gio'
-import { Display }               from '@gi/Meta'
-import { shell_version }         from '@me/utils/ui'
+import { SchemasKeys } from '../utils/settings.js'
+import { EffectManager } from '../utils/types.js'
+import { ExtensionsWindowActor } from '../utils/types.js'
+import { global } from '@global'
+import * as Gio from 'gi://Gio'
+import { shell_version } from '../utils/ui.js'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -62,8 +61,8 @@ export class WindowActorTracker {
     this.connections.connect (
       global.display,
       'window-created',
-      (_: Display, win: Window) => {
-        const actor: WindowActor = win.get_compositor_private ()
+      (_: Meta.Display, win: Meta.Window) => {
+        const actor: Meta.WindowActor = win.get_compositor_private ()
 
         // If wm_class_instance of Meta.Window is null, try to add rounded
         // corners when wm_class_instance is set
@@ -81,7 +80,7 @@ export class WindowActorTracker {
     this.connections.connect (
       wm,
       'switch-workspace',
-      (_: WM, from: number, to: number) => {
+      (_: Shell.WM, from: number, to: number) => {
         this.run ((m) => {
           const ws = global.workspace_manager.get_workspace_by_index (to)
           if (!m.on_switch_workspace) return
@@ -94,40 +93,50 @@ export class WindowActorTracker {
     )
 
     // Connect 'minimized' signal
-    this.connections.connect (wm, 'minimize', (_: WM, actor: WindowActor) => {
-      this.run ((m) => m.on_minimize (actor))
-    })
+    this.connections.connect (
+      wm,
+      'minimize',
+      (_: Shell.WM, actor: Meta.WindowActor) => {
+        this.run ((m) => m.on_minimize (actor))
+      }
+    )
 
     // Restore visible of shadow when un-minimized
-    this.connections.connect (wm, 'unminimize', (_: WM, actor: WindowActor) => {
-      // Handle visible of shader with Compiz alike magic lamp effect
-      // After MagicLampUnminimizeEffect completed, then show shadow
-      //
-      // https://github.com/hermes83/compiz-alike-magic-lamp-effect
-      const effect = actor.get_effect ('unminimize-magic-lamp-effect')
-      if (effect) {
-        type Effect = Clutter.Effect & { timerId: Clutter.Timeline }
-        const timer_id = (effect as Effect).timerId
+    this.connections.connect (
+      wm,
+      'unminimize',
+      (_: Shell.WM, actor: Meta.WindowActor) => {
+        // Handle visible of shader with Compiz alike magic lamp effect
+        // After MagicLampUnminimizeEffect completed, then show shadow
+        //
+        // https://github.com/hermes83/compiz-alike-magic-lamp-effect
+        const effect = actor.get_effect ('unminimize-magic-lamp-effect')
+        if (effect) {
+          type Effect = Clutter.Effect & { timerId: Clutter.Timeline }
+          const timer_id = (effect as Effect).timerId
 
-        const id = timer_id.connect ('new-frame', (source) => {
-          // Effect completed when get_process() touch 1.0
-          // Need show shadow here
-          if (source.get_progress () > 0.98) {
-            _log ('Handle Unminimize with Magic Lamp Effect')
+          const id = timer_id.connect ('new-frame', (source) => {
+            // Effect completed when get_process() touch 1.0
+            // Need show shadow here
+            if (source.get_progress () > 0.98) {
+              _log ('Handle Unminimize with Magic Lamp Effect')
 
-            this.run ((m) => m.on_unminimize (actor))
-            source.disconnect (id)
-          }
-        })
-        return
+              this.run ((m) => m.on_unminimize (actor))
+              source.disconnect (id)
+            }
+          })
+          return
+        }
+
+        this.run ((m) => m.on_unminimize (actor))
       }
-
-      this.run ((m) => m.on_unminimize (actor))
-    })
+    )
 
     // Disconnect all signals of window when closed
-    this.connections.connect (wm, 'destroy', (_: WM, actor: WindowActor) =>
-      this._remove_effect (actor)
+    this.connections.connect (
+      wm,
+      'destroy',
+      (_: Shell.WM, actor: Meta.WindowActor) => this._remove_effect (actor)
     )
 
     // When windows restacked, change order of shadow actor too

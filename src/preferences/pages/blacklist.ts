@@ -1,35 +1,34 @@
 // imports.gi
-import * as GObject      from '@gi/GObject'
+import * as GObject from 'gi://GObject'
 
 // Local Modules
-import { show_err_msg }  from '@me/utils/prefs'
-import { settings }      from '@me/utils/settings'
-import { constants }     from '@me/utils/constants'
-import { connections }   from '@me/utils/connections'
-import { AppRow }        from '@me/preferences/widgets/app_row'
+import { show_err_msg, TIPS_EMPTY } from '../../utils/prefs.js'
+import { settings } from '../../utils/settings.js'
+import { connections } from '../../utils/connections.js'
+import { AppRow } from '../../preferences/widgets/app_row.js'
 
 // types
-import { AppRowHandler } from '../widgets/app_row'
-import { Me }            from '@global'
+import { AppRowHandler } from '../widgets/app_row.js'
 
-import * as Gtk          from '@gi/Gtk'
-import { _ }             from '@me/utils/i18n'
+import * as Gtk from 'gi://Gtk'
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
+import { uri } from '../../utils/io.js'
 
 // --------------------------------------------------------------- [end imports]
 
 /** Black list Preferences Page */
 export const BlackList = GObject.registerClass (
   {
-    Template: `file://${Me.path}/preferences/pages/blacklist.ui`,
+    Template: uri (import.meta.url, 'blacklist.ui'),
     GTypeName: 'RoundedWindowCornersPrefsBlacklist',
     InternalChildren: ['black_list_group', 'add_row_btn'],
   },
   class extends Gtk.Box {
-    private _black_list_group !: Gtk.ListBox
-    private _add_row_btn      !: Gtk.Button
+    private _black_list_group!: Gtk.ListBox
+    private _add_row_btn!: Gtk.Button
 
     /** Store value of settings */
-    private black_list        !: string[]
+    private black_list!: string[]
 
     _init () {
       super._init ()
@@ -86,7 +85,7 @@ export const BlackList = GObject.registerClass (
       row.title = title
 
       if (!title) {
-        row.description = constants.TIPS_EMPTY ()
+        row.description = TIPS_EMPTY ()
       }
 
       this._black_list_group.append (row)

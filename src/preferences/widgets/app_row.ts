@@ -1,22 +1,21 @@
 // imports.gi
-import * as GObject        from '@gi/GObject'
-import * as Gtk            from '@gi/Gtk'
+import * as GObject from 'gi://GObject'
+import * as Gtk from 'gi://Gtk'
 
 // local Modules
-import { show_err_msg }    from '@me/utils/prefs'
-import { connections }     from '@me/utils/connections'
-import { constants }       from '@me/utils/constants'
-import { on_picked, pick } from '@me/dbus/client'
-import { _ }               from '@me/utils/i18n'
+import { show_err_msg, TIPS_EMPTY } from '../../utils/prefs.js'
+import { connections } from '../../utils/connections.js'
+import { on_picked, pick } from '../../dbus/client.js'
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
+import { uri } from '../../utils/io.js'
 
 // types
-import { Me }              from '@global'
 
 // ----------------------------------------------------------------- end imports
 
 export const AppRow = GObject.registerClass (
   {
-    Template: `file://${Me.path}/preferences/widgets/app-row.ui`,
+    Template: uri (import.meta.url, 'app-row.ui'),
     GTypeName: 'AppRow',
     InternalChildren: [
       'wm_class_instance_entry',
@@ -31,15 +30,15 @@ export const AppRow = GObject.registerClass (
     ],
   },
   class extends Gtk.ListBoxRow {
-    private _wm_class_instance_entry !: Gtk.Entry
-    private _remove_button           !: Gtk.Button
-    private _change_title_btn        !: Gtk.Button
-    private _pick_window_btn         !: Gtk.Button
-    private _title                   !: Gtk.Label
-    private _description             !: Gtk.Label
-    private _expand_img              !: Gtk.Button
-    private _revealer                !: Gtk.Revealer
-    _expanded_list_box               !: Gtk.ListBox
+    private _wm_class_instance_entry!: Gtk.Entry
+    private _remove_button!: Gtk.Button
+    private _change_title_btn!: Gtk.Button
+    private _pick_window_btn!: Gtk.Button
+    private _title!: Gtk.Label
+    private _description!: Gtk.Label
+    private _expand_img!: Gtk.Button
+    private _revealer!: Gtk.Revealer
+    _expanded_list_box!: Gtk.ListBox
 
     private bind_property_handler?: GObject.Binding
 
@@ -140,7 +139,7 @@ export const AppRow = GObject.registerClass (
         this.description = ''
       } else {
         if (this.title == '') {
-          this.description = constants.TIPS_EMPTY ()
+          this.description = TIPS_EMPTY ()
         }
       }
     }

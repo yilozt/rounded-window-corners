@@ -1,8 +1,9 @@
-import { DBus, DBusCallFlags } from '@gi/Gio'
-import { Variant }             from '@gi/GLib'
-import { ListBox }             from '@gi/Gtk'
+import * as Gio from 'gi://Gio'
+import * as GLib from 'gi://GLib'
+import * as Gtk from 'gi://Gtk'
+import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
-export const list_children = (widget: ListBox) => {
+export const list_children = (widget: Gtk.ListBox) => {
   const children = []
   for (
     let child = widget.get_first_child ();
@@ -20,12 +21,12 @@ export const show_err_msg = (info: string) => {
   //
   // Ref: https://gjs.guide/guides/gio/dbus.html#direct-calls
 
-  DBus.session.call (
+  Gio.DBus.session.call (
     'org.freedesktop.Notifications',
     '/org/freedesktop/Notifications',
     'org.freedesktop.Notifications',
     'Notify',
-    new Variant ('(susssasa{sv}i)', [
+    new GLib.Variant ('(susssasa{sv}i)', [
       '',
       0,
       '',
@@ -36,9 +37,12 @@ export const show_err_msg = (info: string) => {
       3000,
     ]),
     null,
-    DBusCallFlags.NONE,
+    Gio.DBusCallFlags.NONE,
     -1,
     null,
     null
   )
 }
+
+/** Tips when add new items in preferences Page */
+export const TIPS_EMPTY = () => _ ('Expand this row to pick a window.')

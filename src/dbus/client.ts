@@ -1,5 +1,5 @@
 // imports.gi
-import * as Gio from '@gi/Gio'
+import * as Gio from 'gi://Gio'
 
 // --------------------------------------------------------------- [end imports]
 

@@ -1,22 +1,22 @@
 // imports.gi
-import { registerClass }           from '@gi/GObject'
-import { GLSLEffect, SnippetHook } from '@gi/Shell'
+import * as GObject from 'gi://GObject'
+import * as Meta from 'gi://Meta'
+import * as Shell from 'gi://Shell'
 
 // local modules
-import { loadShader }              from '@me/utils/io'
-import * as types                  from '@me/utils/types'
+import { loadShader } from '../utils/io.js'
+import * as types from '../utils/types.js'
 
 // types
-import { Me }                      from '@global'
-import { PaintContext, PaintNode } from '@gi/Clutter'
-import { shell_version }           from '@me/utils/ui'
-import { WindowActor }             from '@gi/Meta'
+import * as Clutter from 'gi://Clutter'
+import { shell_version } from '../utils/ui.js'
 
 // --------------------------------------------------------------- [end imports]
 
 // Load fragment shader of rounded corners effect.
 const { declarations, code } = loadShader (
-  `${Me.path}/effect/shader/rounded_corners.frag`
+  import.meta.url,
+  'shader/rounded_corners.frag'
 )
 
 /** Location of uniform variants of rounded corners effect */
@@ -31,9 +31,9 @@ class Uniforms {
   border_color = 0
 }
 
-export const RoundedCornersEffect = registerClass (
+export const RoundedCornersEffect = GObject.registerClass (
   {},
-  class Effect extends GLSLEffect {
+  class Effect extends Shell.GLSLEffect {
     /**
      * Location of uniforms variants in shader, Cache those location
      * when shader has been setup in `vfunc_build_pipeline()`, sot that
@@ -63,12 +63,12 @@ export const RoundedCornersEffect = registerClass (
     }
 
     vfunc_build_pipeline (): void {
-      const type = SnippetHook.FRAGMENT
+      const type = Shell.SnippetHook.FRAGMENT
       this.add_glsl_snippet (type, declarations, code, false)
       this._init_uniforms ()
     }
 
-    vfunc_paint_target (node: PaintNode, ctx: PaintContext) {
+    vfunc_paint_target (node: Clutter.PaintNode, ctx: Clutter.PaintContext) {
       // Reset to default blend string.
       this.get_pipeline ()?.set_blend (
         'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
@@ -125,7 +125,7 @@ export const RoundedCornersEffect = registerClass (
         // offers correct one.
         if (
           shell_version () >= 43.1 &&
-          actor instanceof WindowActor &&
+          actor instanceof Meta.WindowActor &&
           actor.first_child?.first_child
         ) {
           const { width, height } = actor.first_child.first_child

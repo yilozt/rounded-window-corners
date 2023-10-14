@@ -1,21 +1,23 @@
 // imports.gi
-import * as Meta           from '@gi/Meta'
-import { Settings }        from '@gi/Gio'
+import * as Meta from 'gi://Meta'
+import * as Gio from 'gi://Gio'
 
 // gnome modules
-import { openPrefs }       from '@imports/misc/extensionUtils'
-import { PACKAGE_VERSION } from '@imports/misc/config'
+import {
+  Extension,
+  gettext as _,
+} from 'resource:///org/gnome/shell/extensions/extension.js'
+import { PACKAGE_VERSION } from 'resource:///org/gnome/shell/misc/config.js'
 
 // local modules
-import { load }            from '@me/utils/io'
-import { _log, _logError } from '@me/utils/log'
-import { constants }       from '@me/utils/constants'
-import { _ }               from '@me/utils/i18n'
+import { load } from './io.js'
+import { _log, _logError } from './log.js'
+import { constants } from './constants.js'
 
 // types
-import { global }          from '@global'
-import * as types          from '@me/utils/types'
-import { Actor, Effect }   from '@gi/Clutter'
+import { global } from '@global'
+import * as types from './types.js'
+import * as Clutter from 'gi://Clutter'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -65,7 +67,7 @@ export const getAppType = (meta_window: Meta.Window) => {
  * scale factor of current monitor
  */
 export const WindowScaleFactor = (win?: Meta.Window) => {
-  const features = Settings.new ('org.gnome.mutter').get_strv (
+  const features = Gio.Settings.new ('org.gnome.mutter').get_strv (
     'experimental-features'
   )
 
@@ -98,17 +100,19 @@ type BackgroundExtra = {
  * @param menu - BackgroundMenu to add
  */
 export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
+  const openprefs_item = _ ('Rounded Corners Settings...')
   for (const item of menu._getMenuItems ()) {
-    if (item.label?.text === _ (constants.ITEM_LABEL ())) {
+    if (item.label?.text === openprefs_item) {
       return
     }
   }
 
-  menu.addAction (_ (constants.ITEM_LABEL ()), () => {
+  menu.addAction (openprefs_item, () => {
+    const extension = Extension.lookupByURL (import.meta.url) as Extension
     try {
-      openPrefs ()
+      extension.openPreferences ()
     } catch (err) {
-      openPrefs ()
+      extension.openPreferences ()
     }
   })
 }
@@ -124,10 +128,10 @@ export const SetupBackgroundMenu = () => {
 export const RestoreBackgroundMenu = () => {
   const remove_menu_item = (menu: BackgroundMenu) => {
     const items = menu._getMenuItems ()
-
+    const openprefs_item = _ ('Rounded Corners Settings...')
     for (const i of items) {
-      if (i?.label?.text === _ (constants.ITEM_LABEL ())) {
-        (i as Actor).destroy ()
+      if (i?.label?.text === openprefs_item) {
+        (i as Clutter.Actor).destroy ()
         break
       }
     }
@@ -192,7 +196,7 @@ export function shell_version (): number {
  */
 export function get_rounded_corners_effect (
   actor: Meta.WindowActor
-): Effect | null {
+): Clutter.Effect | null {
   const win = actor.meta_window
   const name = constants.ROUNDED_CORNERS_EFFECT
   return win.get_client_type () === Meta.WindowClientType.X11
