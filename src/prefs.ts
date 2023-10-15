@@ -5,11 +5,18 @@ import * as Adw from 'gi://Adw'
 import { init_settings } from './utils/settings.js'
 import { pages } from './preferences/index.js'
 import * as Utils from './utils/io.js'
-import {
-  ExtensionPreferences
-} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
+import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
+declare const imports: any
 export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
+  constructor (metadata: object) {
+    super (metadata)
+
+    // Classical GTK4 template ui need this to make translatable string works
+    imports.gettext.textdomain (this.uuid)
+    this.initTranslations (this.uuid)
+  }
+
   _load_css () {
     const display = Gdk.Display.get_default ()
     if (display) {
