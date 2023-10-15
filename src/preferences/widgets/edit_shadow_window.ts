@@ -135,12 +135,23 @@ export const EditShadowWindow = registerClass (
            ${box_shadow_css (hover)};
          }`
 
-      this.unfocus_provider.load_from_data (
-        gen_style (this.unfocused_shadow, this.focused_shadow)
-      )
-      this.focus_provider.load_from_data (
-        gen_style (this.focused_shadow, this.unfocused_shadow)
-      )
+      if (Gtk.MAJOR_VERSION >= 4 && Gtk.MINOR_VERSION >= 12) {
+        type A = Gtk.CssProvider & { load_from_string: (s: string) => void }
+        ;(this.unfocus_provider as A).load_from_string (
+          gen_style (this.unfocused_shadow, this.focused_shadow)
+        )
+        ;(this.focus_provider as A).load_from_string (
+          gen_style (this.focused_shadow, this.unfocused_shadow)
+        )
+      } else {
+        // Gtk.CssProvider.load_from_data() Deprecated since 4.12
+        this.unfocus_provider.load_from_data (
+          gen_style (this.unfocused_shadow, this.focused_shadow)
+        )
+        this.focus_provider.load_from_data (
+          gen_style (this.focused_shadow, this.unfocused_shadow)
+        )
+      }
     }
 
     // signal handles
