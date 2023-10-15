@@ -120,6 +120,7 @@ export const AddBackgroundMenuItem = (menu: BackgroundMenu) => {
 /** Find all Background menu, then add extra item to it */
 export const SetupBackgroundMenu = () => {
   for (const _bg of global.window_group.first_child.get_children ()) {
+    _log ('Found Desktop Background obj', _bg)
     const menu = (_bg as typeof _bg & BackgroundExtra)._backgroundMenu
     AddBackgroundMenuItem (menu)
   }

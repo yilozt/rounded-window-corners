@@ -55,10 +55,16 @@ export default class RoundedWindowCorners extends Extension {
     if (layoutManager._startingUp) {
       const id = layoutManager.connect ('startup-complete', () => {
         this._window_actor_tracker?.enable ()
+        if (settings ().enable_preferences_entry) {
+          UI.SetupBackgroundMenu ()
+        }
         layoutManager.disconnect (id)
       })
     } else {
       this._window_actor_tracker?.enable ()
+      if (settings ().enable_preferences_entry) {
+        UI.SetupBackgroundMenu ()
+      }
     }
 
     const self = this
@@ -202,10 +208,6 @@ export default class RoundedWindowCorners extends Extension {
 
         c.disconnect_all (this)
       })
-    }
-
-    if (settings ().enable_preferences_entry) {
-      UI.SetupBackgroundMenu ()
     }
 
     const c = connections.get ()
