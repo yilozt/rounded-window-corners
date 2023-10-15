@@ -145,12 +145,25 @@ export const EditShadowWindow = registerClass (
         )
       } else {
         // Gtk.CssProvider.load_from_data() Deprecated since 4.12
-        this.unfocus_provider.load_from_data (
-          gen_style (this.unfocused_shadow, this.focused_shadow)
-        )
-        this.focus_provider.load_from_data (
-          gen_style (this.focused_shadow, this.unfocused_shadow)
-        )
+        type A = (data: string, len: number) => void
+        const funcs = this.unfocus_provider.load_from_data
+        if (funcs.length == 1) {
+          this.unfocus_provider.load_from_data (
+            gen_style (this.unfocused_shadow, this.focused_shadow)
+          )
+          this.focus_provider.load_from_data (
+            gen_style (this.focused_shadow, this.unfocused_shadow)
+          )
+        } else {
+          (this.unfocus_provider.load_from_data as A) (
+            gen_style (this.unfocused_shadow, this.focused_shadow),
+            -1
+          )
+          ;(this.focus_provider.load_from_data as A) (
+            gen_style (this.focused_shadow, this.unfocused_shadow),
+            -1
+          )
+        }
       }
     }
 
