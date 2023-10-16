@@ -45,7 +45,7 @@
     "func-call-spacing": ["error", "always"],
     "no-var": ["error"],
     "max-len": ["warn", {
-      "code": 80,
+      "code": 120,
       "ignorePattern": "^import"
     }]
   },

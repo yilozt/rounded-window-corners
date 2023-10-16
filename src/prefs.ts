@@ -7,7 +7,6 @@ import { pages } from './preferences/index.js'
 import * as Utils from './utils/io.js'
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
-declare const imports: any
 export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
   constructor (metadata: object) {
     super (metadata)
@@ -43,4 +42,8 @@ export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
 
     this._load_css ()
   }
+}
+
+declare const imports: {
+  gettext: { textdomain: (uuid: string) => void }
 }

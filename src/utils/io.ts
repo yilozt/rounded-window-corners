@@ -1,13 +1,11 @@
 import * as Gio from 'gi://Gio'
 
-import { _log, _logError } from './log.js'
-
 // --------------------------------------------------------------- [end imports]
 
 export const load = (path: string): string => {
   const file = Gio.File.new_for_path (path)
 
-  const [, contents, ] = file.load_contents (null)
+  const [, contents] = file.load_contents (null)
 
   const decoder = new TextDecoder ('utf-8')
   return decoder.decode (contents)
