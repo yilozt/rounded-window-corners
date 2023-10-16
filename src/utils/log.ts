@@ -1,5 +1,4 @@
 import { settings } from './settings.js'
-import { log, logError } from '@global'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -8,14 +7,13 @@ import { log, logError } from '@global'
  */
 export const _log = (...args: unknown[]) => {
   if (settings ().debug_mode) {
-    log (`[RoundedCornersEffect] ${args}`)
+    console.log (`[RoundedCornersEffect] ${args}`)
   }
 }
 
 /** Always log error message  */
 export const _logError = (err: Error) => {
-  log (`[Rounded Corners Effect] Error occurs: ${err.message}`)
-  logError (err)
+  console.error (err)
 }
 
 /**
