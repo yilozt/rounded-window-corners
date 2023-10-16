@@ -1,15 +1,16 @@
 import { Window, WindowActor } from 'gi://Meta'
 import { Actor, Clone } from 'gi://Clutter'
+import * as St from 'gi://St'
 
 export class WorkspaceAnimationController {
     _movingWindow: Window;
     _switchData: {
-        monitors: any[];
-        gestureActivated: boolean;
-        inProgress: boolean;
+        monitors: MonitorGroup[];
     };
     _swipeTracker: any;
     _prepareWorkspaceSwitch(workspaceIndices: Array<number>): void;
+    _finishWorkspaceSwitch(switchData: typeof this._switchData): void;
+
 }
 
 export class WorkspaceGroup extends Actor {
@@ -21,4 +22,8 @@ export class WorkspaceGroup extends Actor {
     _removeWindows(): void;
     _syncStacking(): void;
     _shouldShowWindow(win: Window): boolean;
+}
+
+export class MonitorGroup extends St.Widget {
+    _workspaceGroups: WorkspaceGroup []
 }
