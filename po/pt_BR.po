@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-10-11 16:02+0000\n"
+"PO-Revision-Date: 2023-10-19 04:06+0000\n"
 "Last-Translator: Heder Barreto <matheusmr640@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/pt_BR/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Aplicativos"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
@@ -51,17 +51,17 @@ msgstr ""
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "Cor da Borda"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "Raio da Borda"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "Largura da Borda"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
@@ -70,11 +70,11 @@ msgstr ""
 #: src/preferences/pages/blacklist.ts:65
 #: src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "Não é possível adicionar à lista, porque já existe"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
-msgstr ""
+msgstr "Não é possível selecionar uma janela a partir desta posição"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/preferences/widgets/edit_shadow_window.ts:58
 msgid "Edit Shadow for Rounded Corners Windows"
@@ -103,7 +103,7 @@ msgstr ""
 
 #: src/preferences/pages/custom.ts:189
 msgid "Enable"
-msgstr ""
+msgstr "Habilitar"
 
 #: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
@@ -112,7 +112,7 @@ msgstr ""
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "Habilitar Log"
 
 #: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
@@ -132,7 +132,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
-msgstr ""
+msgstr "Configurações Globais"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
@@ -203,7 +203,7 @@ msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "Selecionar tudo"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
