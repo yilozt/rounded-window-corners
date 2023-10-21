@@ -1,23 +1,22 @@
 // imports.gi
-import * as Clutter              from '@gi/Clutter'
-import * as Graphene             from '@gi/Graphene'
+import * as Clutter                             from '@gi/Clutter'
+import * as Graphene                            from '@gi/Graphene'
 
 // local modules
-import { _log }                  from '@me/utils/log'
-import { settings }              from '@me/utils/settings'
-import { Connections }           from '@me/utils/connections'
-import { RoundedCornersManager } from '@me/manager/rounded_corners_manager'
+import { _log }                                 from '@me/utils/log'
+import { settings }                             from '@me/utils/settings'
+import { Connections }                          from '@me/utils/connections'
+import { RoundedCornersManager }                from '@me/manager/rounded_corners_manager'
 
 // types, those import statements will be removed in output javascript files.
-import { SchemasKeys }           from '@me/utils/settings'
-import { EffectManager }         from '@me/utils/types'
-import { ExtensionsWindowActor } from '@me/utils/types'
-import { WindowActor, Window }   from '@gi/Meta'
-import { WM }                    from '@gi/Shell'
-import { global }                from '@global'
-import * as Gio                  from '@gi/Gio'
-import { Display }               from '@gi/Meta'
-import { shell_version }         from '@me/utils/ui'
+import type { SchemasKeys }                     from '@me/utils/settings'
+import { EffectManager, ExtensionsWindowActor } from '@me/utils/types'
+import { WindowActor, Window, GrabOp, Display } from '@gi/Meta'
+import { WM }                                   from '@gi/Shell'
+import { global }                               from '@global'
+import * as Gio                                 from '@gi/Gio'
+import { shell_version }                        from '@me/utils/ui'
+import { source_remove, timeout_add }           from '@gi/GLib'
 
 // --------------------------------------------------------------- [end imports]
 
@@ -29,6 +28,22 @@ export class WindowActorTracker {
    * disconnect_all() to disconnect all signals when extension disabled
    */
   private connections: Connections | null = null
+
+  private timeout_ids = {
+    grabBegin: 0,
+    grabEnd: 0,
+  }
+
+  private allowedResizeOp = [
+    GrabOp.RESIZING_W,
+    GrabOp.RESIZING_E,
+    GrabOp.RESIZING_S,
+    GrabOp.RESIZING_N,
+    GrabOp.RESIZING_NW,
+    GrabOp.RESIZING_NE,
+    GrabOp.RESIZING_SE,
+    GrabOp.RESIZING_SW,
+  ]
 
   // ---------------------------------------------------------- [public methods]
 
@@ -76,6 +91,30 @@ export class WindowActorTracker {
           this._add_effect (actor)
         }
       }
+    )
+
+    this.connections.connect (
+      global.display,
+      'grab-op-begin',
+      (_: Display, win: Window, op: GrabOp) =>
+        (this.timeout_ids.grabBegin = timeout_add (0, 10, () => {
+          if (op) {
+            const actor: WindowActor | null = win.get_compositor_private ()
+            if (actor?.get_effect ('wobbly-compiz-effect')) {
+              this.run ((m) => m.on_minimize (actor))
+            }
+          }
+          return false
+        }))
+    )
+    this.connections.connect (
+      global.display,
+      'grab-op-end',
+      (_: Display, win: Window, op: GrabOp) =>
+        (this.timeout_ids.grabEnd = timeout_add (0, 10, () => {
+          this.grabEnd (win, op)
+          return false
+        }))
     )
 
     this.connections.connect (
@@ -149,6 +188,40 @@ export class WindowActorTracker {
     // Disconnect all signal
     this.connections?.disconnect_all ()
     this.connections = null
+
+    source_remove (this.timeout_ids.grabBegin)
+    source_remove (this.timeout_ids.grabEnd)
+  }
+
+  private grabEnd (window: Window, op: GrabOp) {
+    if (!op) {
+      return
+    }
+    const actor: ExtensionsWindowActor = window.get_compositor_private ()
+    const effect = actor?.get_effect ('wobbly-compiz-effect')
+    if (effect) {
+      this.run ((m) => {
+        m.on_unminimize (actor)
+        m.on_focus_changed (actor)
+      })
+      const timer_id = (
+        effect as Clutter.Effect & { timerId: Clutter.Timeline }
+      ).timerId
+      if (op == GrabOp.MOVING) {
+        const id = timer_id.connect ('stopped', (source) => {
+          this.run ((m) => m.on_focus_changed (actor))
+          source.disconnect (id)
+        })
+      }
+      if (this.allowedResizeOp.includes (op)) {
+        const id = timer_id.connect ('new-frame', (source) => {
+          if (timer_id.get_progress () > 0.9) {
+            this.run ((m) => m.on_focus_changed (actor))
+            source.disconnect (id)
+          }
+        })
+      }
+    }
   }
 
   // ------------------------------------------------------- [private methods]

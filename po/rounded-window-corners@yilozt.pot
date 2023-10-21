@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"Project-Id-Version: 10\n"
+"Project-Id-Version: 12\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
