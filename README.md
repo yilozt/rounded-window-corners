@@ -59,9 +59,9 @@ You may need to install those packages when building this extensions. Feel free
 to open issues if you got error.
 
 ```bash
-sudo pacman -S nodejs yarn gettext        # Arch Linix
-sudo apt install nodejs yarnpkg gettext   # Ubuntu
-sudo dnf install nodejs yarnpkg gettext   # Fedora
+sudo pacman -S nodejs yarn gettext                      # Arch Linux
+sudo apt install nodejs yarnpkg gettext                 # Ubuntu
+sudo dnf install nodejs yarnpkg gettext gettext-devel   # Fedora
 ```
 
 ### From Releases / Github Actions
