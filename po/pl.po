@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-10-25 23:05+0000\n"
-"Last-Translator: Y4kCh3ck <jakub.czekaj@protonmail.com>\n"
+"PO-Revision-Date: 2023-10-29 05:13+0000\n"
+"Last-Translator: Eryk Michalak <gnu.ewm@protonmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/pl/>\n"
 "Language: pl\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -175,31 +175,31 @@ msgstr "Otwórz okno resetowania ustawień"
 
 #: src/preferences/widgets/reset_dialog.ts:71
 msgid "Padding"
-msgstr ""
+msgstr "Margines wewnętrzny"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
-msgstr ""
+msgstr "Marginesy wewnętrzne"
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
-msgstr ""
+msgstr "Wybierz okno do dodania na listę"
 
 #: src/preferences/widgets/app-row.ui:36
 msgid "Remove Window from this List"
-msgstr ""
+msgstr "Usuń okno z tej listy"
 
 #: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
-msgstr ""
+msgstr "Przywróć preferencje do domyślnych"
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "Prawo"
 
 #: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
-msgstr ""
+msgstr "Ustawienia zaokrąglonych narożników..."
 
 #: src/preferences/pages/general.ui:336
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
