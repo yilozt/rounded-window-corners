@@ -2,70 +2,78 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-11-11 20:32+0000\n"
+"Last-Translator: CraftWorks <thelonegamer87@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/it/>\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
+"Aggiungi tra le impostazioni del menu del tasto destro del mouse sul "
+"Background"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "Aggiungi Finestra"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "Tieni i bordi arrotondati quando la finestra è a schermo intero."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
-msgstr ""
+msgstr "Tieni i bordi arrotondati quando la finestra è massimizzata."
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "Applicazioni"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "Applica"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "Lista nera"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
-msgstr ""
+msgstr "Offset della sfocatura"
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "Colore del bordo"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "Raggio del bordo"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "Larghezza del bordo"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "Sotto"
 
 #: src/preferences/pages/blacklist.ts:65
 #: src/preferences/pages/custom.ts:177
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "Impossibile aggiungerlo alla lista, perchè esiste già"
 
 #: src/preferences/widgets/app_row.ts:106
 msgid "Can't pick a window window from this position"
-msgstr ""
+msgstr "Impossibile selezionare la finestra da questa posizione"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
@@ -74,76 +82,76 @@ msgstr ""
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
-msgstr ""
+msgstr "Smussamento del bordo"
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "Personalizza"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
-msgstr ""
+msgstr "Personalizza l'ombra del bordo arrotondato"
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: src/preferences/widgets/edit_shadow_window.ts:58
 msgid "Edit Shadow for Rounded Corners Windows"
-msgstr ""
+msgstr "Modifica l'ombra per le finestre arrotondate"
 
 #: src/preferences/pages/custom.ts:189
 msgid "Enable"
-msgstr ""
+msgstr "Abilita"
 
 #: src/preferences/pages/custom.ts:193
 msgid "Enable custom settings for this window"
-msgstr ""
+msgstr "Abilita le impostazioni personalizzate per questa finestra"
 
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "Abilita i Log"
 
 #: src/utils/constants.ts:17
 msgid "Expand this row to pick a window."
-msgstr ""
+msgstr "Espandi questa riga per selezionare una finestra."
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
-msgstr ""
+msgstr "Finestra attiva"
 
 #: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
-msgstr ""
+msgstr "Stile dell'ombra della finestra attiva"
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
-msgstr ""
+msgstr "Impostazioni Globali"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
-msgstr ""
+msgstr "Offset Orizzontale"
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
-msgstr ""
+msgstr "Mantieni I Bordi Arrotondati In Schermo Intero"
 
 #: src/preferences/widgets/rounded-corners-item.ui:86
 msgid "Keep Rounded Corners when Maximized"
-msgstr ""
+msgstr "Mantieni I Bordi Arrotondati quando Massimizzato"
 
 #: src/preferences/widgets/reset_dialog.ts:73
 msgid "Keep Rounded Corners when Maximized or Fullscreen"
-msgstr ""
+msgstr "Mantieni I Bordi Arrotondati Quando Massimizzato o a Schermo Intero"
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "Sinistra"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -151,18 +159,23 @@ msgid ""
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
+"Non tutte le applizazioni funzionano bene con l'effetto dei bordo "
+"arrotondati, aggiungili a questa lista per disabilitarlo.\n"
+"\n"
+"Gli oggetti di questa lista fanno parte della proprietà WM_CLASS. Puoi "
+"selezionare una finestra per aggingerla a questa lista."
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
-msgstr ""
+msgstr "Opacità"
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
-msgstr ""
+msgstr "Apri il Dialogo Per Resettare le Preferenze"
 
 #: src/preferences/widgets/reset_dialog.ts:71
 msgid "Padding"
-msgstr ""
+msgstr "Padding"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
@@ -170,35 +183,37 @@ msgstr ""
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
-msgstr ""
+msgstr "Seleziona una finestra da aggiungere alla lista"
 
 #: src/preferences/widgets/app-row.ui:36
 msgid "Remove Window from this List"
-msgstr ""
+msgstr "Rimuovi Finestra dalla lista"
 
 #: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
-msgstr ""
+msgstr "Reimposta Preferenze"
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "Destra"
 
 #: src/utils/constants.ts:21
 msgid "Rounded Corners Settings..."
-msgstr ""
+msgstr "Impostazioni per i Bordi Arrotondati..."
 
 #: src/preferences/pages/general.ui:336
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
 msgstr ""
+"Esegui <i>journalctl -o cat -f /usr/bin/gnome-shell</i> nel terminale per "
+"vedere i log"
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "Seleziona Tutto"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
-msgstr ""
+msgstr "Seleziona Item da reimpostare"
 
 #: src/preferences/pages/custom.ui:14
 msgid ""
@@ -206,20 +221,26 @@ msgid ""
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
+"Imposta un clip padding diverso aggiungendo una finestra in questa lista.\n"
+"\n"
+"Gli oggetti di questa lista fanno parte della proprietà WM_CLASS. Puoi "
+"selezionare una finestra da aggiungerla a questa lista."
 
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
 msgid "Skip LibAdwaita Applications"
-msgstr ""
+msgstr "Ignora Applicazioni LibAdwaita"
 
 #: src/preferences/pages/general.ui:74
 #: src/preferences/widgets/reset_dialog.ts:61
 msgid "Skip LibHandy Applications"
-msgstr ""
+msgstr "Ignora Applicazioni LibHandy"
 
 #: src/preferences/pages/general.ui:23
 msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
 msgstr ""
+"Alcune applicazioni scritte con LibAdwaita o LibHandy hanno già i bordi "
+"arrotondati, quindi possiamo ignorarli con queste impostazioni"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
@@ -231,11 +252,11 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
-msgstr ""
+msgstr "Sopra"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
-msgstr ""
+msgstr "Prova ad arrotondare i bordi al terminale Kitty su Wayland"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
@@ -243,7 +264,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
-msgstr ""
+msgstr "Modifiche"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
@@ -255,8 +276,8 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
-msgstr ""
+msgstr "Offset Veticale"
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
-msgstr ""
+msgstr "Ombra della Finestra"
