@@ -8,7 +8,6 @@ import { settings } from '../../utils/settings.js'
 import { SchemasKeys } from '../../utils/settings.js'
 import { connections } from '../../utils/connections.js'
 import { list_children } from '../../utils/prefs.js'
-import { _log } from '../../utils/log.js'
 import { RoundedCornersItem } from '../widgets/rounded_corners_item.js'
 import { EditShadowWindow } from '../widgets/edit_shadow_window.js'
 import { ResetDialog } from '../widgets/reset_dialog.js'
@@ -154,18 +153,6 @@ export const General = GObject.registerClass (
 
       c.connect (this._reset_preferences_btn, 'clicked', () => {
         new ResetDialog ().show ()
-      })
-    }
-
-    vfunc_root (): void {
-      super.vfunc_root ()
-      const win = this.root as Gtk.Window
-
-      // Disconnect all signal when close prefs
-      win.connect ('close-request', () => {
-        _log ('Disconnect Signals')
-        connections.get ().disconnect_all ()
-        connections.del ()
       })
     }
 

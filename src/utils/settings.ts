@@ -203,6 +203,10 @@ export class Settings {
 
     log (`[RoundedWindowCorners] Update Settings to v${VERSION}`)
   }
+
+  _disable () {
+    (this.g_settings as Gio.Settings | null) = null
+  }
 }
 
 /** A singleton instance of Settings */
@@ -210,6 +214,11 @@ let _settings!: Settings
 
 export const init_settings = (g_settings: Gio.Settings) => {
   _settings = new Settings (g_settings)
+}
+
+export const uninit_settings = () => {
+  _settings?._disable ()
+  ;(_settings as Settings | null) = null
 }
 
 /** Access _settings by this method */
