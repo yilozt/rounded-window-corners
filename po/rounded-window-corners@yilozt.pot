@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"Project-Id-Version: 11\n"
+"Project-Id-Version: 12\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -183,7 +183,7 @@ msgid "Right"
 msgstr ""
 
 #: src/utils/ui.ts:103
-#: src/utils/ui.ts:131
+#: src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr ""
 

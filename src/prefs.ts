@@ -2,8 +2,10 @@ import * as Gtk from 'gi://Gtk'
 import * as Gdk from 'gi://Gdk'
 import * as Adw from 'gi://Adw'
 
-import { init_settings } from './utils/settings.js'
+import { connections } from './utils/connections.js'
+import { init_settings, uninit_settings } from './utils/settings.js'
 import { pages } from './preferences/index.js'
+import { _log } from './utils/log.js'
 import * as Utils from './utils/io.js'
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js'
 
@@ -39,6 +41,14 @@ export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
       group.add (page.widget)
       win.add (pref_page)
     }
+
+    // Disconnect all signal when close prefs
+    win.connect ('close-request', () => {
+      _log ('Disconnect Signals')
+      connections.get ().disconnect_all ()
+      connections.del ()
+      uninit_settings ()
+    })
 
     this._load_css ()
   }
