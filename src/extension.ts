@@ -264,10 +264,14 @@ export default class RoundedWindowCorners extends Extension {
               shadow_clone.y = clone.y + frame_rect.y - actor.y - paddings
 
               // Should works well work Desktop Cube extensions
-              clone.connect (
+              const notify_id = clone.connect (
                 'notify::translation-z',
                 () => (shadow_clone.translation_z = clone.translation_z - 0.05)
               )
+              const destroy_id = clone.connect ('destroy', () => {
+                clone.disconnect (notify_id)
+                clone.disconnect (destroy_id)
+              })
 
               // Add reference shadow clone for clone actor, so that we
               // can restack position of shadow when we need
