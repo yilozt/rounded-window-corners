@@ -2,70 +2,79 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 12\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2023-11-27 13:01+0000\n"
+"Last-Translator: Nadjib Chergui <chergui.cnadjib@outlook.com>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/ar/>\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.3-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr ""
+msgstr "أضف بندا للإعدادات في قائمة النقرة اليمنى للخلفية"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "إضافة نافذة"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "إبقاء الزوايا المدورة في حال النافذة في وضع ملء الشاشة."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
-msgstr ""
+msgstr "إبقاء زوايا النافذة مدورة في وضع التكبير أو التحجيم."
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "تطبيقات"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "تطبيق"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "اللائحة السوداء"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
+#, fuzzy
 msgid "Blur Offset"
-msgstr ""
+msgstr "توازن الضبابية"
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "لون الحدود"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "درجة تدوير زوايا الحدود"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
+#, fuzzy
 msgid "Border Width"
-msgstr ""
+msgstr "عرض الحدود"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "أسفل"
 
 #: src/preferences/pages/blacklist.ts:64
 #: src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "لا يمك‏ن إضافته للقائمة، لأنه موجودة فيها"
 
 #: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
-msgstr ""
+msgstr "لا يمكن اختيار النافذة من هذا المكان"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
@@ -74,56 +83,56 @@ msgstr ""
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
-msgstr ""
+msgstr "تمليس الزاوية"
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "خاص"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
-msgstr ""
+msgstr "تخصيص نمط ظل النافذة ذات الزوايا المدورة"
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "تصحيح الأخطاء"
 
 #: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
-msgstr ""
+msgstr "تعديل ظل النوافذ ذات الزوايا المدورة"
 
 #: src/preferences/pages/custom.ts:186
 msgid "Enable"
-msgstr ""
+msgstr "تفعيل"
 
 #: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
-msgstr ""
+msgstr "تفعيل الإعدادات الخاصة بهذه النافذة"
 
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "تفعيل التسجيلات التقنية"
 
 #: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
-msgstr ""
+msgstr "كبر الصف لاختيار نافذة."
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
-msgstr ""
+msgstr "التركيز على النافذة"
 
 #: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
-msgstr ""
+msgstr "نمط ظل النافذة المختارة"
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "عام"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
-msgstr ""
+msgstr "الإعدادات الشاملة"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
@@ -131,19 +140,19 @@ msgstr ""
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
-msgstr ""
+msgstr "إبقاء الزوايا المدورة في وضع ملء الشاشة"
 
 #: src/preferences/widgets/rounded-corners-item.ui:86
 msgid "Keep Rounded Corners when Maximized"
-msgstr ""
+msgstr "إبقاء الزوايا المدورة في وضع التكبير"
 
 #: src/preferences/widgets/reset_dialog.ts:73
 msgid "Keep Rounded Corners when Maximized or Fullscreen"
-msgstr ""
+msgstr "إبقاء الزوايا المدورة في وضع التكبير أو ملء الشاشة"
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "يسار"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -151,6 +160,7 @@ msgid ""
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
+"ليست كل التطبيقات تعمل مع تأثير الزوايا المدورة، أضفهم لإيقاف التأثيرات لهم."
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
@@ -158,36 +168,36 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
-msgstr ""
+msgstr "فتح نافذة إعادة الضبط"
 
 #: src/preferences/widgets/reset_dialog.ts:71
 msgid "Padding"
-msgstr ""
+msgstr "تباعد"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
-msgstr ""
+msgstr "تباعدات"
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
-msgstr ""
+msgstr "اختر نافذةً لإضافتها إلى القائمة"
 
 #: src/preferences/widgets/app-row.ui:36
 msgid "Remove Window from this List"
-msgstr ""
+msgstr "إزالة النافذة من القائمة"
 
 #: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
-msgstr ""
+msgstr "إعادة ضبط الإعدادات"
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "يمين"
 
 #: src/utils/ui.ts:103
 #: src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
-msgstr ""
+msgstr "إعدادات الزوايا المدورة..."
 
 #: src/preferences/pages/general.ui:336
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
@@ -195,11 +205,11 @@ msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "اختر الكل"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
-msgstr ""
+msgstr "اختر الأشياء لإعادة ضبطها"
 
 #: src/preferences/pages/custom.ui:14
 msgid ""
@@ -211,16 +221,18 @@ msgstr ""
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
 msgid "Skip LibAdwaita Applications"
-msgstr ""
+msgstr "تجنب تطبيقات (LibAdwaita)"
 
 #: src/preferences/pages/general.ui:74
 #: src/preferences/widgets/reset_dialog.ts:61
 msgid "Skip LibHandy Applications"
-msgstr ""
+msgstr "تجنب تطبيقات (LibHandy)"
 
 #: src/preferences/pages/general.ui:23
 msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
 msgstr ""
+"بعض التطبيقات التي تستخدم (LibAdwaita) أو (LibHandy) لديها زوايا دائرية "
+"فعلًا، لذا يمكن تجنبها بواسطة هذه الإعدادات"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
@@ -228,11 +240,11 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:143
 msgid "This settings will try to effects all windows"
-msgstr ""
+msgstr "هذه الإعدادات ستحاول في التأثير على كل النوافذ"
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
-msgstr ""
+msgstr "أعلى"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
@@ -244,15 +256,15 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
-msgstr ""
+msgstr "تعديلات"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr ""
+msgstr "عدم التركيز على النافذة"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
-msgstr ""
+msgstr "نمط ظل النافذة الغير المختارة"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
@@ -260,4 +272,4 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
-msgstr ""
+msgstr "ظل النافذة"
