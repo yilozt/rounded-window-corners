@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 12\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-12-03 12:07+0000\n"
+"PO-Revision-Date: 2023-12-10 10:05+0000\n"
 "Last-Translator: Nadjib Chergui <chergui.cnadjib@outlook.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/ar/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr "أضف بندا للإعدادات في قائمة النقرة اليمنى للخلفية"
+msgstr "أضف بند الإعدادات في قائمة النقرة اليمنى للخلفية"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
@@ -43,7 +43,6 @@ msgid "Blacklist"
 msgstr "اللائحة السوداء"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
-#, fuzzy
 msgid "Blur Offset"
 msgstr "توازن الضبابية"
 
@@ -77,8 +76,9 @@ msgid "Can't pick a window window from this position"
 msgstr "لا يمكن اختيار النافذة من هذا المكان"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
+#, fuzzy
 msgid "Clip paddings of window"
-msgstr ""
+msgstr "تصغير حواف النافذة"
 
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
@@ -136,7 +136,7 @@ msgstr "الإعدادات الشاملة"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
-msgstr ""
+msgstr "الميلان الأفقي"
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
@@ -202,6 +202,8 @@ msgstr "إعدادات الزوايا المدورة..."
 #: src/preferences/pages/general.ui:336
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
 msgstr ""
+"شغل <i>journalctl -o cat -f /usr/bin/gnome-shell</i> في الطرفية لتظهر "
+"التسجيلات"
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
@@ -247,8 +249,9 @@ msgid "Top"
 msgstr "أعلى"
 
 #: src/preferences/pages/general.ui:247
+#, fuzzy
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
-msgstr ""
+msgstr "حاول إضافة الزوايا المدورة لطرفية كيتي (Kitty) في وايلاند (Wayland)"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
@@ -260,15 +263,16 @@ msgstr "تعديلات"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr "عدم التركيز على النافذة"
+msgstr "النافذة الغير المختارة"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "نمط ظل النافذة الغير المختارة"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
+#, fuzzy
 msgid "Vertical Offset"
-msgstr ""
+msgstr "الميلان العمودي"
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
