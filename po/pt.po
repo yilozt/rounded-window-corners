@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 12\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-12-19 16:08+0000\n"
+"PO-Revision-Date: 2023-12-21 14:06+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/pt/>\n"
@@ -10,11 +10,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
+"Adicionar entrada de configurações no menu de fundo do botão direito do rato"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
@@ -260,11 +261,11 @@ msgstr "Parte Superior"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
-msgstr ""
+msgstr "Tente adicionar cantos arredondados ao Terminal Kitty em Wayland"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
-msgstr ""
+msgstr "Ajustar preenchimento de clipe para o Kitty Terminal"
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
