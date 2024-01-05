@@ -4,20 +4,19 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-04-25 17:52+0000\n"
 "Last-Translator: Fjuro <ifjuro@proton.me>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 4.18-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Přidat položku Nastavení do nabídky pravého tlačítka myši na pozadí"
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Přidat okno"
 
@@ -64,12 +63,11 @@ msgstr "Šířka okraje"
 msgid "Bottom"
 msgstr "Spodní"
 
-#: src/preferences/pages/blacklist.ts:65
-#: src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "Nelze přidat do seznamu, protože existuje"
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Nelze vybrat okno z této pozice"
 
@@ -90,28 +88,28 @@ msgstr "Vlastní"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Přizpůsobení stínu zaobleného rohu okna"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Ladění"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Úprava stínu pro okna se zaoblenými rohy"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Povolit"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Povolit vlastní nastavení tohoto okna"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Povolit protokol"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Rozbalte tento řádek a vyberte okno."
 
@@ -153,9 +151,11 @@ msgstr "Vlevo"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Ne všechny aplikace umí dobře pracovat s efekty zaoblených rohů, přidejte je "
 "do tohoto seznamu a zakažte efekty.\n"
@@ -167,7 +167,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Neprůhlednost"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Otevřít dialogové okno Obnovit předvolby"
 
@@ -187,7 +187,7 @@ msgstr "Vyberte okno, které chcete přidat do seznamu"
 msgid "Remove Window from this List"
 msgstr "Odebrat okno z tohoto seznamu"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Obnovit předvolby"
 
@@ -195,12 +195,14 @@ msgstr "Obnovit předvolby"
 msgid "Right"
 msgstr "Vpravo"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Nastavení zaoblených rohů..."
 
-#: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+#: src/preferences/pages/general.ui:364
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "Pro zobrazení protokolu spusťte v terminálu příkaz <i>journalctl -o cat -f /"
 "usr/bin/gnome-shell</i>"
@@ -217,7 +219,8 @@ msgstr "Vyberte položky, které chcete resetovat"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Nastavte různé výplně klipů přidáním okna do tohoto seznamu.\n"
 "\n"
@@ -235,7 +238,9 @@ msgid "Skip LibHandy Applications"
 msgstr "Přeskočit aplikace LibHandy"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "Některé aplikace napsané pomocí LibAdwaita nebo LibHandy již mají nativní "
 "zaoblené rohy, takže je můžeme přeskočit pomocí těchto nastavení"
@@ -252,15 +257,15 @@ msgstr "Toto nastavení se pokusí ovlivnit všechna okna"
 msgid "Top"
 msgstr "Nahoře"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Pokusit se přidat zaoblené rohy do aplikace Kitty Terminal ve Waylandu"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "Upravit výplně klipů pro Kitty Terminal"
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "Vylepšení"
 
@@ -271,6 +276,11 @@ msgstr "Okno bez zaměření"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Styl stínu nezaměřeného okna"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Barva okraje"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

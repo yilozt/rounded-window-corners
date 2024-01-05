@@ -12,12 +12,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.2-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Adicionar janela"
 
@@ -67,12 +66,11 @@ msgstr "Largura da Borda"
 msgid "Bottom"
 msgstr "Parte Inferior"
 
-#: src/preferences/pages/blacklist.ts:65
-#: src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "Não é possível adicionar à lista porque já existe"
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Não é possível selecionar uma janela a partir desta posição"
 
@@ -93,28 +91,28 @@ msgstr "Personalizado"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Personalize a sombra dos cantos da janela"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Debug"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Editar a sombra dos cantos da janela"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Habilitar"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Habilitar customizações nesta janela"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Habilitar Log"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Expanda esta linha para escolher uma janela."
 
@@ -156,9 +154,11 @@ msgstr "Esquerda"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Nem todos os aplicativos conseguem funcionar bem com efeitos de cantos "
 "arredondados, adicione-os a esta lista para desativar os efeitos.\n"
@@ -170,7 +170,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Opacidade"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Abrir caixa de diálogo de Redefinição de Configurações"
 
@@ -190,7 +190,7 @@ msgstr "Escolher Janela para adicionar à lista"
 msgid "Remove Window from this List"
 msgstr "Remover Janela desta Lista"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Redefinir Preferências"
 
@@ -198,12 +198,14 @@ msgstr "Redefinir Preferências"
 msgid "Right"
 msgstr "Direita"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Configurações de Cantos Arredondados..."
 
-#: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+#: src/preferences/pages/general.ui:364
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "Execute <i>journalctl -o cat -f /usr/bin/gnome-shell</i> no terminal para "
 "ver o log"
@@ -220,10 +222,11 @@ msgstr "Selecionar Itens para Redefinir"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
-"Configure diferentes recortes de margem adicionando uma janela a esta lista."
-"\n"
+"Configure diferentes recortes de margem adicionando uma janela a esta "
+"lista.\n"
 "\n"
 "O item da lista é uma parte da propriedade WM_CLASS da janela. Você pode "
 "selecionar uma janela para adicioná-la a esta lista."
@@ -239,7 +242,9 @@ msgid "Skip LibHandy Applications"
 msgstr "Ignorar Aplicativos Usando LibHandy"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "Alguns aplicativos escritos usando LibAdwaita ou LibHandy já possuem cantos "
 "arredondados nativos, então podemos ignorá-los através dessas configurações"
@@ -256,15 +261,15 @@ msgstr "Estas configurações tentarão afetar todas as janelas"
 msgid "Top"
 msgstr "Parte Superior"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr ""
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr ""
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "Ajustes"
 
@@ -275,6 +280,11 @@ msgstr "Janela Desfocada"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Estilo de Sombra da Janela Desfocada"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Cor da Borda"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

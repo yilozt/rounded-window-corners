@@ -33,6 +33,7 @@ export const General = GObject.registerClass (
       'preferences_entry_switch',
       'border_width_ajustment',
       'border_color_button',
+      'unfocused_border_color_button',
       'edit_shadow_row',
       'applications_group',
       'reset_preferences_btn',
@@ -48,6 +49,7 @@ export const General = GObject.registerClass (
     private _preferences_entry_switch!: Gtk.Switch
     private _border_width_ajustment!: Gtk.Adjustment
     private _border_color_button!: Gtk.ColorButton
+    private _unfocused_border_color_button!: Gtk.ColorButton
     private _edit_shadow_row!: Gtk.ListBoxRow
     private _applications_group!: Gtk.ListBox
     private _reset_preferences_btn!: Gtk.Button
@@ -114,6 +116,13 @@ export const General = GObject.registerClass (
         blue: color[2],
         alpha: color[3],
       })
+      const u_color = settings ().unfocused_border_color
+      this._unfocused_border_color_button.rgba = new Gdk.RGBA ({
+        red: u_color[0],
+        green: u_color[1],
+        blue: u_color[2],
+        alpha: u_color[3],
+      })
 
       const c = connections.get ()
       c.connect (
@@ -122,6 +131,19 @@ export const General = GObject.registerClass (
         (btn: Gtk.ColorButton) => {
           const color = btn.get_rgba ()
           settings ().border_color = [
+            color.red,
+            color.green,
+            color.blue,
+            color.alpha,
+          ]
+        }
+      )
+      c.connect (
+        this._unfocused_border_color_button,
+        'color-set',
+        (btn: Gtk.ColorButton) => {
+          const color = btn.get_rgba ()
+          settings ().unfocused_border_color = [
             color.red,
             color.green,
             color.blue,
@@ -190,6 +212,17 @@ export const General = GObject.registerClass (
         {
           const color = settings ().border_color
           this._border_color_button.rgba = new Gdk.RGBA ({
+            red: color[0],
+            green: color[1],
+            blue: color[2],
+            alpha: color[3],
+          })
+        }
+        break
+      case 'unfocused-border-color':
+        {
+          const color = settings ().unfocused_border_color
+          this._unfocused_border_color_button.rgba = new Gdk.RGBA ({
             red: color[0],
             green: color[1],
             blue: color[2],

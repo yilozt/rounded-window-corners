@@ -4,8 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-03-27 22:37+0000\n"
 "Last-Translator: Dan <denqwerta@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/uk/>\n"
 "Language: uk\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,18 +13,18 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.17-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Додати запис налаштувань у меню фону правою кнопкою миші"
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "Додати вікно"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr "Завжди зберігати заокруглені кути, коли вікно розгорнуто на весь екран."
+msgstr ""
+"Завжди зберігати заокруглені кути, коли вікно розгорнуто на весь екран."
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
@@ -67,12 +67,11 @@ msgstr "Ширина рамки"
 msgid "Bottom"
 msgstr "Низ"
 
-#: src/preferences/pages/blacklist.ts:65
-#: src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "Не можна додати до списку, тому що він вже існує"
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Не можу вибрати вікно з цієї позиції"
 
@@ -93,28 +92,28 @@ msgstr "Власний"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Налаштувати тінь заокругленого кутового вікна"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Налагодження"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Редагувати тіні для вікон із заокругленими кутами"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Увімкнути власні налаштування для цього вікна"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Увімкнути журнал"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Розгорніть цей рядок, щоб вибрати вікно."
 
@@ -156,9 +155,11 @@ msgstr "Ліворуч"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Не всі застосунки можуть добре працювати з ефектами заокруглених кутів, "
 "додайте їх до цього списку, щоб вимкнути ефекти.\n"
@@ -170,7 +171,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Непрозорість"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Відкрити діалогове вікно скидання налаштувань"
 
@@ -190,7 +191,7 @@ msgstr "Виберіть вікно, щоб додати до списку"
 msgid "Remove Window from this List"
 msgstr "Видалити вікно з цього списку"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Скинути налаштування"
 
@@ -198,12 +199,14 @@ msgstr "Скинути налаштування"
 msgid "Right"
 msgstr "Праворуч"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Налаштування заокруглених кутів..."
 
-#: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+#: src/preferences/pages/general.ui:364
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "Запустіть <i>journalctl -o cat -f /usr/bin/gnome-shell</i> у терміналі, щоб "
 "переглянути журнал"
@@ -220,7 +223,8 @@ msgstr "Виберіть елементи для скидання"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "Налаштуйте інший відступ кліпу, додавши вікно до цього списку.\n"
 "\n"
@@ -238,7 +242,9 @@ msgid "Skip LibHandy Applications"
 msgstr "Пропустити застосунки LibHandy"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "Деякі застосунки, написані за допомогою LibAdwaita або LibHandy, вже мають "
 "власні заокруглені кути, тому ми можемо пропустити їх за допомогою цих "
@@ -256,15 +262,15 @@ msgstr "Ці налаштування намагатимуться вплину�
 msgid "Top"
 msgstr "Вверх"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Спробувати додати заокруглені кути до терміналу Kitty у Wayland"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "Налаштувати внутрішній відступ для терміналу Kitty"
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "Твіки"
 
@@ -275,6 +281,11 @@ msgstr "Розфокусувати вікно"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Стиль тіні розфокусованого вікна"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Колір рамки"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

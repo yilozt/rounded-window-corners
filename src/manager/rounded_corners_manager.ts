@@ -181,6 +181,10 @@ export class RoundedCornersManager implements EffectManager {
     // Cache the offset, so that we can calculate this value once
     const content_offset_of_win = UI.computeWindowContentsOffset (win)
 
+    const col = win.appears_focused
+      ? settings ().border_color
+      : settings ().unfocused_border_color
+
     // When size changed. update uniforms for window
     effect.update_uniforms (
       UI.WindowScaleFactor (win),
@@ -188,7 +192,7 @@ export class RoundedCornersManager implements EffectManager {
       this._compute_bounds (actor, content_offset_of_win),
       {
         width: settings ().border_width,
-        color: settings ().border_color,
+        color: col,
       }
     )
 
@@ -209,6 +213,26 @@ export class RoundedCornersManager implements EffectManager {
   on_focus_changed (actor: ExtensionsWindowActor): void {
     const win = actor.meta_window
     const shadow = actor.__rwc_rounded_window_info?.shadow
+
+    const effect = this._actor_to_rounded (actor)?.get_effect (
+      constants.ROUNDED_CORNERS_EFFECT
+    ) as RoundedCornersEffectType | null
+    if (!effect) return
+    const cfg = this._get_rounded_corners_cfg (win)
+    const content_offset_of_win = UI.computeWindowContentsOffset (win)
+    const col = win.appears_focused
+      ? settings ().border_color
+      : settings ().unfocused_border_color
+    effect.update_uniforms (
+      UI.WindowScaleFactor (win),
+      cfg,
+      this._compute_bounds (actor, content_offset_of_win),
+      {
+        width: settings ().border_width,
+        color: col,
+      }
+    )
+
     if (!shadow) {
       return
     }
