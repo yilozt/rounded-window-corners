@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "Project-Id-Version: 12\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Customize the shadow of the rounded corner window"
 msgstr ""
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr ""
 
@@ -98,7 +98,7 @@ msgstr ""
 msgid "Enable custom settings for this window"
 msgstr ""
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr ""
@@ -154,7 +154,7 @@ msgstr ""
 msgid "Opacity"
 msgstr ""
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgstr ""
 msgid "Remove Window from this List"
 msgstr ""
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr ""
 
@@ -187,7 +187,7 @@ msgstr ""
 msgid "Rounded Corners Settings..."
 msgstr ""
 
-#: src/preferences/pages/general.ui:336
+#: src/preferences/pages/general.ui:364
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
 msgstr ""
 
@@ -232,15 +232,15 @@ msgstr ""
 msgid "Top"
 msgstr ""
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr ""
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr ""
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr ""
 
@@ -250,6 +250,10 @@ msgstr ""
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
+msgstr ""
+
+#: src/preferences/pages/general.ui:229
+msgid "Unfocused Border Color"
 msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:66

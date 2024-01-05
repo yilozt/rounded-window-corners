@@ -3,15 +3,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-05-24 00:51+0000\n"
 "Last-Translator: Reza Almanda <rezaalmanda27@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/id/>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/rounded-"
+"window-corners/rounded-window-corners/id/>\n"
 "Language: id\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.18-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Tambahkan Entri Pengaturan di menu klik kanan Latar Belakang"
 
@@ -64,11 +64,11 @@ msgstr "Lebar Border"
 msgid "Bottom"
 msgstr "Bawah"
 
-#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "Tidak dapat menambahkan ke daftar, karena sudah ada"
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Tidak dapat memilih jendela dari posisi ini"
 
@@ -89,28 +89,28 @@ msgstr "Kustom"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Sesuaikan bayangan jendela sudut membulat"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Debug"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Edit Bayangan untuk Jendela Sudut Bulat"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Aktifkan"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Aktifkan pengaturan khusus untuk jendela ini"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Aktifkan Log"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Luaskan baris ini untuk memilih jendela."
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Kegelapan"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Buka Dialog Atur Ulang Preferensi"
 
@@ -188,7 +188,7 @@ msgstr "Pilih Jendela untuk ditambahkan ke daftar"
 msgid "Remove Window from this List"
 msgstr "Hapus Jendela dari Daftar ini"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Atur Ulang Preferensi"
 
@@ -196,11 +196,11 @@ msgstr "Atur Ulang Preferensi"
 msgid "Right"
 msgstr "Kanan"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Pengaturan Sudut Bulat..."
 
-#: src/preferences/pages/general.ui:336
+#: src/preferences/pages/general.ui:364
 msgid ""
 "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
 "log"
@@ -259,15 +259,15 @@ msgstr "Pengaturan ini akan mencoba mempengaruhi semua jendela"
 msgid "Top"
 msgstr "Atas"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Coba tambahkan sudut membulat ke Terminal Kitty di Wayland"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "Tweak lapisan klip untuk Terminal Kitty"
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "Oprekan"
 
@@ -278,6 +278,11 @@ msgstr "Jendela Tidak Fokus"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Gaya Bayangan Jendela Tidak Fokus"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Warna Border"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

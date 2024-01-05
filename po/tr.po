@@ -3,15 +3,15 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-05-14 22:51+0000\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.18-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Arka Plan'ın sağ tıklama menüsüne Ayarlar Girdisi Ekle"
 
@@ -64,11 +64,11 @@ msgstr "Kenarlık Genişliği"
 msgid "Bottom"
 msgstr "Alt"
 
-#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "Listeye eklenemiyor, çünkü var"
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Bu konumdan bir pencere seçilemez"
 
@@ -89,28 +89,28 @@ msgstr "Özel"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Yuvarlak köşeli pencerenin gölgesini özelleştir"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Hata Ayıkla"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Yuvarlak Köşeli Pencereler İçin Gölgeyi Düzenle"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Bu pencere için özel ayarları etkinleştir"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Günlüğü Etkinleştir"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Bir pencere seçmek için bu sırayı genişlet."
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Matlık"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Tercihleri Sıfırla İletişim Kutusunu Aç"
 
@@ -188,7 +188,7 @@ msgstr "Listeye eklemek için Pencere seçin"
 msgid "Remove Window from this List"
 msgstr "Pencereyi bu listeden kaldır"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Tercihleri Sıfırla"
 
@@ -196,11 +196,11 @@ msgstr "Tercihleri Sıfırla"
 msgid "Right"
 msgstr "Sağ"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Yuvarlatılmış Köşe Ayarları..."
 
-#: src/preferences/pages/general.ui:336
+#: src/preferences/pages/general.ui:364
 msgid ""
 "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
 "log"
@@ -259,15 +259,15 @@ msgstr "Bu ayarlar tüm pencereleri etkilemeye çalışacaktır"
 msgid "Top"
 msgstr "Üst"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Wayland'da Kitty Terminal'e yuvarlatılmış köşeler eklemeye çalış"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "Kitty Terminal için kırpma dolgularını ayarla"
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "İnce Ayarlar"
 
@@ -278,6 +278,11 @@ msgstr "Odaklanmamış Pencere"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Odaklanmamış Pencere Gölge Biçemi"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Kenarlık Rengi"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

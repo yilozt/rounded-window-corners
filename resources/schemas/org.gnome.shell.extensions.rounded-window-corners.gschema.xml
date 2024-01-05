@@ -38,6 +38,11 @@
       <summary>Border color for rounded corners window</summary>
       <default>(0.5, 0.5, 0.5, 1.0)</default>
     </key>
+
+    <key name="unfocused-border-color" type="(dddd)">
+      <summary>Border color for rounded corners unfocused window</summary>
+      <default>(0.5, 0.5, 0.5, 1.0)</default>
+    </key>
     
     <key name="global-rounded-corner-settings" type="a{sv}">
       <summary>Global rounded corners settings for all windows</summary>

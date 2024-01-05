@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.15-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "Lisää asetukset-rivi taustan kontekstivalikkoon"
 
@@ -62,11 +62,11 @@ msgstr "Reunan leveys"
 msgid "Bottom"
 msgstr "Alaosa"
 
-#: src/preferences/pages/blacklist.ts:65 src/preferences/pages/custom.ts:177
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr ""
 
-#: src/preferences/widgets/app_row.ts:106
+#: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
 msgstr "Ikkunaa ei voi valita tästä sijainnista"
 
@@ -87,28 +87,28 @@ msgstr "Mukautettu"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "Mukauta pyöristetyn kulman varjoa"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "Vianetsintä"
 
-#: src/preferences/widgets/edit_shadow_window.ts:58
+#: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
 msgstr "Muokkaa pyöristettyjen ikkunoiden varjoa"
 
-#: src/preferences/pages/custom.ts:189
+#: src/preferences/pages/custom.ts:186
 msgid "Enable"
 msgstr "Päälle"
 
-#: src/preferences/pages/custom.ts:193
+#: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
 msgstr "Käytä kustomoituja asetuksia tälle ikkunalle"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "Kirjoita lokiin"
 
-#: src/utils/constants.ts:17
+#: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
 msgstr "Laajenna rivi valitaksesi ikkunan."
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Opacity"
 msgstr "Peittävyys"
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "Avaa asetusten nollausvalikko"
 
@@ -186,7 +186,7 @@ msgstr "Valitse ikkuna lisätäksesi sen listaan"
 msgid "Remove Window from this List"
 msgstr "Poista ikkuna listasta"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "Nollaa asetukset"
 
@@ -194,11 +194,11 @@ msgstr "Nollaa asetukset"
 msgid "Right"
 msgstr "Oikea"
 
-#: src/utils/constants.ts:21
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "Kulmienpyöristyksen asetukset..."
 
-#: src/preferences/pages/general.ui:336
+#: src/preferences/pages/general.ui:364
 msgid ""
 "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
 "log"
@@ -256,15 +256,15 @@ msgstr "Tämä asetus pyrkii vaikuttamaan kaikkiin ikkunoihin"
 msgid "Top"
 msgstr "Yläosa"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "Koita pyöristää Kitty-pääteohjelman kulmat Waylandissa"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr "Muokkaa Kitty-pääteohjelman ylijäämäleikkausta"
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "Hienosäädöt"
 
@@ -275,6 +275,11 @@ msgstr "Keskittämätön ikkuna"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "Keskittämättömän ikkunan varjo"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "Reunan väri"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"

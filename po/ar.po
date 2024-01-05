@@ -4,8 +4,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
 "PO-Revision-Date: 2023-12-10 10:05+0000\n"
 "Last-Translator: Nadjib Chergui <chergui.cnadjib@outlook.com>\n"
-"Language-Team: Arabic <https://hosted.weblate.org/projects/"
-"rounded-window-corners/rounded-window-corners/ar/>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/rounded-window-"
+"corners/rounded-window-corners/ar/>\n"
 "Language: ar\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,12 +13,11 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Weblate 5.3-dev\n"
 
-#: src/preferences/pages/general.ui:284
+#: src/preferences/pages/general.ui:312
 msgid "Add Settings Entry in right-click menu of Background"
 msgstr "أضف بند الإعدادات في قائمة النقرة اليمنى للخلفية"
 
-#: src/preferences/pages/blacklist.ui:38
-#: src/preferences/pages/custom.ui:38
+#: src/preferences/pages/blacklist.ui:38 src/preferences/pages/custom.ui:38
 msgid "Add Window"
 msgstr "إضافة نافذة"
 
@@ -66,8 +65,7 @@ msgstr "عرض الحدود"
 msgid "Bottom"
 msgstr "أسفل"
 
-#: src/preferences/pages/blacklist.ts:64
-#: src/preferences/pages/custom.ts:174
+#: src/preferences/pages/blacklist.ts:64 src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
 msgstr "لا يمك‏ن إضافته للقائمة، لأنه موجودة فيها"
 
@@ -93,7 +91,7 @@ msgstr "خاص"
 msgid "Customize the shadow of the rounded corner window"
 msgstr "تخصيص نمط ظل النافذة ذات الزوايا المدورة"
 
-#: src/preferences/pages/general.ui:304
+#: src/preferences/pages/general.ui:332
 msgid "Debug"
 msgstr "تصحيح الأخطاء"
 
@@ -109,7 +107,7 @@ msgstr "تفعيل"
 msgid "Enable custom settings for this window"
 msgstr "تفعيل الإعدادات الخاصة بهذه النافذة"
 
-#: src/preferences/pages/general.ui:329
+#: src/preferences/pages/general.ui:357
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
 msgstr "تفعيل التسجيلات التقنية"
@@ -156,9 +154,11 @@ msgstr "يسار"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
-"Not all application can works well with rounded corners effects, add them to this list to disable effects.\n"
+"Not all application can works well with rounded corners effects, add them to "
+"this list to disable effects.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 "ليست كل التطبيقات تعمل مع تأثير الزوايا المدورة، أضفهم لإيقاف التأثيرات لهم."
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Opacity"
 msgstr ""
 
-#: src/preferences/pages/general.ui:367
+#: src/preferences/pages/general.ui:395
 msgid "Open Reset Preferences Dialog"
 msgstr "فتح نافذة إعادة الضبط"
 
@@ -186,7 +186,7 @@ msgstr "اختر نافذةً لإضافتها إلى القائمة"
 msgid "Remove Window from this List"
 msgstr "إزالة النافذة من القائمة"
 
-#: src/preferences/pages/general.ui:359
+#: src/preferences/pages/general.ui:387
 msgid "Reset Preferences"
 msgstr "إعادة ضبط الإعدادات"
 
@@ -194,13 +194,14 @@ msgstr "إعادة ضبط الإعدادات"
 msgid "Right"
 msgstr "يمين"
 
-#: src/utils/ui.ts:103
-#: src/utils/ui.ts:132
+#: src/utils/ui.ts:103 src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
 msgstr "إعدادات الزوايا المدورة..."
 
-#: src/preferences/pages/general.ui:336
-msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
+#: src/preferences/pages/general.ui:364
+msgid ""
+"Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the "
+"log"
 msgstr ""
 "شغل <i>journalctl -o cat -f /usr/bin/gnome-shell</i> في الطرفية لتظهر "
 "التسجيلات"
@@ -217,7 +218,8 @@ msgstr "اختر الأشياء لإعادة ضبطها"
 msgid ""
 "Setup different clip padding by add window into this list.\n"
 "\n"
-"The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
+"The item of list is instance part of WM_CLASS property with window. You can "
+"pick a window to add it into this list."
 msgstr ""
 
 #: src/preferences/pages/general.ui:47
@@ -231,7 +233,9 @@ msgid "Skip LibHandy Applications"
 msgstr "تجنب تطبيقات (LibHandy)"
 
 #: src/preferences/pages/general.ui:23
-msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
+msgid ""
+"Some applications written using LibAdwaita or LibHandy already have native "
+"rounded corners, so we can skip them through these settings"
 msgstr ""
 "بعض التطبيقات التي تستخدم (LibAdwaita) أو (LibHandy) لديها زوايا دائرية "
 "فعلًا، إذن يمكن تجنبها بواسطة هذه الإعدادات"
@@ -248,16 +252,16 @@ msgstr "هذه الإعدادات ستحاول في التأثير على كل �
 msgid "Top"
 msgstr "أعلى"
 
-#: src/preferences/pages/general.ui:247
+#: src/preferences/pages/general.ui:275
 #, fuzzy
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
 msgstr "حاول إضافة الزوايا المدورة لطرفية كيتي (Kitty) في وايلاند (Wayland)"
 
-#: src/preferences/pages/general.ui:254
+#: src/preferences/pages/general.ui:282
 msgid "Tweak clip paddings for Kitty Terminal"
 msgstr ""
 
-#: src/preferences/pages/general.ui:222
+#: src/preferences/pages/general.ui:250
 msgid "Tweaks"
 msgstr "تعديلات"
 
@@ -268,6 +272,11 @@ msgstr "النافذة الغير المختارة"
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
 msgstr "نمط ظل النافذة الغير المختارة"
+
+#: src/preferences/pages/general.ui:229
+#, fuzzy
+msgid "Unfocused Border Color"
+msgstr "لون الحدود"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 #, fuzzy
