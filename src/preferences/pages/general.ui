@@ -296,6 +296,33 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkListBoxRow">
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkBox">
+                    <property name="valign">center</property>
+                    <property name="hexpand">true</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Add rounded corners for all windows in overview</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSwitch" id="rounded_overview_window_switch">
+                    <property name="visible">true</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
