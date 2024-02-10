@@ -172,9 +172,9 @@ export default class RoundedWindowCorners extends Extension {
         let pixel_step: [number, number] | undefined = undefined
         if (
           UI.shell_version () >= 43.1 &&
-          window.get_client_type () == WindowClientType.WAYLAND
+          window.get_client_type () == Meta.WindowClientType.WAYLAND
         ) {
-          const surface = (window.get_compositor_private () as WindowActor)
+          const surface = (window.get_compositor_private () as Meta.WindowActor)
             .first_child
           pixel_step = [
             1.0 / (scale_factor * surface.get_width ()),
