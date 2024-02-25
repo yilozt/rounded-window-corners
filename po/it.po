@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 10\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
-"PO-Revision-Date: 2023-11-11 20:32+0000\n"
-"Last-Translator: CraftWorks <thelonegamer87@gmail.com>\n"
+"PO-Revision-Date: 2024-02-25 14:01+0000\n"
+"Last-Translator: repex97 <repetto.andrea025@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/"
 "rounded-window-corners/rounded-window-corners/it/>\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
@@ -77,7 +77,7 @@ msgstr "Impossibile selezionare la finestra da questa posizione"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
-msgstr ""
+msgstr "Ritaglia i margini delle finestre"
 
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
@@ -179,7 +179,7 @@ msgstr "Padding"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
-msgstr ""
+msgstr "Paddings"
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
@@ -244,11 +244,11 @@ msgstr ""
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
-msgstr ""
+msgstr "Raggio"
 
 #: src/preferences/pages/general.ui:143
 msgid "This settings will try to effects all windows"
-msgstr ""
+msgstr "Queste impostazioni avranno possibilmente effetto su tutte le finestre"
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
@@ -260,7 +260,7 @@ msgstr "Prova ad arrotondare i bordi al terminale Kitty su Wayland"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
-msgstr ""
+msgstr "Personalizza i margini per Kitty Terminal"
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
@@ -268,11 +268,11 @@ msgstr "Modifiche"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr ""
+msgstr "Finestra in secondo piano"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
-msgstr ""
+msgstr "Stile ombreggiatura finestra in secondo piano"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
