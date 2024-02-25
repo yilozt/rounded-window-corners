@@ -15,7 +15,6 @@ export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
 
     // Classical GTK4 template ui need this to make translatable string works
     imports.gettext.textdomain (this.uuid)
-    this.initTranslations (this.uuid)
   }
 
   _load_css () {
@@ -51,6 +50,13 @@ export default class RoundedWindowCornresPrefs extends ExtensionPreferences {
     })
 
     this._load_css ()
+  }
+
+  disable () {
+    _log ('Disconnect Signals')
+    connections.get ().disconnect_all ()
+    connections.del ()
+    uninit_settings ()
   }
 }
 
