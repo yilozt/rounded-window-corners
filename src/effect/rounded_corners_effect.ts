@@ -57,7 +57,8 @@ export const RoundedCornersEffect = GObject.registerClass (
         border_color: 0,
       }
       Object.keys (Effect.uniforms).forEach ((k) => {
-        if (!Effect.uniforms) return
+        if (!Effect.uniforms || Effect.uniforms[k as keyof Uniforms] !== 0)
+          return
         Effect.uniforms[k as keyof Uniforms] = this.get_uniform_location (k)
       })
     }
@@ -65,10 +66,10 @@ export const RoundedCornersEffect = GObject.registerClass (
     vfunc_build_pipeline (): void {
       const type = Shell.SnippetHook.FRAGMENT
       this.add_glsl_snippet (type, declarations, code, false)
-      this._init_uniforms ()
     }
 
     vfunc_paint_target (node: Clutter.PaintNode, ctx: Clutter.PaintContext) {
+      this._init_uniforms ()
       // Reset to default blend string.
       this.get_pipeline ()?.set_blend (
         'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
@@ -142,6 +143,8 @@ export const RoundedCornersEffect = GObject.registerClass (
         radius = max_radius
       }
       inner_radius *= radius / outer_radius
+
+      this._init_uniforms ()
 
       const location = Effect.uniforms
       this.set_uniform_float (location.bounds, 4, bounds)
