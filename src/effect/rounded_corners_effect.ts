@@ -69,7 +69,6 @@ export const RoundedCornersEffect = GObject.registerClass (
     }
 
     vfunc_paint_target (node: Clutter.PaintNode, ctx: Clutter.PaintContext) {
-      this._init_uniforms ()
       // Reset to default blend string.
       this.get_pipeline ()?.set_blend (
         'RGBA = ADD(SRC_COLOR, DST_COLOR*(1-SRC_COLOR[A]))'
