@@ -2,9 +2,9 @@
   "name": "Rounded Window Corners",
   "description": "Add rounded corners for all windows",
   "uuid": "rounded-window-corners@yilozt",
-  "version": "12",
+  "version": "13",
   "url": "https://github.com/yilozt/rounded-window-corners",
   "gettext-domain": "rounded-window-corners@yilozt",
   "settings-schema": "org.gnome.shell.extensions.rounded-window-corners",
-  "shell-version": ["45"]
+  "shell-version": ["45", "46"]
 }
