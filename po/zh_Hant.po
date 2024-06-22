@@ -2,148 +2,154 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 12\n"
 "Report-Msgid-Bugs-To: yilozt@outlook.com\n"
+"PO-Revision-Date: 2024-06-23 11:09+0000\n"
+"Last-Translator: hugoalh <hugoalh@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
+"rounded-window-corners/rounded-window-corners/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: src/preferences/pages/general.ui:284
 msgid "Add Settings Entry in right-click menu of Background"
-msgstr ""
+msgstr "在背景右鍵選單中增加設定條目"
 
 #: src/preferences/pages/blacklist.ui:38
 #: src/preferences/pages/custom.ui:38
 msgid "Add Window"
-msgstr ""
+msgstr "新增視窗"
 
 #: src/preferences/widgets/rounded-corners-item.ui:130
 msgid "Always keep rounded corners when window is fullscreen."
-msgstr ""
+msgstr "當視窗全螢幕時總是保留圓角。"
 
 #: src/preferences/widgets/rounded-corners-item.ui:93
 msgid "Always keep rounded corners when window is maximized or tiled."
-msgstr ""
+msgstr "當視窗最大化或平鋪時總是保留圓角。"
 
 #: src/preferences/pages/general.ui:10
 msgid "Applications"
-msgstr ""
+msgstr "應用程式"
 
 #: src/preferences/widgets/app-row.ui:92
 msgid "Apply"
-msgstr ""
+msgstr "套用"
 
 #: src/preferences/index.ts:17
 msgid "Blacklist"
-msgstr ""
+msgstr "黑名單"
 
 #: src/preferences/widgets/edit-shadow-window.ui:87
 msgid "Blur Offset"
-msgstr ""
+msgstr "模糊偏移"
 
 #: src/preferences/pages/general.ui:201
 #: src/preferences/widgets/reset_dialog.ts:65
 msgid "Border Color"
-msgstr ""
+msgstr "邊框顏色"
 
 #: src/preferences/widgets/reset_dialog.ts:70
 #: src/preferences/widgets/rounded-corners-item.ui:19
 msgid "Border Radius"
-msgstr ""
+msgstr "邊框半徑"
 
 #: src/preferences/pages/general.ui:168
 #: src/preferences/widgets/reset_dialog.ts:64
 msgid "Border Width"
-msgstr ""
+msgstr "邊框寬度"
 
 #: src/preferences/widgets/rounded-corners-item.ui:309
 msgid "Bottom"
-msgstr ""
+msgstr "底部"
 
 #: src/preferences/pages/blacklist.ts:64
 #: src/preferences/pages/custom.ts:174
 msgid "Can't add to list, because it has exists"
-msgstr ""
+msgstr "無法增加至列表，因為它已存在"
 
 #: src/preferences/widgets/app_row.ts:105
 msgid "Can't pick a window window from this position"
-msgstr ""
+msgstr "無法從這個位置選取視窗"
 
 #: src/preferences/widgets/rounded-corners-item.ui:170
 msgid "Clip paddings of window"
-msgstr ""
+msgstr "剪裁視窗的內距"
 
 #: src/preferences/widgets/reset_dialog.ts:75
 #: src/preferences/widgets/rounded-corners-item.ui:53
 msgid "Corner Smoothing"
-msgstr ""
+msgstr "圓角平滑"
 
 #: src/preferences/index.ts:22
 msgid "Custom"
-msgstr ""
+msgstr "自訂"
 
 #: src/preferences/pages/general.ui:107
 msgid "Customize the shadow of the rounded corner window"
-msgstr ""
+msgstr "自訂圓角視窗的陰影"
 
 #: src/preferences/pages/general.ui:304
 msgid "Debug"
-msgstr ""
+msgstr "偵錯"
 
 #: src/preferences/widgets/edit_shadow_window.ts:59
 msgid "Edit Shadow for Rounded Corners Windows"
-msgstr ""
+msgstr "編輯圓角視窗的陰影"
 
 #: src/preferences/pages/custom.ts:186
 msgid "Enable"
-msgstr ""
+msgstr "啟用"
 
 #: src/preferences/pages/custom.ts:190
 msgid "Enable custom settings for this window"
-msgstr ""
+msgstr "為這個視窗啟用自訂設定"
 
 #: src/preferences/pages/general.ui:329
 #: src/preferences/widgets/reset_dialog.ts:66
 msgid "Enable Log"
-msgstr ""
+msgstr "啟用日誌"
 
 #: src/utils/prefs.ts:48
 msgid "Expand this row to pick a window."
-msgstr ""
+msgstr "展開這行以選擇一個視窗。"
 
 #: src/preferences/widgets/edit-shadow-window.ui:26
 msgid "Focus Window"
-msgstr ""
+msgstr "聚焦視窗"
 
 #: src/preferences/widgets/reset_dialog.ts:62
 msgid "Focus Window Shadow Style"
-msgstr ""
+msgstr "聚焦視窗陰影樣式"
 
 #: src/preferences/index.ts:12
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 #: src/preferences/pages/general.ui:132
 msgid "Global Settings"
-msgstr ""
+msgstr "全域設定"
 
 #: src/preferences/widgets/edit-shadow-window.ui:46
 msgid "Horizontal Offset"
-msgstr ""
+msgstr "水平偏移"
 
 #: src/preferences/widgets/rounded-corners-item.ui:123
 msgid "Keep Rounded Corners when Fullscreen"
-msgstr ""
+msgstr "全螢幕時保留圓角"
 
 #: src/preferences/widgets/rounded-corners-item.ui:86
 msgid "Keep Rounded Corners when Maximized"
-msgstr ""
+msgstr "最大化時保留圓角"
 
 #: src/preferences/widgets/reset_dialog.ts:73
 msgid "Keep Rounded Corners when Maximized or Fullscreen"
-msgstr ""
+msgstr "最大化或全螢幕時保留圓角"
 
 #: src/preferences/widgets/rounded-corners-item.ui:210
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: src/preferences/pages/blacklist.ui:14
 msgid ""
@@ -151,55 +157,60 @@ msgid ""
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
+"並非所有應用程式都可以很好地使用圓角效果，請將它們增加至這個列表以停用效果。"
+"\n"
+"\n"
+"列表項目是帶有視窗的 WM_CLASS "
+"屬性的實例部分。你可以選取一個視窗以將其增加至這個列表。"
 
 #: src/preferences/widgets/edit-shadow-window.ui:126
 msgid "Opacity"
-msgstr ""
+msgstr "不透明度"
 
 #: src/preferences/pages/general.ui:367
 msgid "Open Reset Preferences Dialog"
-msgstr ""
+msgstr "開啟重置偏好設定對話框"
 
 #: src/preferences/widgets/reset_dialog.ts:71
 msgid "Padding"
-msgstr ""
+msgstr "內距"
 
 #: src/preferences/widgets/rounded-corners-item.ui:163
 msgid "Paddings"
-msgstr ""
+msgstr "內距"
 
 #: src/preferences/widgets/app-row.ui:77
 msgid "Pick Window to add into list"
-msgstr ""
+msgstr "選取視窗以增加至列表中"
 
 #: src/preferences/widgets/app-row.ui:36
 msgid "Remove Window from this List"
-msgstr ""
+msgstr "從這個列表中移除視窗"
 
 #: src/preferences/pages/general.ui:359
 msgid "Reset Preferences"
-msgstr ""
+msgstr "重置偏好設定"
 
 #: src/preferences/widgets/rounded-corners-item.ui:243
 msgid "Right"
-msgstr ""
+msgstr "右"
 
 #: src/utils/ui.ts:103
 #: src/utils/ui.ts:132
 msgid "Rounded Corners Settings..."
-msgstr ""
+msgstr "圓角設定…"
 
 #: src/preferences/pages/general.ui:336
 msgid "Run <i>journalctl -o cat -f /usr/bin/gnome-shell</i> in terminal to see the log"
-msgstr ""
+msgstr "在終端機中執行 <i>journalctl -o cat -f /usr/bin/gnome-shell</i> 以檢視日誌"
 
 #: src/preferences/widgets/reset_dialog.ts:96
 msgid "Select All"
-msgstr ""
+msgstr "選取全部"
 
 #: src/preferences/widgets/reset_dialog.ts:87
 msgid "Select Items to reset"
-msgstr ""
+msgstr "選擇要重置的項目"
 
 #: src/preferences/pages/custom.ui:14
 msgid ""
@@ -207,57 +218,62 @@ msgid ""
 "\n"
 "The item of list is instance part of WM_CLASS property with window. You can pick a window to add it into this list."
 msgstr ""
+"將視窗增加至這個列表以設定不同的剪裁內距。\n"
+"\n"
+"列表項目是帶有視窗的 WM_CLASS "
+"屬性的實例部分。你可以選取一個視窗以將其增加至這個列表。"
 
 #: src/preferences/pages/general.ui:47
 #: src/preferences/widgets/reset_dialog.ts:60
 msgid "Skip LibAdwaita Applications"
-msgstr ""
+msgstr "略過 LibAdwaita 應用程式"
 
 #: src/preferences/pages/general.ui:74
 #: src/preferences/widgets/reset_dialog.ts:61
 msgid "Skip LibHandy Applications"
-msgstr ""
+msgstr "略過 LibHandy 應用程式"
 
 #: src/preferences/pages/general.ui:23
 msgid "Some applications written using LibAdwaita or LibHandy already have native rounded corners, so we can skip them through these settings"
-msgstr ""
+msgstr "一些使用 LibAdwaita 或 LibHandy "
+"編寫的應用程式已經具有原生圓角，因此我們可以透過這些設定略過它們"
 
 #: src/preferences/widgets/edit-shadow-window.ui:107
 msgid "Spread Radius"
-msgstr ""
+msgstr "擴散半徑"
 
 #: src/preferences/pages/general.ui:143
 msgid "This settings will try to effects all windows"
-msgstr ""
+msgstr "這個設定將嘗試影響所有視窗"
 
 #: src/preferences/widgets/rounded-corners-item.ui:276
 msgid "Top"
-msgstr ""
+msgstr "頂部"
 
 #: src/preferences/pages/general.ui:247
 msgid "Try to add rounded corners to Kitty Terminal in Wayland"
-msgstr ""
+msgstr "嘗試為 Wayland 的 Kitty Terminal 加入圓角"
 
 #: src/preferences/pages/general.ui:254
 msgid "Tweak clip paddings for Kitty Terminal"
-msgstr ""
+msgstr "調整 Kitty 終端的剪裁內距"
 
 #: src/preferences/pages/general.ui:222
 msgid "Tweaks"
-msgstr ""
+msgstr "調整"
 
 #: src/preferences/widgets/edit-shadow-window.ui:35
 msgid "Unfocus Window"
-msgstr ""
+msgstr "未聚焦視窗"
 
 #: src/preferences/widgets/reset_dialog.ts:63
 msgid "Unfocus Window Shadow Style"
-msgstr ""
+msgstr "未聚焦視窗陰影樣式"
 
 #: src/preferences/widgets/edit-shadow-window.ui:66
 msgid "Vertical Offset"
-msgstr ""
+msgstr "垂直偏移"
 
 #: src/preferences/pages/general.ui:101
 msgid "Window Shadow"
-msgstr ""
+msgstr "視窗陰影"
