@@ -6,5 +6,5 @@
   "url": "https://github.com/yilozt/rounded-window-corners",
   "gettext-domain": "rounded-window-corners@yilozt",
   "settings-schema": "org.gnome.shell.extensions.rounded-window-corners",
-  "shell-version": ["45"]
+  "shell-version": ["46"]
 }
